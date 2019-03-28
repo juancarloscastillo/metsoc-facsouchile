@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introducción a R</title>
+    <meta charset="utf-8">
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introducción a R
+## En un marco de Ciencia Abierta
+### (Actualizado Marzo 2019)
+
+---
+
+
+
+
+class: inverse, center, middle
+
+
+&lt;!--- Para correr en ATOM
+- open terminal, abrir R (simplemente, R y enter)
+- w
+- rmarkdown::render('introRopen.Rmd', 'xaringan::moon_reader')
+
+- knitr
+knitr::knit2html("present_panel-alas2018.Rmd")
+
+About macros.js: permite escalar las imágenes como [scale 50%](path to image), hay si que grabar ese archivo js en el directorio---&gt;
+
+
+# Ciencia Abierta
+
+---
+
+# ¿Es la ciencia realmente abierta?
+
+--
+
+### - Reproducibilidad
+--
+
+### - Transparencia
+--
+
+### - Colaboración
+--
+
+### - Acceso
+
+---
+# ¿Cómo investigar y reportar de manera abierta?
+
+--
+### - Texto plano (acceso universal independiente de plataformas)
+
+--
+### - Flujo de trabajo reproducible (ej: Bowers, 2017 y Healy, 2011)
+
+--
+### - Reportes dinámicos (programación literaria)
+
+---
+# Ej. Flujo de trabajo reproducible (Healy)
+
+&lt;img src=https://kieranhealy.org/files/misc/workflow-wide-tx.png /&gt;
+
+---
+# Flujo X(irinGITo)
+
+![](xflow.png)
+
+Más detalles: ver presentación [aquí](https://juancarloscastillo.github.io/jc-castillo/documents/atomworkflow/Xiringito_press.html)
+
+---
+
+class: center, inverse, middle
+
+# R &amp; RStudio
+
+## Herramientas que favorecen la implementación de procedimientos de ciencia abierta en la investigación
+
+
+---
+
+# R
+
+-   Libre (gratis) &amp; Open source
+
+-   Flexible ("customizable"):  Posibilidad de añadir nuevas funciones (librerías) en expansión constante
+
+-   Permite análisis estadísticos avanzados
+
+-   Posibilidad de importar/leer datos desde diferentes formatos (SPSS,  Stata, SAS, Excel, etc.)
+
+-   Capacidades gráficas avanzadas
+
+-   Disponible para distintos sistemas operativos (Windows, Mac, Linux)
+
+-   Análisis a partir de código en texto plano, favorece documentación y reproducibilidad
+
+- Generación de reportes dinámicos
+
+---
+
+# Google scholar hits
+
+&lt;img src=https://i0.wp.com/r4stats.com/wp-content/uploads/2012/04/Fig_2d_ScholarlyImpact.png width="800" height="400" /&gt;
+
+Source: https://i0.wp.com/r4stats.com/wp-content/uploads/2012/04/Fig_2d_ScholarlyImpact.png
+
+---
+
+# Instalación R
+
+-   Visitar la página de CRAN (Comprehensive R Archive Network)
+http://cran.r-project.org/ [](https:/cran.r-project.org)
+
+-   Seleccionar versión según sistema operativo (Ej. Windows)
+
+-   Instalar “base”
+
+-   En Windows R GUI (Graphical User Interface) se agrega como interfaz por defecto.
+
+-   Existen otras interfaces gráficas (GUIs) para trabajar con R (R Commander o Java GUI for R (Jaguar), Deducer, R-Studio, etc.)
+
+- RStudio es la más recomendada, principalmente por su expansión de funciones de reportes dinámicos
+
+---
+# Instalación RStudio
+
+-   Instalar R Studio: http://www.rstudio.com/
+
+-   Actualización:
+
+    -   Bajar e instalar nueva versión de R
+
+    -   Copiar librerías de carpeta antigua a la nueva
+
+    -   Actualizar librerías (update packages)
+
+
+---
+
+&lt;img src=https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_1505311630/rstudio.png /&gt;
+
+
+&lt;img src=http://freesearch.pe.kr/wp-content/uploads/image.png /&gt;
+
+---
+class: center, middle, inverse
+
+# Trabajando en R
+
+--
+## Código
+
+--
+## Directorio
+
+--
+## Librerías
+
+--
+## Objetos
+
+---
+# Archivo de código / sintaxis
+
+- Tal como en Stata, por defecto los comandos se anotan en un archivo de código desde donde se ejecutan, y que permiten tener respaldo de los análisis
+
+-   Archivo de código simple: File - newfile - Rscript
+
+-   Caracteres especiales
+
+  -   *\#* =Comentarios (AltGr 3) , no se ejecutan
+
+  -   *\+* =Sigue el comando en la próxima línea
+
+  -   *;* =Para escribir más de una función en la misma línea de comandos
+
+- El archivo de código se guarda por defecto con extensión .R, es un archivo de texto simple (plano), que puede ser leído y modificado por cualquier editor.
+
+---
+# Directorio de trabajo
+
+-   Por temas de reproducibilidad, se recomienda establecer el directorio de trabajo (donde se buscan y guardan los archivos)
+
+- Especificar al comienzo del archivo de código
+
+
+```r
+ getwd() # obtener directorio de trabajo actual
+ setwd("ruta") # : establecer directorio de trabajo
+ setwd("C:\Documents and Settings\jcastillo\Mis documentos\proyecto1") # ejemplo
+```
+
+---
+# Librerías
+
+-   Conjunto de funciones que tienen una relación entre ellas y que  usualmente vienen acompañadas de ficheros de ayuda (documentación)
+
+-   Algunas librerías vienen preinstaladas ("base"), otras específicas hay que instalarlas de acuerdo a las necesidades del usuario
+
+-   Para conocer la lista de librerías instaladas: library()
+
+-   Para instalar:
+
+
+```r
+install.packages(“librería”)
+```
+
+-   Las librerías se instalan sólo 1 vez, pero deben ser cargadas si se quieren utilizar en la sesión de trabajo
+
+
+```r
+library(“librería”)
+```
+
+
+-   descripción de librerias por tema (“task views”): https://cran.r-project.org/web/views/
+
+---
+## ... librerías
+
+
+```r
+install.packages("lme4")
+library("lme4")
+? lme4 # ayuda lme4
+```
+
+- Para evitar lo de instalar / cargar, hay una librería en R que se llama *pacman* (package manager) que cumple la función de cargar las librerías, y si estas no están instaladas, las instala y las carga.
+
+
+```r
+install.packages("pacman") #solo la primera vez
+
+# Luego
+pacman::p_load(librería1, librería2, librería3)
+```
+
+---
+# Objetos
+
+
+-   R es un programa orientado a objetos, los que son creados por  funciones, que en su forma más general sería: Objeto = función
+
+-   Diferentes tipos de objetos: vectores, factores, matrices, marco de  datos (entre otros)
+
+-   Objetos simples:
+
+
+```r
+# Datos numéricos
+ x &lt;- 5 # el número 5 es asignado al objeto x
+ x
+```
+
+```
+## [1] 5
+```
+
+```r
+# Carácter
+a &lt;- "hoy"
+a
+```
+
+```
+## [1] "hoy"
+```
+
+---
+## Objetos: Vectores
+
+Objeto unidimensional constituido por elementos del mismo tipo
+
+
+```r
+edad=c(50,1,25,6)
+alumnmos=c("juan", "simon","maria","sonia")
+hasta20 &lt;- 1:20 #genera una secuencia de números del 1 al 20
+a &lt;- seq (from = -5, to = 5, by = 1.5)
+tresdos = rep(2,3)
+# Ejemplo de operaciones con vectores numéricos
+mean(edad)
+```
+
+```
+## [1] 20.5
+```
+
+```r
+summary(edad)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00    4.75   15.50   20.50   31.25   50.00
+```
+
+---
+##Objectos: Factores
+
+Modo que utiliza R para almacenar variables categóricas
+
+
+```r
+# crea vector de caracteres
+sexo = c(rep("mujer", 4), rep("varon", 10))
+sexo
+```
+
+```
+##  [1] "mujer" "mujer" "mujer" "mujer" "varon" "varon" "varon" "varon"
+##  [9] "varon" "varon" "varon" "varon" "varon" "varon"
+```
+
+```r
+# Para convertir el vector en factor:
+sexo = as.factor(sexo)
+levels(sexo)
+```
+
+```
+## [1] "mujer" "varon"
+```
+
+```r
+table(sexo)
+```
+
+```
+## sexo
+## mujer varon 
+##     4    10
+```
+
+---
+##Objetos: Base de datos (dataframe)
+
+-   Estructura más común en R para el análisis de datos
+
+-   Consiste en una matriz donde las columnas pueden tener datos  almacenados en distintos modos , numéricos y categóricos
+
+-   Se pueden concebir como conjuntos de datos donde las líneas representan casos y las columnas variables
+
+-   Las variables pueden ser de distinto tipo, pero todos los datos referidos a una misma variable son del mismo modo
+
+
+---
+class: center, middle, inverse
+
+# Gracias!
+
+(presentación generada con la librería de R  [**xaringan**](https://github.com/yihui/xaringan), de Yihui Xie.
+
+A través de
+[remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

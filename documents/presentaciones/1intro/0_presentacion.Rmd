@@ -1,0 +1,267 @@
+---
+title: "Estadística Multivariada"
+subtitle: "Sesión 1: Introducción"
+author: ".small[Juan Carlos Castillo & Alejandro Plaza <br><br> Departamento de Sociología - UCH / COES <br><br>]"
+date: "1er Sem 2019"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+    seal: false # esto omite title slide automática
+---
+class: bottom, left
+
+```{r xaringan-themer, include = FALSE}
+library(xaringanthemer)
+solarized_light(background_color="#FFF",
+                text_color="#000")
+```
+
+
+
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo & Alejandro Plaza
+
+## Sesión 1: Introducción
+
+---
+class: inverse, middle, center
+
+<!---
+Para correr en ATOM
+- open terminal, abrir R (simplemente, R y enter)
+- rmarkdown::render('0_presentacion.Rmd', 'xaringan::moon_reader')
+
+About macros.js: permite escalar las imágenes como [scale 50%](path to image), hay si que grabar ese archivo js en el directorio.
+--->
+
+# Preambulo: ¿Cómo explicamos fenómenos sociales?
+
+---
+# Pedro, Juan ...
+
+**Pedro** estudió en un colegio particular pagado del barrio alto de Santiago, y fue un buen alumno. En el Simce de 8º básico sacó más de 316 puntos, lo que lo situó en el 10% más alto entre todos los niños chilenos.
+
+--
+
+**Juan** también superó los 316 puntos. En su caso, el mérito fue doble, porque estudió en un colegio público: el capital cultural y el nivel socioeconómico de su familia eran muy inferiores a los de Pedro.
+Citando una famosa metáfora, Pedro corrió con patines mientras Juan iba descalzo, y así y todo llegaron empatados a la meta.
+
+--
+
+**¿Cómo premiará la sociedad el mérito de Pedro y el de Juan? ¿Reconocerá más a quien, contra todo pronóstico, logró destacarse pese a un entorno desfavorable?**
+
+Gracias a una investigación hasta ahora inédita, hoy podemos responder esa pregunta (Meneses, Blanco & Paredes): quienes tuvieron más de 316 puntos en el Simce 2004, y estudiaban en uno de nueve colegios de élite de Santiago (nuestros “Pedros”), en 2017 ganaron un sueldo bruto promedio de $1.471.115. Quienes tuvieron el mismo resultado en el Simce, pero estaban en un liceo público (nuestros “Juanes”), recibieron $716.665.
+
+---
+# Pedro, Juan ... & Diego
+
+Hablemos ahora de **Diego**. Él, a diferencia de Pedro y Juan, fue un mal alumno. Pese a asistir a un colegio de elite, quedó por debajo del promedio nacional, con entre 217 y 251 puntos en el Simce. Pues bien, a pesar de sus malos resultados, en 2017 Diego ganaba $1.071.756.
+
+Juan partió la carrera con todas las desventajas: menor nivel socioeconómico y capital cultural, y una inversión por alumno entre 5 y 6 veces inferior a la que recibió Diego. Así y todo, en una hazaña improbable, le sacó más de 100 puntos de ventaja en el Simce. Pero, lejos de ser premiado por su talento sobresaliente, ahora Juan tiene un trabajo peor pagado que Diego.
+
+(adaptado de columna de Daniel Matamala en La Tercera, ver original [aquí](https://www.latercera.com/opinion/noticia/pedro-juan-diego/502941/) )
+
+???
+
+  - Anotar lo que les llame la atención.
+  - Discutir en duplas (5 min), luego pequeño plenario
+
+  - ¿Cómo se relaciona el mérito con rendimiento académwico?
+  - ¿Qué teorías hay en contraste aquí?
+  - ¿Cómo se podría investigar este tema?
+
+---
+# Explicación ... y un mundo de datos
+
+- Aumento de bases de datos en diferentes temas, con mediciones comparables a nivel internacional, y con crecientes grados de complejidad. [Ejemplos](https://github.com/erikgahner/PolData).
+
+- Del mismo modo existe una creciente profesionalización en repositorios de datos, y curatoria enfocada a compartir, preservar, citar, explorar y analizar datos de otras investigacione. [Proyecto Dataverse](https://dataverse.harvard.edu/dataverse/harvard?q=&fq0=subject_ss%3A"Social%20Sciences"&types=dataverses%3Adatasets&sort=dateSort&order=desc
+  ).
+
+
+---
+class: inverse, middle, center
+
+# Este curso
+
+## y <-- bx + e
+
+(programa & sesiones)
+
+???
+
+Por qué es importante este curso:
+
+  - Todos tenemos teorías para muchas cosas, pero: ¿Qué es lo que diferencia a un cientista social? Sistematicidad y herramientas específicas teóricas y prácticas.
+  - En este curso vamos a aprender una herramienta muy relevante para la investigación empírica en sociología: modelo de regresión. Este modelo estadístico nos va a permitir estimar relaciones de predicción entre variables, lo que se relaciona con la explicación en ciencias sociales. Es decir, en términos simples, en qué medida si conozco el valor de una(s) variable(s), puedo conocer el valor de la otra, lo que puede concebirse como una versión minimalista y estadística de una teoría.
+  -  Hacer referencia a que la participación de sociólogas en este espacio es importante, que estos modelos son la base de muchos otros modelos en investigación cuantitativa y que además permite en diálogo interdisciplinario.
+  - Ronda de presentación
+
+---
+
+# El programa
+
+???
+
+- Lectura programa (descripción, objetivos, evaluación)
+- Programación de sesiones y lecturas
+
+---
+# Definiciones y acuerdos básicos
+
+- Estadística vs. investigación aplicada
+
+- Orientación práctica: aprender haciendo
+
+- Protagonismo en el proceso de aprendizaje
+
+- Reproducibilidad, colaboración y ciencia abierta
+
+
+???
+  - Esto no es un curso de estadística, es un curso de herramientas de investigación sociológica aplicadas a datos cuantitativos.
+  - En la lógica de herramienta, se aprende principalmente practicando, resolviendo problemas y dificultades.
+  - Reproducibilidad y ciencia abierta
+  - Protagonismo en su propio proceso de aprendizaje:
+    - Roles: protagonista, actor secundario o espectador.
+    - Decidir tempranamente qué rol se va a tomar evita frustraciones.
+
+---
+class: inverse, middle, center
+
+## Parte 2: La explicación en sociología empírica
+
+---
+# Teorías y explicación
+
+![](coleman2macro.jpg)
+
+---
+# Explanandum y explanans
+
+  - **Explanandum**: el fenómeno que pretendemos explicar
+    - definición precisa
+    - relevancia
+    - variabilidad
+
+  - **Explanans**: lo que genera la aparición del fenómeno
+    - relación lógica (silogismo y "falacia de la afirmación del consecuente")
+    - eficacia explicativa (elegancia, potencial heurístico, parsimonia)
+    - claridad
+
+???
+Explicación: relación entre hechos y "causas"
+Algunos ejemplos:
+- ideología de izquierda y participación política
+- nivel socioeconómico y rendimiento académico
+
+---
+# Algunos antecedentes de la explicación en sociología empírica
+
+- Uso de métodos cuantitativos en sociología: rezago frente a disciplinas como la economía (econometría) y psicología (psicometría)
+
+- Vaivenes y discontinuidades entre Europa y Estados Unidos
+
+- Gustav von Schmoller y el Methodenstreit (deductivo vs inductivo): promueve extensivo uso de datos históricos, que confusamente se asocian a "causas".
+
+- Fundación del laboratorio de estadística de universidad de Columbia: Giddings, "Statistics & Sociology" & Chapin, "Fieldwork & Social Research" (1920).
+
+---
+# Algunos antecedentes de la explicación en sociología empírica
+
+- Uso de tablas y comienzos de regresión (Lundberg, 1929), basadas en nociones del positivismo lógico: busqueda de definiciones operacionales genuinas y clasificaciones objetivas. Foco en correlación y abandono de causalidad.
+
+- Stouffer et. al ("The American Soldier", 1949): estudio de actitudes basado en encuestas, y aporte de Lazarfeld (1950) sobre control estadístico de relaciones espúreas mediante regresión múltiple.
+
+- Etapa actual: relaciones múltiples entre variables (ecuaciones estructurales), foco en mecanismos y experimentos sociológicos. Vuelta a la relación entre explicación y causalidad.
+
+???
+
+Idea central: como se plantea una forma inductiva de hacer sociología vs. la tradición teórica deductiva, que comienza de ideas y principios generales.
+Esto comienza de manera más bien descriptiva-historicista en Europa (Ej: El Suicidio), para luego basarse en análisis de datos en base a modelos de probabilidad (Universidad de Columbia)
+
+
+---
+# Modalidades de explicación en ciencias sociales (Linares,2018).
+
+- Por leyes de cobertura
+
+- Explicación Funcional
+
+- Explicación Estadística
+
+- Explicación "como si"
+
+- *Explicación por mecanismos*
+
+???
+
+Se podría comentar las orientaciones sociologicas asociadas al neopositivismo (logica galileana) y a la hermeneutica (logica aristotelica). "La primera tradición gira en torno al ceoncepto de explicación causal (explicación a través de causas eficientes), mientras que la segunda gira en torno al concepto de explicación teleológica(explicación a través de causas finales o telos) "(Linares, p.57)
+
+
+---
+# Explicación y modelos estadísticos
+
+¿Es posible lograr explicaciones desde el análisis de datos?
+
+  - existen mejores y peores formas de aproximarse a la explicación
+
+  - desde la regresión, una de las claves es el *control estadístico*, que permite lidiar con explicaciones alternativas
+
+???
+Ejemplos de Control.
+
+- Si un investigador encuentra relación entre grupo etnico y actitudes hace el gasto publico. Se controlo por las diferencias de ingreso entre grupos?
+
+
+---
+# ...Volviendo a Pedro, Juan & Diego
+
+.center[![Modelo Blau-Duncan (1967)](ModeloBlauDuncan.png)]
+
+
+???
+Modelo de transmición intergeneracional de la desigualdad.
+
+- Uno de los primeros modelos en sociología que utiliza el path analysis o analisis de sendero.
+
+- En este modelo se puede apreciar la operacionalización de un fenomeno abstracto como la transmición intergeneracional de la desigualdad.
+
+- Sinergia entre Teoría sociologíca y explicación por mecanismos.
+
+
+---
+# Preguntas
+
+- Responder anónimamente las siguientes preguntas en una hoja 
+- Solo anotar el número de la pregunta y la respuesta 
+- Si no se sabe la respuesta, simplemente escribir "No sé"
+
+_________________________
+
+### 1. ¿Entre qué rango varía una correlación?
+### 2. ¿Para qué se usa el test de diferencia de Chi2?
+### 3. ¿Cual es la relación entre varianza y desviación estándar?
+
+
+---
+class: inverse, bottom, left
+
+### Estadística multivariada - Sesión 1

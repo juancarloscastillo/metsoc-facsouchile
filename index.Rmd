@@ -17,9 +17,9 @@ output:
 
 ## Sitio (provisorio) del curso *Estadística Multivariada*, que incluye la información de programación, evaluación, prácticas y presentaciones.
 
-El programa oficial del curso se puede bajar [aquí]()
+El programa oficial del curso se puede bajar [aquí](documents/programa/Estadística Multivariada_programa.pdf)
 
-La programación de las sesiones se encuentra [aquí]()
+La programación de las sesiones se encuentra [aquí](documents/programa/Multiv2019prog_sesiones.pdf)
 
 
 
