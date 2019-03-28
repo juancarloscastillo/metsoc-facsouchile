@@ -1,0 +1,22 @@
+name: "Estadística Multivariada"
+output_dir: "."
+navbar:
+  title: "Estadística Multivariada"
+  right:
+  - text: "Sesiones"
+    href: sesiones.html
+  - text: "Prácticas"
+    href: practicas.html
+  - text: "Contacto"
+    href: contact.html
+  - icon: fa-github fa-lg
+    href: http://github.com/juancarloscastillo
+ 
+output:
+  html_document:
+    theme: yeti
+    highlight: pygments
+    css: style4.css
+    includes:
+      in_header: academicons.html
+      # after_body: footer.html

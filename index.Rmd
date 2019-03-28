@@ -1,0 +1,27 @@
+---
+title: "Inicio"
+author: " "
+output:
+    html_document:
+        smart: false
+        theme: united
+        highlight: tango
+        includes:
+          before_body: header.html
+#          after_body: footer.html
+
+---
+
+<br/>
+<br/>
+
+## Sitio (provisorio) del curso *Estadística Multivariada*, que incluye la información de programación, evaluación, prácticas y presentaciones.
+
+El programa oficial del curso se puede bajar [aquí]()
+
+La programación de las sesiones se encuentra [aquí]()
+
+
+
+
+

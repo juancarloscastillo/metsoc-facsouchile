@@ -1,0 +1,15 @@
+---
+title: "Sesiones "
+author: "Juan Castillo "
+output:
+    html_document:
+        theme: united
+
+---
+
+<br/>
+
+Probando 
+  
+<iframe src="https://juancarloscastillo.github.io/jc-castillo/documents/presentacion-final/present-panel-alas2018.html#1" height="500" width="775">
+</iframe>

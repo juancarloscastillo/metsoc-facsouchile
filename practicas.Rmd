@@ -1,0 +1,13 @@
+---
+title: "Practicas"
+author: "Juan Castillo "
+output:
+    html_document:
+        theme: united
+        toc: TRUE
+        toc_float: TRUE
+
+---
+<br/>
+
+<br/>
