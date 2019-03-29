@@ -8,9 +8,9 @@ output:
 ---
 <br/>
 
-### Prácticas 
+### Prácticas
 
-- [Práctica 1: Regresión Simple](documents/practicas/1_regsimp/prac1_regsimp.html)
+- [1: Regresión Simple](documents/practicas/1_regsimp/prac1_regsimp.html)
 
 
 <br/>
