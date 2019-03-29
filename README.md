@@ -1,1 +1,1 @@
-## Sitio web del curso Estadstica Multivariada
+## Sitio web del curso Estadística Multivariada
