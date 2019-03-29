@@ -8,6 +8,7 @@ output:
 ---
 
 <br/>
+
 # Documentos de presentación
 (generados vía Rmarkdown - [Xaringan](https://github.com/yihui/xaringan))
 
