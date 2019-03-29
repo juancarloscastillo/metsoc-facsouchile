@@ -30,24 +30,32 @@
 
 html, body {
   font-weight: 400;
-  font-size: 20px;
+  font-size: 25px;
   height: 100%;
-  font-family: 'Verdana', sans-serifserif;
+  font-family: Bebas Neue;
 }
 
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Times New Roman', serif;
+  font-family: 'Verdana', serif;
 }
 
+h1 {
+  font-family: 'Verdana', serif;
+    color: #dc322f;  
+}
+
+
+
 h1.title {
-  color: #FFFFFF;  
+  color: #dc322f;  
   font-size: 3px;
   }
 
 
 .navbar-default {
   background-color: var(--pale-black);
+  color: #d1420e;
 }
 
 
@@ -56,8 +64,9 @@ h1.title {
 .navbar-brand {
   font-family: 'Book Antiqua', serif;
   font-weight: 300;
-  font-size: 24px;
+  font-size: 40px;
   height: 100%;
+  color: #d1420e;
 }
 
 #rbmvFooter {

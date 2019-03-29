@@ -1,16 +1,16 @@
 ---
 title: "Practicas"
-author: "Juan Castillo "
+author: " "
 output:
     html_document:
         theme: united
-        toc: TRUE
-        toc_float: TRUE
 
 ---
 <br/>
 
-- [Práctica 1: Regresión Simple] ("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/practicas/1_regsimp/prac1_regsimp.html")
+### Prácticas 
+
+- [Práctica 1: Regresión Simple](documents/practicas/1_regsimp/prac1_regsimp.html)
 
 
 <br/>

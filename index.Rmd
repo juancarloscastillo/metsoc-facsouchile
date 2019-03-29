@@ -15,7 +15,21 @@ output:
 <br/>
 <br/>
 
-## Sitio (provisorio) del curso *Estadística Multivariada*, que incluye la información de programación, evaluación, prácticas y presentaciones.
+# **Curso Estadística multivariada - 1er sem 2019**
+
+<br/>
+
+## **Facultad de Ciencias Sociales, Universidad de Chile**
+
+<br/>
+
+## **Profesores**: Juan Carlos Castillo & Alejandro Plaza
+
+
+<br/>
+<br/>
+
+## *Programación*
 
 El programa oficial del curso se puede bajar [aquí](documents/programa/Estadística Multivariada_programa.pdf)
 

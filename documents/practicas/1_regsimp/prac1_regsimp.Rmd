@@ -1,10 +1,9 @@
 ---
-title: "Practica 1: Primera estimación regresión simple"
-subtitle: "Estadistica Multivariada - Sociología FACSO Universidad de Chile"
-author: "Juan Carlos Castillo & Alejandro Plaza"
+title: " "
+author: " "
 output:
   html_document:
-    theme: flatly
+    theme: united
     highlight: tango
     toc: true
     toc_float: true
@@ -16,6 +15,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Practica 1: Primera estimación regresión simple
+Estadistica Multivariada - Sociología FACSO Universidad de Chile
 
 # Introducción
 

@@ -8,16 +8,25 @@ output:
 ---
 
 <br/>
+# Documentos de presentación
+(generados vía Rmarkdown - [Xaringan](https://github.com/yihui/xaringan))
+
+<br/>
+
 
 *Sesión 1: Presentación e introducción*
   
 <iframe src=documents/presentaciones/1intro/0_presentacion.html height="500" width="775">
 </iframe>
 
+<br/>
+
 *Sesión 2: Bases*
   
 <iframe src=documents/presentaciones/2bases/1_bases.html height="500" width="775">
 </iframe>
+
+<br/>
 
 *Sesión 3: Introducción a regresión simple*
   
