@@ -3,7 +3,11 @@ title: "Trabajos"
 author: " "
 output:
     html_document:
-        theme: united
+      theme: united    
+      toc: true
+      toc_float: true
+      toc_depth: 2
+
 
 ---
 # Pauta trabajo Estadística Multivariada
@@ -51,7 +55,7 @@ Formato:
 - si se prefiere entregar en formato tradicional, es tamaño carta letra times new roman 12 (o equivalente) espacio 1,5, 3 cm márgenes laterales; en archivo pdf.
 - referencias APA o Chicago.
 
-# Fechas importantes:
+## Fechas importantes
 
 - Lunes 15 de Abril: inscripción de temas
 - Lunes 20 Mayo: informe de avance (20%).
