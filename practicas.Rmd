@@ -10,7 +10,8 @@ output:
 
 ### Prácticas
 
-- [1: Regresión Simple](documents/practicas/1_regsimp/prac1_regsimp.html)
-
+- [1: Regresión Simple 1: Primera estimación](documents/practicas/1_regsimp/prac1_regsimp.html)
 
 <br/>
+
+- [2: Regresión Simple 2: Ajuste general, residuos y correlación](documents/practicas/2regsimp/prac2_regsimp1.html)
