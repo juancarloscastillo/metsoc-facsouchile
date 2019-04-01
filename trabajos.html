@@ -1,341 +1,57 @@
-<!DOCTYPE html>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
-
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
-
-
-<meta name="author" content="" />
-
-
-<title>Trabajos</title>
-
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-<link rel="stylesheet" href="site_libs/academicons-1.8.6/css/academicons.css" />
-
-
-
-
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
-
-<link rel="stylesheet" href="style4.css" type="text/css" />
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
-img {
-  max-width:100%;
-  height: auto;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-</style>
-
-
-<style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script>
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.parent().addClass('active');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
-<!-- code folding -->
-
-
-
-
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
 </head>
-
 <body>
-
-
-<div class="container-fluid main-container">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Estadística Multivariada</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="sesiones.html">Sesiones</a>
-</li>
-<li>
-  <a href="practicas.html">Prácticas</a>
-</li>
-<li>
-  <a href="trabajos.html">Trabajos</a>
-</li>
-<li>
-  <a href="varios.html">Varios</a>
-</li>
-<li>
-  <a href="https://github.com/juancarloscastillo/metsoc-facsouchile">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div class="fluid-row" id="header">
-
-
-
-<h1 class="title toc-ignore">Trabajos</h1>
-
-</div>
-
-
-<p><br/></p>
-<p>(<em>En construcción</em>)</p>
-
-
-
-
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
+<h1 id="pauta-trabajo-estadística-multivariada">Pauta trabajo Estadística Multivariada</h1>
+<h2 id="objetivo-general">Objetivo general</h2>
+<p>Aplicar los contenidos del curso a una temática de interés en formato de artículo de investigación breve.</p>
+<h2 id="sobre-los-temas">Sobre los temas</h2>
+<p>Para poder lograr un mayor foco y colaboración en temáticas específicas, así como también facilitar el proceso de asesorías, se proponen fuentes de datos específicas con las cuales realizar los trabajos:</p>
+<ul>
+<li><a href="http://www.elsoc.cl/">ELSOC</a> (Ola 1)</li>
+<li><a href="http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/basedatos.php">CASEN</a> (evt. subset)</li>
+<li><a href="https://www.agenciaeducacion.cl/evaluaciones/que-es-el-simce/">SIMCE</a> (evt. subset)</li>
+<li><a href="https://www.vanderbilt.edu/lapop-espanol/">LAPOP</a> - OLA 2016</li>
+<li><a href="https://www.desiguales.org/descripcin-del-libro">Desiguales</a></li>
+<li>CEP Chile - ISSP</li>
+<li>2016 <a href="https://dbk.gesis.org/dbksearch/sdesc2.asp?no=6900&amp;db=E&amp;tab=3">Rol del gobierno</a></li>
+<li>2017 <a href="https://dbk.gesis.org/DBKsearch/SDESC2.asp?no=6980&amp;tab=3&amp;db=E">Redes sociales</a></li>
+<li><ul>
+<li>eventualmente otras bases</li>
+</ul></li>
+</ul>
+<h2 id="modalidad-de-trabajo-y-asesorías">Modalidad de trabajo y asesorías</h2>
+<p>Los trabajos por regla general se realizarán en duplas, a menos que se justifique una situación diferente.</p>
+<p>Las duplas se inscribirán hasta la semana del 15 de Abril con un tema / base de datos específica a trabajar.</p>
+<h2 id="formato-entregas">Formato entregas</h2>
+<p>Este trabajo posee dos entregas, tal como se señala en el programa del curso: un informe de avance (20% nota final) y un informe final (30%). El informe final debe tener formato de artículo/reporte breve de investigación, con las siguientes secciones y número de palabras sugeridas (total máximo 3.500):</p>
+<ol style="list-style-type: decimal">
+<li>Título</li>
+<li>Abstract (250 palabras), incluye: problema/pregunta, objetivo, datos (y N), resultado principal.</li>
+<li>Introducción: definición de la problemática a abordar, su relevancia y principales conceptos (500 palabras).</li>
+<li>Objetivos / hipótesis (alrededor de 3) (250 palabras)</li>
+<li>Metodología: datos (no olvidar número de casos), variables y métodos (500 palabras)</li>
+<li>Análisis (1500 palabras)</li>
+<li>Discusión de los resultados, con énfasis en la relación entre variable dependiente e independientes, limitaciones, posibles estudios futuros. (500 palabras)</li>
+</ol>
+<p>Para el informe de avance se espera un reporte de alrededor de 1500-2000 palabras que sea una especie de borrador del informe final. La idea es avanzar en todas las secciones, incluyendo la temática general a abordar así como también datos y variables en la sección de métodos, y análisis descriptivos. El énfasis en esta primera entrega se encuentra en el planteamiento de las hipótesis y el modelo de regresión asociado, incluyendo una primera estimación. En el caso de los trabajos donde la variable dependiente sea dicotómica, para esta primera entrega la estimación puede ser realizada preliminarmente con OLS, y para la segunda se espera estimación con regresión logística. En la segunda entrega se corrigen los aspectos críticos según la primera evaluación, y se profundiza en chequeo de supuestos, casos influyentes e interacciones.</p>
+<p>Formato:</p>
+<ul>
+<li>el formato recomendado es (R)Markdown, que facilita la integración y reproducibilidad de los análisis en R (<a href="http://rusersgroup.com/blog/rmarkdown/">http://rusersgroup.com/blog/rmarkdown/</a>). Se pondrá a disposición una plantilla para realizar el trabajo en este formato.</li>
+<li>si se prefiere entregar en formato tradicional, es tamaño carta letra times new roman 12 (o equivalente) espacio 1,5, 3 cm márgenes laterales; en archivo pdf.</li>
+<li>referencias APA o Chicago.</li>
+</ul>
+<h1 id="fechas-importantes">Fechas importantes:</h1>
+<ul>
+<li>Lunes 15 de Abril: inscripción de temas</li>
+<li>Lunes 20 Mayo: informe de avance (20%).</li>
+<li>Lunes 17 Junio: informe final (30%)</li>
+</ul>
 </body>
 </html>
