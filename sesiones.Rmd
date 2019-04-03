@@ -15,26 +15,30 @@ output:
 <br/>
 
 
-*Sesión 1: Presentación e introducción*
+[*Sesión 1: Presentación e introducción*](documents/presentaciones/1intro/0_presentacion.html)
+
+
 
 <iframe src=documents/presentaciones/1intro/0_presentacion.html height="500" width="775">
 </iframe>
 
 <br/>
 
-*Sesión 2: Bases*
+[*Sesión 2: Bases*](documents/presentaciones/2bases/1_bases.html)
 
 <iframe src=documents/presentaciones/2bases/1_bases.html height="500" width="775">
 </iframe>
 
 <br/>
 
-*Sesión 3: Introducción a regresión simple*
+[*Sesión 3: Introducción a regresión simple*](documents/presentaciones/3regsimp1/3_regsimp1.html)
 
 <iframe src=documents/presentaciones/3regsimp1/3_regsimp1.html height="500" width="775">
 </iframe>
 
-*Sesión 4: Introducción a regresión simple 2*
+<br/>
+
+[*Sesión 4: Introducción a regresión simple 2*](documents/presentaciones/4regsimp2/4_regsimp2.html)
 
 <iframe src=documents/presentaciones/4regsimp2/4_regsimp2.html height="500" width="775">
 </iframe>

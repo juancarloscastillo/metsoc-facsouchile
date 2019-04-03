@@ -12,6 +12,11 @@ output:
 
 ---
 
+<!---
+Para rendir el sitio desde terminal R:
+rmarkdown::render_site(encoding = 'UTF-8')
+--->
+
 <br/>
 <br/>
 
@@ -34,8 +39,3 @@ output:
 El programa oficial del curso se puede bajar [aquí](documents/programa/Estadística Multivariada_programa.pdf)
 
 La programación de las sesiones se encuentra [aquí](documents/programa/Multiv2019prog_sesiones.pdf)
-
-
-
-
-
