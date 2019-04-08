@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Estadística Multivariada</title>
+    <meta charset="utf-8">
+    <meta name="author" content=".small[Juan Carlos Castillo &amp; Alejandro Plaza    Departamento de Sociología - UCH / COES   ]" />
+    <link rel="stylesheet" href="../xaringan_custom/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="../xaringan_custom/progress-bar.css" type="text/css" />
+    <link rel="stylesheet" href="../xaringan_custom/header-footer.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: bottom, left, exclude
+
+
+
+&lt;!---
+Para correr en ATOM
+- open terminal, abrir R (simplemente, R y enter)
+- rmarkdown::render('5_regmul1.Rmd', 'xaringan::moon_reader')
+
+About macros.js: permite escalar las imágenes como [scale 50%](path to image), hay si que grabar ese archivo js en el directorio.
+---&gt;
+
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo &amp; Alejandro Plaza
+
+## *Sesión 5* : Regresión múltiple 1
+
+
+---
+
+layout: true
+class: animated, fadeIn
+
+---
+class: inverse, bottom, left
+
+# **Contenidos**
+
+## 1. Repaso de sesión anterior
+
+## 2. Introducción a regresión múltiple
+
+## 3. Control estadístico y estimación de coeficientes
+
+---
+class: inverse, middle, center
+
+# 1. Repaso sesión anterior
+
+---
+# Componentes de la ecuación de la recta de regresión
+
+`$$\widehat{Y}=b_{0} +b_{1}X$$`
+
+Donde
+
+- `\(\widehat{Y}\)` es el valor estimado de `\(Y\)`
+
+- `\(b_{0}\)` es el intercepto de la recta (el valor de Y cuando X es 0)
+
+- `\(b_{1}\)` es el coeficiente de regresión, que nos dice cuánto aumenta Y por cada punto que aumenta X
+
+---
+# Resumiendo: Modelo de regresión (simple)
+
+.center[![](../images/regmod.png)]
+
+
+- Se estima mediante el método de mínimos cuadrados ordinarios (OLS)
+
+- Permite estimar el valor de una variable ( `\(\widehat{Y}\)` ) a partir del valor conocido de otra variable ( `\(X\)` )
+
+- La estimación se expresa en el coeficiente de regresión `\(b_{1}\)`, también llamado "beta" o pendiente
+
+- Este coeficiente se interpreta de la siguiente manera: Por cada unidad que aumenta X, Y aumenta en `\(b_{1}\)` unidades
+
+---
+# Descomponiendo Y
+
+Conceptualmente:
+
+`$$SS_{tot}=SS_{reg} + SS_{error}$$`
+
+![image](../images/resid_3.JPG)
+
+---
+# Varianza explicada II
+
+.center[![image](../images/plotreg.png)]
+
+- Un porcentaje de la variación de Y puede ser asociado a la variación de X:  `\(R^2\)`
+
+---
+class: inverse
+
+# Resumen regresión simple ... hasta ahora
+
+&lt;br&gt;
+
+### - Coeficiente de regresión por mínimos cuadrados: permite predecir en cuántas unidades aumenta _Y_ por cada punto de aumento en _X_
+
+### - El valor del beta de regresión nos informa sobre una magnitud y sentido de la pendiente, no sobre la bondad (ajuste) del modelo
+
+### - El ajuste del modelo a los datos se relaciona con la proporción de residuos generados por el modelo respecto de la varianza total de Y (_R2_)
+
+---
+class: middle, center
+
+# PREGUNTAS
+
+---
+class: inverse, middle, center
+
+# 2. Introducción a regresión múltiple
+
+
+---
+# Definiciones
+
+### En simple: modelo de regresión con más de un predictor o variable independiente
+
+.center[![image](../images/regmulwool.png)]
+
+
+---
+# Agregando predictores al modelo
+
+
+.pull-left[
+.center[![image](../images/ingresoeduc.png)]
+
+`$$\widehat{Ingreso}=b_0+b_1(Educación)$$`
+
+]
+
+--
+
+.pull-right[
+.center[![](../images/ingresoeducexp.png)]
+
+`$$\widehat{Ingreso}=$$`
+`$$b_0+b_1(Educación)+b_2(Experiencia)$$`
+]
+
+
+???
+
+- Tenemos un modelo teórico que relaciona ingreso con nivel educacional: a mayor ingreso, mayor nivel educacional.
+- Esto puede expresarse en un modelo de regresión
+- Qué sucede si nos surge la pregunta sobre la posibilidad de que otras variables también tienen que ver con ingreso?
+- Se puede agregar una tercera variable al modelo, pero: ¿qué consecuencias teóricas y empíricas tiene esto?
+
+---
+# Agregando predictores al modelo
+
+.pull-left[
+
+.center[![](../images/ingresoeducexp.png)]
+
+]
+
+.pull-right[
+
+- Teóricamente el modelo asume covariación entre Ingreso y Educación, y entre _Ingreso_ y _Experiencia_
+
+  - Pero ... también existe la posibilidad de covariación entre los predictores _Educación_ y _Experiencia_
+
+- La covariación de los predictores y su consideración en el modelo se relaciona con el **control estadístico**
+{{content}}
+
+]
+
+---
+# Concepto de control
+
+## 1. Control por diseño
+
+- Característico de la metodología experimental
+
+- El control se logra por diseño mediante **aleatorización** (al azar) de sujetos a diferentes situaciones experimentales
+
+- La distribución al azar a diferentes situaciones (ej: tratamiento y control) intenta aislar el efecto del tratamiento de todas las otras variables que podrían afectar en la respuesta
+
+---
+# Concepto de control
+
+## 2. Control estadístico
+
+- Al analizar datos de encuestas no tenemos (en principio) control por diseño, por lo que se recurre al **control estadístico**
+
+- Se logra incluyendo en el modelo de regresión las variables que teóricamente podrían dar cuenta o afectar la relación entre X e Y.
+
+- La inclusión de otras (co)variables despeja o "controla" la asociación de `\(X_1\)` e `\(Y\)`, aislando el efecto conjunto de `\(X_1\)` y `\(X_2\)` (... y `\(X_n\)`)
+
+---
+# Control estadístico
+
+.pull-left[
+- ¿Qué efecto posee el nivel educacional en ingreso, _controlando por_ experiencia?
+
+**Conceptualmente:**
+
+- aislar el efecto de educación en ingreso, manteniendo la experiencia _constante_.
+
+- estimar el efecto de educación en ingreso independiente del efecto de la experiencia
+
+- estimación del efecto de ingreso en educación _ceteris paribus_ (manteniendo el efecto del resto de los predictores constante)
+]
+
+.pull-right[
+.center[![](../images/ingresoeducexp.png)]
+]
+
+
+---
+class: inverse, center, middle, exclude
+
+# POR LO TANTO
+
+## Un aspecto **clave** de la regresión múltiple, tanto conceptual como estadísticamente, tiene que ver con el control de la CORRELACION ENTRE PREDICTORES O VARIABLES INDEPENDIENTES (X)
+
+---
+# Estimación de parámetros y control
+
+### Ejemplo 1: sin correlación relevante entre predictores
+
+.pull-left[
+.center[![](../images/ingeduex1.png)]
+]
+
+--
+
+.pull-right[.medium[
+Matriz de correlaciones:
+
+
+
+```r
+m1=cor(rdata1)
+round(m1, digits=2)
+```
+
+```
+##             ingreso educacion experiencia
+## ingreso        1.00      0.36        0.28
+## educacion      0.36      1.00       -0.02
+## experiencia    0.28     -0.02        1.00
+```
+]
+]
+
+---
+# Estimación de parámetros y control
+
+### Ejemplo 1: sin correlación relevante entre predictores
+
+.pull-left[
+.center[![](../images/ingeduex1.png)]
+]
+
+.pull-right[.small[
+
+```r
+library(corrplot)
+corrplot.mixed(m1, number.cex=6, tl.cex=4)
+```
+
+![](5_regmul1_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+]
+---
+# Estimación de parámetros y control
+
+### Ejemplo 1: sin correlación relevante entre predictores
+
+
+&lt;table cellspacing="0" align="center" style="border: none;"&gt;
+&lt;caption align="bottom" style="margin-top:0.3em;"&gt; &lt;/caption&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 1&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 2&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 3&lt;/b&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(Intercept)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-0.15&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-0.15&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-0.16&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.09)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.10)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.09)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;educacion&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.40&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.40&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.10)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.10)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;experiencia&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.30&lt;sup style="vertical-align: 0px;"&gt;**&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.31&lt;sup style="vertical-align: 0px;"&gt;**&lt;/sup&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.10)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.10)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="border-top: 1px solid black;"&gt;R&lt;sup style="vertical-align: 0px;"&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.13&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.08&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.21&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;Adj. R&lt;sup style="vertical-align: 0px;"&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.12&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.07&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.20&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;Num. obs.&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;100&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;100&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;RMSE&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;0.94&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;0.97&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;0.90&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;" colspan="5"&gt;&lt;span style="font-size:0.8em"&gt;&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;p &amp;lt; 0.001, &lt;sup style="vertical-align: 0px;"&gt;**&lt;/sup&gt;p &amp;lt; 0.01, &lt;sup style="vertical-align: 0px;"&gt;*&lt;/sup&gt;p &amp;lt; 0.05&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+---
+# Estimación de parámetros y control
+
+### Ejemplo 2: con correlación entre predictores
+
+.pull-left[
+.center[![](../images/ingresoeducexp.png)]
+]
+
+--
+
+.pull-right[.medium[
+Matriz de correlaciones:
+
+
+
+```r
+m2=cor(rdata2)
+round(m2, digits=2)
+```
+
+```
+##             ingreso educacion experiencia
+## ingreso        1.00      0.48        0.47
+## educacion      0.48      1.00        0.29
+## experiencia    0.47      0.29        1.00
+```
+]
+]
+
+---
+# Estimación de parámetros y control
+
+### Ejemplo 2: con correlación entre predictores
+
+.pull-left[
+.center[![](../images/ingresoeducexp.png)]
+]
+
+.pull-right[.small[
+
+```r
+library(corrplot)
+corrplot.mixed(m2,number.cex=6, tl.cex=4)
+```
+
+![](5_regmul1_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+]
+
+
+---
+# Estimación de parámetros y control
+
+### Ejemplo 2: con correlación entre predictores
+
+
+&lt;table cellspacing="0" align="center" style="border: none;"&gt;
+&lt;caption align="bottom" style="margin-top:0.3em;"&gt; &lt;/caption&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 1&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 2&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 3&lt;/b&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(Intercept)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-0.15&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-0.14&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-0.14&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.09)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.09)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.08)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;educacion&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.52&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.40&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.10)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.09)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;experiencia&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.50&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.39&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.10)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(0.09)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="border-top: 1px solid black;"&gt;R&lt;sup style="vertical-align: 0px;"&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.23&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.22&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.35&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;Adj. R&lt;sup style="vertical-align: 0px;"&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.22&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.21&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.33&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;Num. obs.&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;100&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;100&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;RMSE&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;0.89&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;0.89&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;0.82&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;" colspan="5"&gt;&lt;span style="font-size:0.8em"&gt;&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;p &amp;lt; 0.001, &lt;sup style="vertical-align: 0px;"&gt;**&lt;/sup&gt;p &amp;lt; 0.01, &lt;sup style="vertical-align: 0px;"&gt;*&lt;/sup&gt;p &amp;lt; 0.05&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+---
+# Estimación de parámetros y control estadístico
+
+- Los coeficientes de regresión (X) no alteran su valor en los modelos en ausencia de correlación entre ellos (Ejemplo 1)
+
+- Si hay correlación entre predictores, el valor de los coeficientes de regresión será distinto en modelos simples y en modelos múltiples
+
+- Por ello, en regresión múltiple se habla de coeficientes de regresión **parciales**
+
+- Esta diferencia se relaciona con el concepto de control estadístico
+
+  - Ejemplo 2, modelo 3: El ingreso aumenta en 0.4 puntos por cada nivel adicional de educación, **controlando por experiencia**. O también ...
+
+      - manteniendo la experiencia _constante_
+
+      - _ceteris paribus_
+
+---
+class: inverse
+
+# Resumen
+
+- regresión múltiple: más de un predictor / variable independiente en el modelo
+
+- Permite
+
+  - contrastar hipótesis de la influencia simultánea de más de una variable
+
+  - controlar por la posible influencia de terceras variables (control estadístico)
+
+- la estimación de los coeficientes de regresión en el caso múltiple se distingue de la simple porque considera la posible correlación entre predictores
+
+---
+class: bottom, left, exclude
+
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo &amp; Alejandro Plaza
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../xaringan_custom/macros.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>` ",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

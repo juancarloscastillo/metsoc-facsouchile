@@ -195,3 +195,10 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
     color: #225b7c;
 }
 
+
+.remark-slide-content:not(.exclude) {
+background-image: url(../images/footer.png);
+  background-position: 9% 100%;
+  background-size: 900px;
+  padding-left: 100px;  /* delete this for 4:3 aspect ratio */
+}
