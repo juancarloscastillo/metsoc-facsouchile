@@ -45,7 +45,7 @@ output:
 
 <br/>
 
-[*Sesión 5: Regresión múltiple 1 2*](documents/presentaciones/5regmul1/5_regmul1.html)
+[*Sesión 5: Regresión múltiple 1*](documents/presentaciones/5regmul1/5_regmul1.html)
 
 <iframe src=documents/presentaciones/5regmul1/5_regmul1.html height="500" width="775">
 </iframe>
