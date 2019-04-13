@@ -21,20 +21,39 @@ rmarkdown::render_site(encoding = 'UTF-8')
 <br/>
 
 # **Curso Estadística multivariada - 1er sem 2019**
+Web link: [http://bit.ly/multivariada](http://bit.ly/multivariada)
 
 <br/>
 
-## **Facultad de Ciencias Sociales, Universidad de Chile**
+## **Departamento de Sociología, Facultad de Ciencias Sociales - Universidad de Chile**
 
 <br/>
 
-## **Profesores**: Juan Carlos Castillo & Alejandro Plaza
+## **Equipo**:
+
+<br/>
+
+### _Profesores_
+
+  - Juan Carlos Castillo, juancastillov@uchile.cl - [jc-castillo.com](https://jc-castillo.com)
+  - Alejandro Plaza, agplaza@uc.cl
+
+<br/>
+
+### _Ayudantes_
+  - Anaís Herrera
+  - Carlos Budnevich
+  - Francisco Meneses
+  - Gabriel Sotomayor
+  - Matías Montero
+  - Simón Varas
+  - Sofía Villalobos
 
 
 <br/>
 <br/>
 
-## *Programación*
+## **Programación**
 
 El programa oficial del curso se puede bajar [aquí](documents/programa/Estadística Multivariada_programa.pdf)
 

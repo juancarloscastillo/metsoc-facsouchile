@@ -3,7 +3,7 @@ title: "Trabajos"
 author: " "
 output:
     html_document:
-      theme: united    
+      theme: united
       toc: true
       toc_float: true
       toc_depth: 2
@@ -19,6 +19,9 @@ Aplicar los contenidos del curso a una temática de interés en formato de artí
 Para poder lograr un mayor foco y colaboración en temáticas específicas, así como también facilitar el proceso de asesorías, se proponen fuentes de datos específicas con las cuales realizar los trabajos:
 
 - [ELSOC](http://www.elsoc.cl/) (Ola 1)
+  - [Cuestionario Ola 1] (http://www.elsoc.cl/wp-content/uploads/2017/05/Cuestionario_ELSOC_Ola_01_Completo.pdf)
+  - [Libro de códigos Ola 1](http://www.elsoc.cl/wp-content/uploads/2017/05/Libro_de_Codigos_ELSOC_Ola_01_Completo.pdf)
+  - [base de datos Ola 1](documents/data/COESW1_Stata14_V3.dta)
 - [CASEN](http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/basedatos.php) (evt. subset)
 - [SIMCE](https://www.agenciaeducacion.cl/evaluaciones/que-es-el-simce/) (evt. subset)
 - [LAPOP](https://www.vanderbilt.edu/lapop-espanol/) - OLA 2016
