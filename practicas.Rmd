@@ -15,3 +15,7 @@ output:
 <br/>
 
 - [2: Regresión Simple 2: Ajuste general, residuos y correlación](documents/practicas/2regsimp/prac2_regsimp1.html)
+
+<br/>
+
+- [2: Regresión Múltiple: Control y parcialización correlación](documents/practicas/3regmul/Practica3_regmul2.html)

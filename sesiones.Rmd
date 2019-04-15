@@ -38,14 +38,19 @@ output:
 
 <br/>
 
-[*Sesión 4: Introducción a regresión simple 2 2*](documents/presentaciones/4regsimp2/4_regsimp2.html)
+[*Sesión 4: Introducción a regresión simple 2*](documents/presentaciones/4regsimp2/4_regsimp2.html)
 
 <iframe src=documents/presentaciones/4regsimp2/4_regsimp2.html height="500" width="775">
 </iframe>
 
 <br/>
 
-[*Sesión 5: Regresión múltiple 1*](documents/presentaciones/5regmul1/5_regmul1.html)
+[*Sesión 5: Regresión múltiple 1: Introducción 1*](documents/presentaciones/5regmul1/5_regmul1.html)
 
 <iframe src=documents/presentaciones/5regmul1/5_regmul1.html height="500" width="775">
+</iframe>
+
+[*Sesión 6: Regresión múltiple 2: Control y parcialización 1*](documents/presentaciones/6regmul2/6_regmul2.html)
+
+<iframe src=documents/presentaciones/6regmul2/6_regmul2.html height="500" width="775">
 </iframe>

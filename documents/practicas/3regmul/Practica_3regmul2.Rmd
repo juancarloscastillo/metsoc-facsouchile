@@ -1,5 +1,5 @@
 ---
-title: "Practica 2: Ajuste, Residuos y Correlación"
+title: "Practica 3: Regresión múltiple, control estadístico y parcialización"
 subtitle: "Estadistica Multivariada - Sociología FACSO Universidad de Chile"
 author: "Juan Carlos Castillo & Alejandro Plaza"
 output:
@@ -32,13 +32,10 @@ Este ejericio corresponde al que se detalla en la sesión 6 [ver aquí](https://
 pacman::p_load(dplyr,
                corrplot,
                ggplot2,
-               scatterplot3d,
                texreg,
-               kable,
                stargazer)
 
-datos=read.csv("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/presentaciones/3regsimp1/6regmul2/ingedexp.csv", sep="")
-stargazer(datos, type = "text", digits=0)
+datos=read.csv("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/presentaciones/6regmul2/ingedexp.csv", sep="")
 ```
 
 Ver datos
@@ -75,7 +72,7 @@ reg_y_x2=lm(ingreso ~ experiencia, data=datos)
 reg_y_x1_x2=lm(ingreso ~ educacion + experiencia , data=datos)
 
 
-screenreg(list(reg_y_x1,reg_y_x2,reg_y_x1_x2,reg_y_x1_x2_x1x2))
+screenreg(list(reg_y_x1,reg_y_x2,reg_y_x1_x2))
 ```
 
 
