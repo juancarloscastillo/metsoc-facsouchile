@@ -18,4 +18,4 @@ output:
 
 <br/>
 
-- [2: Regresión Múltiple: Control y parcialización correlación](documents/practicas/3regmul/Practica3_regmul2.html)
+- [3: Regresión Múltiple: Control y parcialización correlación](documents/practicas/3regmul/Practica3_regmul2.html)
