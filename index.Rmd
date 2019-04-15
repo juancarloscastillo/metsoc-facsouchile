@@ -29,6 +29,21 @@ Web link: [http://bit.ly/multivariada](http://bit.ly/multivariada)
 
 <br/>
 
+<div class="alert alert-info">
+  <strong>Noticias y fechas importantes</strong>
+
+  - Actualización documento programación de sesiones
+  - Cambio en fecha de Control 2: 6 de Mayo
+  - Fechas de Talleres (ayudantías)
+  - Recordar entrega de tema de investigación a más tardar el 16 de Abril
+
+
+</div>
+
+
+
+<br/>
+
 ## **Equipo**:
 
 <br/>
