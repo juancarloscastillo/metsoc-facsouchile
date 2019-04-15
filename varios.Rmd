@@ -11,6 +11,11 @@ output:
 <br/>
 <br/>
 
+### Links
+
+- [Stargazer: tablas en R con salida a html y otros formatos] (https://github.com/JakeRuss/cheatsheets/blob/master/stargazer.md)
+
+
 
 
 ### Horas de reunión

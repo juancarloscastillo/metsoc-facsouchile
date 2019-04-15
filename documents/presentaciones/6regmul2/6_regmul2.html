@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html>
   <head>
     <title>Estadística Multivariada</title>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta name="author" content=".small[Juan Carlos Castillo &amp; Alejandro Plaza    Departamento de Sociología - UCH / COES   ]" />
     <link rel="stylesheet" href="../xaringan_custom/xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="../xaringan_custom/progress-bar.css" type="text/css" />
@@ -55,7 +55,7 @@ class: inverse, bottom, left
 
 ## 2. Bases de control y parcialización
 
-## 3. Significación de coeficientes de regresión
+## 3. Demostración parcialización
 
 ---
 class: inverse, middle, center
@@ -84,7 +84,6 @@ class: inverse, middle, center
 
 
 ---
-
 # Regresión múltiple: &gt; 1 predictor
 
 `$$\widehat{Y}=b_{0}+b_{1}X_{1}+b_{2}X_{2}+b_{3}X_{3}+...+b_{k}X_{k}$$`
@@ -116,6 +115,13 @@ class: inverse, middle, center
 `$$\widehat{Ingreso}=b_0+b_1(Educ)+b_2(Exp)$$`
 ]
 
+---
+# Ejemplo
+
+.center[![](../images/paperclasemedia.png)]
+
+.small[Castillo, J., Miranda, D. &amp; Madero, I. (2013) Todos somos de clase media: Sobre el estatus social subjetivo en Chile. _Latin American Research Review_ 48(1) 155-173
+]
 ---
 # Control de terceras variables
 
@@ -441,27 +447,22 @@ class: inverse, middle, center
 
 
 
-
 ```r
-stargazer(datos, type="text")
+stargazer(datos, type = "html", digits=0)
 ```
 
-```
-## 
-## ==========================================================================
-## Statistic   N     Mean      St. Dev.     Min   Pctl(25) Pctl(75)    Max   
-## --------------------------------------------------------------------------
-## ID          10    5.500       3.028       1      3.2      7.8       10    
-## ingreso     10 495,000.000 323,565.200 100,000 225,000  762,500  1,000,000
-## educacion   10    3.900       1.663       1       3        5         6    
-## experiencia 10    2.300       0.823       1       2        3         3    
-## --------------------------------------------------------------------------
-```
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="6" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Statistic&lt;/td&gt;&lt;td&gt;N&lt;/td&gt;&lt;td&gt;Mean&lt;/td&gt;&lt;td&gt;St. Dev.&lt;/td&gt;&lt;td&gt;Min&lt;/td&gt;&lt;td&gt;Max&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="6" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;ID&lt;/td&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;6&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;10&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;ingreso&lt;/td&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;495,000&lt;/td&gt;&lt;td&gt;323,565&lt;/td&gt;&lt;td&gt;100,000&lt;/td&gt;&lt;td&gt;1,000,000&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;educacion&lt;/td&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;6&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;experiencia&lt;/td&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="6" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 ---
 # Ejemplo: correlaciones
 
-.pull-left[
+.pull-left[.small[
 
 ```r
 cormat=datos %&gt;% select(ingreso,educacion,experiencia) %&gt;% cor()
@@ -475,7 +476,7 @@ round(cormat, digits=2)
 ## experiencia    0.44      0.27        1.00
 ```
 ]
-
+]
 --
 
 .pull-right[
@@ -607,6 +608,26 @@ reg_y_x1_x2=lm(ingreso ~ educacion + experiencia , data=datos)
 ]
 
 ---
+# RESUMEN
+
+- Regresión múltiple: más de un predictor
+
+- No es equivalente a realizar regresiones múltiples por separado con cada predictor
+
+- Predictores correlacionados: requiere consideración, ya que de otra manera se estaría sobreestimando el efecto de `\(X\)` en `\(Y\)`
+
+- Además de ser una corrección estadística, el control se relaciona con preguntas sustantivas basadas en teoría
+
+- El output de regresión múltiple realiza automáticamente el control estadístico vía parcialización de coeficientes. Los detalles de este procedimiento se muestran a continuación.
+
+
+---
+class: inverse, center, middle
+
+# 3. Demostración parcialización
+
+
+---
 # Parcialización 1
 
 _¿Cómo se despeja la regresión de `\(Y\)` en `\(X_1\)` del efecto de `\(X_2\)`?_
@@ -614,6 +635,8 @@ _¿Cómo se despeja la regresión de `\(Y\)` en `\(X_1\)` del efecto de `\(X_2\)
 .pull-left[
 .center[![:scale 80%](../images/ingresoeducexp.png)]
 ]
+
+--
 
 .pull-right[
 .center[![:scale 80%](../images/partial1.png)]
@@ -626,11 +649,15 @@ Implica despejar `\(X_1\)` de su correlación con `\(X_2\)`, o **parcializar** `
 
 ¿Como obtenemos una variables `\(X_1\)` parcializada de `\(X_2\)`?
 
-- Pensemos en que `\(X_1\)` parcializada (de `\(X_2\)` ) es todolo de `\(X_1\)` que no tiene que ver con `\(X_2\)`
+--
 
-- En otras palabras, en un modelo donde `\(X_1\)` es la variable dependiente y `\(X_2\)` la independiente, `\(X_1\)` parcializada equivale al **residuo** de esta regresión
+- Pensemos en que `\(X_1\)` parcializada (de `\(X_2\)` ) es todo lo de `\(X_1\)` (varianza) que no tiene que ver con `\(X_2\)`
+
+--
 
 .center[![:scale 80%](../images/partial2.png)]
+
+- En otras palabras, en un modelo donde `\(X_1\)` es la variable dependiente y `\(X_2\)` la independiente, `\(X_1\)` parcializada equivale al **residuo** de esta regresión
 
 ---
 # Parcialización 4
@@ -643,27 +670,22 @@ Por lo tanto, para **demostrar** el concepto de parcialización en el ejemplo, l
 
 3. Regresión de `\(Y\)` en el residuo (=la variable parcializada)
 
-Con esto llegaremos a los regresores parciales (que son los que automáticamente aparecen en el output de la regresión múltiple)
+Con esto obtendremos el valor del regresor parcial correspondiente a educación (que es el que automáticamente aparece en el output de la regresión múltiple al incluir la variable experiencia)
 
 ---
 # Parcialización 5
 
-1.Regresión entre predictores
+**1.Regresión entre predictores**
 
 
 ```r
 reg_x1_x2=lm(educacion ~ experiencia , data=datos)
-reg_x1_x2
+coef(reg_x1_x2)
 ```
 
 ```
-## 
-## Call:
-## lm(formula = educacion ~ experiencia, data = datos)
-## 
-## Coefficients:
-## (Intercept)  experiencia  
-##       2.656        0.541
+## (Intercept) experiencia 
+##   2.6557377   0.5409836
 ```
 Por lo tanto, tenemos que nuestro modelo de regresión entre predictores, con educación como dependiente es:
 
@@ -672,7 +694,7 @@ Por lo tanto, tenemos que nuestro modelo de regresión entre predictores, con ed
 ---
 # Parcialización 6
 
-2.Obtención de residuo (valor estimado - observado)
+**2.Obtención de residuo (valor estimado - observado)**
 
 .medium[
 
@@ -707,7 +729,7 @@ Y residuo  `\(=2-3.2=-1.2\)`
 ---
 # Parcialización 7
 
-3.Regresión de Y en varaiable `\(X_1\)` parcializada = `\(X_{1.2}\)`
+**3.Regresión de Y en variable `\(X_1\)` parcializada = `\(X_{1.2}\)`**
 
 
 ```r
@@ -818,14 +840,202 @@ regy_resx1_2=lm(datos$ingreso ~ resx1_2)
 ---
 # Parcialización 8
 
-Formulas directas de regresores parciales:
+Ahora, lo mismo pero parcializando experiencia ( `\(X_2\)` ) de educación ( `\(X_1\)` )
 
-`$$b_1=(\frac{s_y}{s_1})(\frac{r_{y1}-r_{y2}r_{12}}{1-r^2_{12}})$$`
-`$$b_2=(\frac{s_y}{s_2})(\frac{r_{y2}-r_{y1}r_{12}}{1-r^2_{12}})$$`
+
+**1.Regresión de `\(X_2\)` (experiencia) en `\(X_1\)` (educación)**
+
+
+```r
+reg_x2_x1=lm(experiencia ~ educacion, data=datos)
+```
+
+**2. Obtención del residuo de la regresión (experiencia parcializada de educación)**
+
+
+```r
+resx2_1=residuals(reg_x2_x1)
+```
+
+**3. Regresión de `\(Y\)` (ingreso) en la variable parcializada `\(X_{2.1}\)`**
+
+
+```r
+regy_resx2_1=lm(datos$ingreso ~ resx2_1)
+```
 
 ---
+# Comparación final modelos
 
-comparación de scatters con y sin parcializar
+.small[
+
+&lt;table cellspacing="0" align="center" style="border: none;"&gt;
+&lt;caption align="bottom" style="margin-top:0.3em;"&gt; &lt;/caption&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 1&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 2&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 3&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 4&lt;/b&gt;&lt;/th&gt;
+&lt;th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;"&gt;&lt;b&gt;Model 5&lt;/b&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(Intercept)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-91566.27&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;93442.62&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-270638.30&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;495000.00&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;495000.00&lt;sup style="vertical-align: 0px;"&gt;**&lt;/sup&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(183509.80)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(302389.31)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(241882.27)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(79673.16)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(105186.77)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;educacion&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;150401.61&lt;sup style="vertical-align: 0px;"&gt;**&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;137092.20&lt;sup style="vertical-align: 0px;"&gt;*&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(43618.69)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(44602.35)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;experiencia&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;174590.16&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;100425.53&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(124491.71)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(90114.05)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;resx1_2&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;137092.20&lt;sup style="vertical-align: 0px;"&gt;*&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(52404.36)&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;resx2_1&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;100425.53&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;(139782.00)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="border-top: 1px solid black;"&gt;R&lt;sup style="vertical-align: 0px;"&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.60&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.20&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.66&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.46&lt;/td&gt;
+&lt;td style="border-top: 1px solid black;"&gt;0.06&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;Adj. R&lt;sup style="vertical-align: 0px;"&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.55&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.10&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.56&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;0.39&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;-0.06&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;Num. obs.&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;10&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;10&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;10&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;10&lt;/td&gt;
+&lt;td style="padding-right: 12px; border: none;"&gt;10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;RMSE&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;217656.84&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;307471.84&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;214438.31&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;251948.67&lt;/td&gt;
+&lt;td style="border-bottom: 2px solid black;"&gt;332629.78&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="padding-right: 12px; border: none;" colspan="7"&gt;&lt;span style="font-size:0.8em"&gt;&lt;sup style="vertical-align: 0px;"&gt;***&lt;/sup&gt;p &amp;lt; 0.001, &lt;sup style="vertical-align: 0px;"&gt;**&lt;/sup&gt;p &amp;lt; 0.01, &lt;sup style="vertical-align: 0px;"&gt;*&lt;/sup&gt;p &amp;lt; 0.05&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+]
+
+---
+# Comparando scatters
+
+.pull-left[
+**Ingreso &lt;- educ `\(X_1\)`**
+
+![](6_regmul2_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+**Ingreso &lt;- educ.parcial `\(X_{1.2}\)`**
+
+![](6_regmul2_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+]
+
+
+
+
+
+---
+# Formulas directas de regresores parciales:
+
+`$$b_1=\biggl(\frac{s_y}{s_1}\biggr)\biggl(\frac{r_{y1}-r_{y2}r_{12}}{1-r^2_{12}}\biggr)$$`
+
+`$$b_2=\biggl(\frac{s_y}{s_2}\biggr)\biggl(\frac{r_{y2}-r_{y1}r_{12}}{1-r^2_{12}}\biggr)$$`
+
+---
+class: inverse
+# RESUMEN
+
+- El control estadístico es central en regresión múltiple
+
+- Pregunta: ¿Es la relación entre _X_ e _Y_ _realmente_ debida a _X_, o hay otras variables que podrían dar cuenta de esta relación?
+
+- El control se implementa agregando predictores en el modelo que por razones teóricas se presume pueden afectar la relación del regresor principal en _Y_
+
+- Y en términos técnicos, esto opera mediante parcialización: los predictores se parcializan mutuamente, generando coeficientes de regresión parciales.
+
+- El regresor parcial entonces es un regresor ajustado por la presencia de otro(s) regresore(s)
 
 ---
 class: bottom, left, exclude
@@ -847,7 +1057,6 @@ class: bottom, left, exclude
 
 ## Juan Carlos Castillo &amp; Alejandro Plaza
     </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="../xaringan_custom/macros.js"></script>
 <script>var slideshow = remark.create({
@@ -859,79 +1068,26 @@ class: bottom, left, exclude
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
-})(document);
-
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
-  }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
 })();</script>
 
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
   }
-})();
-</script>
-
-<script>
-slideshow._releaseMath = function(el) {
-  var i, text, code, codes = el.getElementsByTagName('code');
-  for (i = 0; i < codes.length;) {
-    code = codes[i];
-    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
-      text = code.textContent;
-      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
-          /^\$\$(.|\s)+\$\$$/.test(text) ||
-          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
-        code.outerHTML = code.innerHTML;  // remove <code></code>
-        continue;
-      }
-    }
-    i++;
-  }
-};
-slideshow._releaseMath(document);
+});
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);

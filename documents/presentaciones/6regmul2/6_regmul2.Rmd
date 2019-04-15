@@ -67,7 +67,7 @@ class: inverse, bottom, left
 
 ## 2. Bases de control y parcialización
 
-## 3. Significación de coeficientes de regresión
+## 3. Demostración parcialización
 
 ---
 class: inverse, middle, center
@@ -96,7 +96,6 @@ $$\widehat{Y}=b_{0} +b_{1}X$$
 
 
 ---
-
 # Regresión múltiple: > 1 predictor
 
 $$\widehat{Y}=b_{0}+b_{1}X_{1}+b_{2}X_{2}+b_{3}X_{3}+...+b_{k}X_{k}$$
@@ -128,6 +127,13 @@ $$\widehat{Ingreso}=b_0+b_1(Educ)$$
 $$\widehat{Ingreso}=b_0+b_1(Educ)+b_2(Exp)$$
 ]
 
+---
+# Ejemplo
+
+.center[![](../images/paperclasemedia.png)]
+
+.small[Castillo, J., Miranda, D. & Madero, I. (2013) Todos somos de clase media: Sobre el estatus social subjetivo en Chile. _Latin American Research Review_ 48(1) 155-173
+]
 ---
 # Control de terceras variables
 
@@ -301,21 +307,20 @@ pacman::p_load(dplyr,
 datos=read.csv("ingedexp.csv", sep="")
 ```
 
-
-```{r message=FALSE}
-stargazer(datos, type="text")
+```{r message=FALSE, results='asis'}
+stargazer(datos, type = "html", digits=0)
 ```
 
 ---
 # Ejemplo: correlaciones
 
-.pull-left[
+.pull-left[.small[
 ```{r}
 cormat=datos %>% select(ingreso,educacion,experiencia) %>% cor()
 round(cormat, digits=2)
 ```
 ]
-
+]
 --
 
 .pull-right[
@@ -382,6 +387,26 @@ htmlreg(list(reg_y_x1,reg_y_x2,reg_y_x1_x2), booktabs = TRUE, dcolumn = TRUE, do
 ]
 
 ---
+# RESUMEN
+
+- Regresión múltiple: más de un predictor
+
+- No es equivalente a realizar regresiones múltiples por separado con cada predictor
+
+- Predictores correlacionados: requiere consideración, ya que de otra manera se estaría sobreestimando el efecto de $X$ en $Y$
+
+- Además de ser una corrección estadística, el control se relaciona con preguntas sustantivas basadas en teoría
+
+- El output de regresión múltiple realiza automáticamente el control estadístico vía parcialización de coeficientes. Los detalles de este procedimiento se muestran a continuación.
+
+
+---
+class: inverse, center, middle
+
+# 3. Demostración parcialización
+
+
+---
 # Parcialización 1
 
 _¿Cómo se despeja la regresión de $Y$ en $X_1$ del efecto de $X_2$?_
@@ -389,6 +414,8 @@ _¿Cómo se despeja la regresión de $Y$ en $X_1$ del efecto de $X_2$?_
 .pull-left[
 .center[![:scale 80%](../images/ingresoeducexp.png)]
 ]
+
+--
 
 .pull-right[
 .center[![:scale 80%](../images/partial1.png)]
@@ -401,11 +428,15 @@ Implica despejar $X_1$ de su correlación con $X_2$, o **parcializar** $X_1$ de 
 
 ¿Como obtenemos una variables $X_1$ parcializada de $X_2$?
 
-- Pensemos en que $X_1$ parcializada (de $X_2$ ) es todolo de $X_1$ que no tiene que ver con $X_2$
+--
 
-- En otras palabras, en un modelo donde $X_1$ es la variable dependiente y $X_2$ la independiente, $X_1$ parcializada equivale al **residuo** de esta regresión
+- Pensemos en que $X_1$ parcializada (de $X_2$ ) es todo lo de $X_1$ (varianza) que no tiene que ver con $X_2$
+
+--
 
 .center[![:scale 80%](../images/partial2.png)]
+
+- En otras palabras, en un modelo donde $X_1$ es la variable dependiente y $X_2$ la independiente, $X_1$ parcializada equivale al **residuo** de esta regresión
 
 ---
 # Parcialización 4
@@ -418,16 +449,16 @@ Por lo tanto, para **demostrar** el concepto de parcialización en el ejemplo, l
 
 3. Regresión de $Y$ en el residuo (=la variable parcializada)
 
-Con esto llegaremos a los regresores parciales (que son los que automáticamente aparecen en el output de la regresión múltiple)
+Con esto obtendremos el valor del regresor parcial correspondiente a educación (que es el que automáticamente aparece en el output de la regresión múltiple al incluir la variable experiencia)
 
 ---
 # Parcialización 5
 
-1.Regresión entre predictores
+**1.Regresión entre predictores**
 
 ```{r}
 reg_x1_x2=lm(educacion ~ experiencia , data=datos)
-reg_x1_x2
+coef(reg_x1_x2)
 ```
 Por lo tanto, tenemos que nuestro modelo de regresión entre predictores, con educación como dependiente es:
 
@@ -436,7 +467,7 @@ $$\widehat{educacion}=2.66+0.541_{experiencia}$$
 ---
 # Parcialización 6
 
-2.Obtención de residuo (valor estimado - observado)
+**2.Obtención de residuo (valor estimado - observado)**
 
 .medium[
 
@@ -456,7 +487,7 @@ Y residuo  $=2-3.2=-1.2$
 ---
 # Parcialización 7
 
-3.Regresión de Y en varaiable $X_1$ parcializada = $X_{1.2}$
+**3.Regresión de Y en variable $X_1$ parcializada = $X_{1.2}$**
 
 ```{r}
 regy_resx1_2=lm(datos$ingreso ~ resx1_2)
@@ -471,14 +502,81 @@ htmlreg(list(reg_y_x1,reg_y_x2,reg_y_x1_x2,regy_resx1_2), booktabs = TRUE, dcolu
 ---
 # Parcialización 8
 
-Formulas directas de regresores parciales:
+Ahora, lo mismo pero parcializando experiencia ( $X_2$ ) de educación ( $X_1$ )
 
-$$b_1=(\frac{s_y}{s_1})(\frac{r_{y1}-r_{y2}r_{12}}{1-r^2_{12}})$$
-$$b_2=(\frac{s_y}{s_2})(\frac{r_{y2}-r_{y1}r_{12}}{1-r^2_{12}})$$
+
+**1.Regresión de $X_2$ (experiencia) en $X_1$ (educación)**
+
+```{r}
+reg_x2_x1=lm(experiencia ~ educacion, data=datos)
+```
+
+**2. Obtención del residuo de la regresión (experiencia parcializada de educación)**
+
+```{r}
+resx2_1=residuals(reg_x2_x1)
+```
+
+**3. Regresión de $Y$ (ingreso) en la variable parcializada $X_{2.1}$**
+
+```{r}
+regy_resx2_1=lm(datos$ingreso ~ resx2_1)
+```
 
 ---
+# Comparación final modelos
 
-comparación de scatters con y sin parcializar
+.small[
+```{r echo=FALSE, results='asis'}
+htmlreg(list(reg_y_x1,reg_y_x2,reg_y_x1_x2,regy_resx1_2,regy_resx2_1), booktabs = TRUE, dcolumn = TRUE, doctype = FALSE, caption=" ")
+```
+]
+
+---
+# Comparando scatters
+
+.pull-left[
+**Ingreso <- educ $X_1$**
+
+```{r echo=FALSE}
+ggplot(datos, aes(x=educacion, y=ingreso)) + geom_point() +
+  geom_smooth(method=lm, se=FALSE)
+```
+]
+
+.pull-right[
+**Ingreso <- educ.parcial $X_{1.2}$**
+
+```{r echo=FALSE}
+ggplot(datos, aes(x=resx2_1, y=ingreso)) + geom_point() +
+  geom_smooth(method=lm, se=FALSE)
+```
+]
+
+
+
+
+
+---
+# Formulas directas de regresores parciales:
+
+$$b_1=\biggl(\frac{s_y}{s_1}\biggr)\biggl(\frac{r_{y1}-r_{y2}r_{12}}{1-r^2_{12}}\biggr)$$
+
+$$b_2=\biggl(\frac{s_y}{s_2}\biggr)\biggl(\frac{r_{y2}-r_{y1}r_{12}}{1-r^2_{12}}\biggr)$$
+
+---
+class: inverse
+# RESUMEN
+
+- El control estadístico es central en regresión múltiple
+
+- Pregunta: ¿Es la relación entre _X_ e _Y_ _realmente_ debida a _X_, o hay otras variables que podrían dar cuenta de esta relación?
+
+- El control se implementa agregando predictores en el modelo que por razones teóricas se presume pueden afectar la relación del regresor principal en _Y_
+
+- Y en términos técnicos, esto opera mediante parcialización: los predictores se parcializan mutuamente, generando coeficientes de regresión parciales.
+
+- El regresor parcial entonces es un regresor ajustado por la presencia de otro(s) regresore(s)
 
 ---
 class: bottom, left, exclude

@@ -1,0 +1,338 @@
+---
+title: "Practica 2: Ajuste, Residuos y Correlación"
+subtitle: "Estadistica Multivariada - Sociología FACSO Universidad de Chile"
+author: "Juan Carlos Castillo & Alejandro Plaza"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+En esta práctica nos enfocaremos en la comprensión del control estadístico a partir de la visualización de datos y la regresión parcial. Vamos a realizar dos ejercicios, el primero con los datos de la sesión correspondiene, y el segundo replicando el ejemplo de Darlington & Hayes
+
+
+# Ejemplo 1: ingreso, educación y experiencia.
+
+Este ejericio corresponde al que se detalla en la sesión 6 [ver aquí](https://juancarloscastillo.github.io/metsoc-facsouchile/sesiones.html)
+
+
+## Librerías y datos
+
+```{r}
+pacman::p_load(dplyr,
+               corrplot,
+               ggplot2,
+               scatterplot3d,
+               texreg,
+               kable,
+               stargazer)
+
+datos=read.csv("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/presentaciones/3regsimp1/6regmul2/ingedexp.csv", sep="")
+stargazer(datos, type = "text", digits=0)
+```
+
+Ver datos
+
+```{r}
+stargazer(datos, type = "text", digits=0)
+```
+
+
+## Correlaciones y scatters
+
+```{r}
+cormat=datos %>% select(ingreso,educacion,experiencia) %>% cor()
+round(cormat, digits=2)
+corrplot.mixed(cormat)
+```
+
+
+```{r}
+ggplot(datos, aes(x=educacion, y=ingreso)) + geom_point() +
+  geom_smooth(method=lm, se=FALSE) 
+
+ggplot(datos, aes(x=experiencia, y=ingreso)) + geom_point() +
+  geom_smooth(method=lm, se=FALSE) 
+
+ggplot(datos, aes(x=educacion, y=experiencia)) + geom_point() +
+  geom_smooth(method=lm, se=FALSE) 
+```
+
+## Regresiones
+```{r}
+reg_y_x1=lm(ingreso ~ educacion, data=datos)
+reg_y_x2=lm(ingreso ~ experiencia, data=datos)
+reg_y_x1_x2=lm(ingreso ~ educacion + experiencia , data=datos)
+
+
+screenreg(list(reg_y_x1,reg_y_x2,reg_y_x1_x2,reg_y_x1_x2_x1x2))
+```
+
+
+## Parciales
+
+```{r}
+
+reg_x1_x2=lm(educacion ~ experiencia , data=datos)
+
+x1_fit_x2=fitted.values(reg_x1_x2)
+resx1_2=residuals(reg_x1_x2)
+
+datos=cbind(datos, x1_fit_x2,resx1_2)
+datos
+
+regy_resx1_2=lm(datos$ingreso ~ resx1_2)
+
+
+screenreg(list(reg_y_x1,reg_y_x2,reg_y_x1_x2,regy_resx1_2), booktabs = TRUE, dcolumn = TRUE, doctype = FALSE, caption=" ")
+
+```
+
+
+¿Qué nos indica el coeficiente de regresión parcial?
+¿Cómo se podría obtener el segundo coeficiente?
+
+
+# Ejercicio 2: Ejemplo de Darlington & Hayes
+
+## Datos
+
+Los datos corresponden a la base de dato exercise que muestran Darlington y Hayes (2017) en el capitulo 3 de regresión multiple.
+
+wtloss: variable continua de perdida de peso en gramos.
+food  : variable continua de ingesta de comida medida en calorias
+exercise: promedio de horas de ejercicio a la semana.
+
+## Cargar bases de datos y librerias.
+```{r warning=FALSE, message=FALSE}
+#cargar base de datos
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(car)
+library(stargazer)
+library(texreg)
+
+# Leer datos
+
+exercise <- read_table2("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/practicas/3regmul/exercise.txt")
+
+
+exercise %>% select(id, exercise, food, wtloss)->data #filtrar casos con variables a examinar
+```
+
+
+## Sobre relaciones contraintuitivas
+
+```{rwarning=FALSE, message=FALSE}
+cor(data[2:4])
+```
+Como se puede ver en los datos la correlación entre ejercicio y perdida de peso es de 0.86. Aquellas personas que se ejercitan más tienen una mayor reducción de peso. Por otro lado la correlación entre el consumo de de comida y la perdida de peso es de 0.047. Ignorando el hecho de que es una correlación bastante pequeña, se puede observar una relación positiva, que al menos exploratoriamente es contraintutiva. Es decir a mayor consumo de comida existiría una mayor reducción de peso.
+
+Para entender este tipo de relaciones contraintuitivas una buena aproximación podría ser visualizar qué estaría ocurriendo con los datos. En el siguiente gráfico de dispersión se observa una relación levemente positiva entre la ingesta de comida y la perdida de peso.
+
+```{r}
+#Relacion lineal entre comida y perdida de peso
+ggplot(data, aes(x=food, y=wtloss)) +
+  geom_point() +
+  geom_smooth(method = "lm", se=F)+
+  xlim(0, 10)+
+  ylim(0, 14)+
+  theme_bw()
+```
+
+Ahora bien, puede que entre la relación de ingesta de comida con la perdida de peso exista la presencia de otra variable que pueda estar confundiendo, y que no esta considerada.
+
+En este caso, la variable que puede estar confundiendo refiere al ejercicio.
+En el siguiente gráfico se puede observar nítidamente esta relación.
+
+```{r}
+data$exercise1<- as.factor(data$exercise) #recodificamos a factor para plotear
+
+#Relacion lineal condicionada por cantidad de ejercicio.
+ggplot(data, aes(x=food, y=wtloss,shape=exercise1,color=exercise1)) +
+  geom_point() +
+  geom_smooth(method = "lm", se=F)+
+  xlim(0, 10)+
+  ylim(0, 14)+
+  theme_bw()
+
+```
+
+Al observar el anterior gráfico se puede constatar que si se toma en consideración las horas promedio semanal de ejercicio (en este caso, 0,2 y 4) la relación es negativa entre comida y perdida de peso. Es decir si estudiamos la relación entre comida y perdida de peso entre sujetos "comparables" en relación a su ejercicio, la relación se vuelve negativa.
+
+## Estimación de modelos
+
+Este aspecto claramente tiene repercusiones al estimar un modelo de regresión lineal como se puede observar en el siguiente cuadro.
+
+```{r message=FALSE}
+#Analisis de regresión.
+m1<- lm(wtloss~food, data=data)
+m2<- lm(wtloss~exercise, data=data)
+m3<- lm(wtloss~exercise+food, data=data)
+stargazer(m1,m2,m3, type = "text")
+
+
+
+```
+
+
+Cómo se puede observar en la tabla anterior la comida (food), tiene un beta estimado de 0.071, lo que expresa una relación positiva y relativamente baja. No obstante cuando al modelo se le introduce la variable ejercicio (exercise), en el modelo 3, no solamente observamos un notorio aumento de la magnitud, sino que además este coeficiente cambia su dirección. Ahora es negativo.
+
+El anterior modelo se puede formalizar de la siguiente manera:
+
+
+$$\hat{Y}= b_{0}+b_{1}X_{1} + b_{2}X_{2}$$
+
+Lo que para consideraciones de este analísis corresponde a:
+
+$$\hat{Peso}= b_{0}+b_{1}Ejercicio + b_{2}Comida$$
+y A partir de lo estimado obtenemos que:
+
+$$\hat{Y}= 6+2X_{1} - 0.5X_{2}$$
+A partir de la anterior ecuación podemos estimar una predicción de perdida de peso para cada una de las siguientes personas "téoricas"
+
+```{r}
+#Persona téorica que consume comida=0 y hace ejercicios=0
+6+2*0-0.5*0
+#Considerando a una personas que consume comida = 4 y ejercicio = 0
+6+2*0-0.5*4
+#Considerando a una persona consume comida=0 y hace ejercicio =8
+6+8*0-0.5*0
+
+
+```
+
+
+A modo de resumen, el modelo que representa a $\hat{Y}$ expresa una función lineal entre las variables $X_{1}$ y $X_{2}$
+
+## Coeficientes de Regresión parcial.
+
+Los **coeficientes de regresión parcial** $b_{1}$ y $b_{2}$ son conocidos también como  o pendientes de regresión parcial. Estos coeficientes cuantifican la relación entre Y, y cada variable independiente en términos constantes.
+
+A continuación demostraremos qué significa mantener una variable constante matemáticamente a partir del proceso de parcializar una variable en otra.
+
+Si X1 y X2 no estan corelacionadas, ninguna parcialización es requerido para estimar b1 y b2. Comunmente los regresores en el modelo están correlacionados en algún grado, sin embargo algunos regresores pueden estar más correlacionados que otros en modelos con varias regresores. Dos coeficientes de regresión para X1 y X2 pueden seguir estimandose al regresar Y en X1 y en X2 separadamente pero solo si X1 y X2 han sido parcializadas en sus relaciones mutuas. Esto implica construir una nueva medición de X1 y X2 que son independientes de otro.
+
+Para hacer esto consideramos un modelo en el cual X2 es predicho por X1, o en este ejemplo, la ingesta de comida es predicha por el ejercicio. 
+
+En primer lugar se presenta el gráfico donde se muestra la relación entre comida y ejercicio.
+
+```{r}
+ggplot(data, aes(x=exercise, y=food)) +
+  geom_point() +
+  geom_smooth(method = "lm", se=F)+
+  xlim(0, 5)+
+  ylim(0, 10)+
+  theme_bw()
+```
+
+A continuación se presenta la estimación del modelo de regresión lineal:
+```{r}
+summary(lm(food~exercise, data=data))$coefficient
+
+```
+
+Al realizar la estimación de un regresor sobre el otro tenemos la siguiente ecuación
+
+$$\hat{X_{2}}=4+0.5X_{1}$$
+
+Este modelo de X2 genera una estimación de X2 dada la información que provee X1 para cada caso.
+A partir del comando *fitted.values()* podemos obtener los valores estimados(predichos) de X2. Además con el comando *residuals()* obtenemos una variable con la información de los residuos de esta regresión.
+
+```{r}
+
+#Estimamos la regresion exercise~food
+reg_x1_x2 <- lm(exercise~food, data=data)
+data$x1_2 <- fitted.values(reg_x1_x2) #variable de exercise estimada
+data$resx1_2<- residuals(reg_x1_x2) #residuos de exercise estimada
+
+
+#Estimamos la regresion food~exercise
+reg_x2_x1 <- lm(food~exercise, data=data)
+data$x2_1 <- fitted.values(reg_x2_x1) #variable de food estimada
+data$resx2_1<- residuals(reg_x2_x1) #residuos de food estimada
+head(data)
+
+
+
+```
+
+Los residuos del modelo de regresión lineal no estan correlacionados con todos los regresores del modelo. A continuación lo podemos ver, donde la correlación entre ejercicio no esta correlacionada con el residuo de la estimación de comida predicha por ejercicio.
+```{r}
+cor(data$exercise,data$resx2_1)
+```
+
+De esta manera se puede entender que este residuo es el componente de la comida que es independiente del ejercicio. Es decir el residuo de esta regresión cuantifica lo unico de la variable comida, que no puede ser explicado por la variable ejercicio. 
+
+Ahora consideramos un modelo de regresión lineal en donde se estima la perdida de peso en base al residuo de la estimación de comida (en base a ejercicio). A continuación se presenta el grafíco de dispersión.
+
+```{r}
+ggplot(data, aes(x=resx2_1, y=wtloss)) +
+  geom_point() +
+  geom_smooth(method = "lm", se=F)+
+  xlim(-4, 4)+
+  ylim(0, 14)+
+  theme_bw()
+```
+
+
+
+```{r}
+summary(lm(wtloss~resx2_1, data=data))
+```
+
+Como se puede apreciar la ecuación de mínimos cuadrados estimada para este modelo corresponde a:
+$$\hat{Y}=7.5-0.5ResComida$$
+
+Como se puede notar, este coeficiente de regresión es el mismo que el coeficiente de comida cuando se controla por ejercicio para predecir perdida de perso.
+
+```{r}
+summary(m1)$coefficients
+```
+
+
+A partir de esto, se puede establecer que controlando por la frecuencia del ejercicio, o dando cuenta de las diferencias entre la frecuencias por ejercicio, o manteniendo constante el ejercicio, dos personas que difieren en 1 unidad de ingesta de comida, es estimado que se diferenciaran por 0.5 (gramos) en perdida de peso.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

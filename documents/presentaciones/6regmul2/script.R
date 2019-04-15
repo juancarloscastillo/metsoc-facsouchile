@@ -1,8 +1,7 @@
 # Partials & multiple regression
 
+
 ```{r}
-
-
 
 pacman::p_load(dplyr,
                corrplot,
@@ -13,7 +12,7 @@ pacman::p_load(dplyr,
                stargazer)
 
 datos=read.csv("ingedexp.csv", sep="")
-stargazer(datos, type = "text")
+stargazer(datos, type = "text", digits=0)
 
 cormat=datos %>% select(ingreso,educacion,experiencia) %>% cor()
 round(cormat, digits=2)
@@ -59,11 +58,11 @@ regy_resx1_2=lm(datos$ingreso ~ resx1_2)
 
 screenreg(list(reg_y_x1,reg_y_x2,reg_y_x1_x2,regy_resx1_2), booktabs = TRUE, dcolumn = TRUE, doctype = FALSE, caption=" ")
 
-
-
-
 ```
 
 
 $$b_1=(\frac{s_y}{s_1})(\frac{r_{y1}-r_{y2}r_{12}}{1-r^2_{12}})$$
+
+  
+  
 $$b_2=(\frac{s_y}{s_2})(\frac{r_{y2}-r_{y1}r_{12}}{1-r^2_{12}})$$
