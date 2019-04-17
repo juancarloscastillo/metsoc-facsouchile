@@ -30,13 +30,18 @@ Web link: [http://bit.ly/multivariada](http://bit.ly/multivariada)
 <br/>
 
 <div class="alert alert-info">
-  <strong>Noticias y fechas importantes</strong>
+  <strong>NOVEDADES</strong>
 
+
+  - Notas control 1:
+    - [Pauta](documents/controles/Control1_pauta.html)
+    - [Notas seccion 1](http://bit.ly/2V8ejHm)
+    - [Notas seccion 2](http://bit.ly/2V5xgdF)
+  - Fecha controles recuperativos: 27 de Mayo
   - Actualización documento programación de sesiones
   - Cambio en fecha de Control 2: 6 de Mayo
   - Fechas de Talleres (ayudantías)
   - Recordar entrega de tema de investigación a más tardar el 16 de Abril
-
 
 </div>
 

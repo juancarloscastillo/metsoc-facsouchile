@@ -63,3 +63,23 @@ Formato:
 - Lunes 15 de Abril: inscripción de temas
 - Lunes 20 Mayo: informe de avance (20%).
 - Lunes 17 Junio: informe final (30%)
+
+# Grupos y temas
+
+## Sección 1
+
+Integrantes  | Base de datos  | Tema
+---|--|----
+Karen Tapia - Víctor Jimenez  | Desiguales  |
+Catalina Flores - Camila Díaz  |Desiguales   | Desigualdad de acceso a bienes básicos entre comunas
+Camilo Lazo - Gonzalo Maidana  | ELSOC  | Relación entre territorio, democracia-ciudadanía y conflicto social
+Francisco Rodriguez - Diego Valenzuela  |   |  Satisfacción sobre el ingreso percibido, clase social y género
+Oscar Araya - Rafael Huerta - Andrea Vallejos  |   |
+Tomás Molina, Javiera Soto y Estefanía Muñoz  |  SIMCE |  Resultado académico dependiendo del género y la clase
+Carolina Tapia - Andrea Maguida  | Desiguales | Variación en la percepción de la desigualdad según nivel de ingreso y género
+Cristóbal Ortiz y Valentina Vásquez  | ELSOC  |  causas que influyen en la satisfacción o insatisfacción respecto al barrio
+Gabriela Guerra y Diego Esturillo (S2)  | CASEN  |  gentrificación en comunas de la región metropolitana
+Miguel Cares y Pilar Jara Mardones  | ELSOC |  salud mental relacionada con el genero y las ocupaciones o clases sociales
+Ivan Ojeda - Roque Alfaro  |   |
+Isidora Didier - Rocío Vidal (S2)|  Rol del Gobierno de 2016  |
+  |   |

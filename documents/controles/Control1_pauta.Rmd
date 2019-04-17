@@ -1,0 +1,69 @@
+---
+title: "Pauta Control 1 Estadística Multivariada"
+author: "Juan Carlos Castillo y Alejandro Plaza"
+date: "3 de abril de 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Parte 1
+
+_Parte 1: Explicación en ciencias sociales_
+
+Tomando en cuenta los textos de lectura obligatoria, así como también los contenidos de las clases, responda las siguientes preguntas
+
+### 1. Según Linares (2018), la explicación estadística se relaciona con una manera particular de formular preguntas de investigación, haciendo referencia a la varianza. De acuerdo a esto, formule una pregunta de investigación. (1 punto)
+
+<div class="alert alert-info">
+Respuesta: lo que plantea Linares en este punto son básicamente dos cosas:
+
+1. Qué tipicamente la explicación estadísitca hace referencia a la varianza: "Se dice que una variable es capaz de 'explicar' cierta proporción de la varianza de otra variable (...) Así, la manera típica de formular una pregunta de investigación sería: en qué medida variables como el género, la etnia, la edad o el nivel educativo contribuyen a explicar la variaciónde la probabilidad de estar ocupado" (p.67)
+2. Lo segundo que plantea Linares es una aproximación crítica a este tipo de explicación: "en ausencia de un conjunto de causas eficientes que den cuenta de cómo una variable es capaz de influir sistemáticamente en otra, la correlación estadística entr ambas simplemente describe que 'algo está pasando', pero no por qué" (p.68)
+
+Por lo tanto, una posible respuesta es enunciar una pregunta de investigación haciendo referencia a la varianza o correlación (En qué medida la variación/varianza de X se relaciona con / predice la variación/varianza de Y), o una segunda es hacer una descripción de la crítica hacia este tipo de formulación de preguntas en relación a explicación en ciencias sociales. Planteado radicalmente en el texto: "resulta muy útil y conveniente recordar la regla que Arthur Stinchcombe enunció en su excelente texto de introducción a la teoría social: un estudiante de sociología debería ser capaz de buscar tres explicaciones alternativas para un mismo coeficiente de correlación" (p.67).
+</div>
+
+### 2. ¿A qué hacen referencia los términos explanadum y explanans, y cómo se relacionan con el modelo de regresión? (1 punto)
+
+<div class="alert alert-info">
+Explanandum: fenómeno a explicar
+Explanans: el/los elementos que explican el explanandum.
+En el modelo de regresión, el explanandum se asocia a la variable dependiente y el/los explanans a la(s) variable(s) independiente(s).
+</div>
+
+### 3. Uno de los aspectos mencionados por Linares en relación a una buena explicación refiere al concepto de parsimonia. ¿Qué es una explicación parsimoniosa? (1 punto)
+
+<div class="alert alert-info">
+Una explicación parsimoniosa es una explicación sencilla, no debe ser innecesariamente compleja. En otras palabras, explicar lo más posible con lo menos posible. Menos es más.
+</div>
+
+
+## Parte 2
+
+En una investigación a Ud. se le solicita estimar la influencia del nivel educacional en el nivel de ingreso. Se le entrega una tabla con 10 casos de individuos quienes son caracterizados en deciles de ingreso (niveles de ingreso de 1 a 10) y en nivel educacional (FORMA A: de 1, más bajo, a 5, más alto / FORMA B: de 1, más bajo, a 5, más alto), asumiendo que ambas son variables continuas:
+
+De acuerdo a la información de la tabla:
+
+1- Estime los coeficientes del modelo de regresión
+2- ¿Cómo se interpreta el valor del coeficiente beta correspondiente a la variable educación?
+3- De acuerdo a su modelo, ¿Cuál es el decil de ingreso estimado para un nivel educacional de valor 3?
+
+### Resumen Forma A (educación 1-5)
+
+1. $b_0=3$, $b_1=1$
+
+2. Por cada nivel de aumento en educación, el ingreso aumenta 1 decil
+
+3. 3 + 1*3=6
+
+
+### Resumen forma B (educación 1-3)
+
+1. $b_0=2$, $b_1=2$
+
+2. Por cada nivel de aumento en educación, el ingreso aumenta 2 deciles
+
+3. 2 + 2*3=8
