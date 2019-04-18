@@ -66,5 +66,5 @@ Formato:
 
 # Grupos y temas
 
-## [Sección 1](https://docs.google.com/spreadsheets/d/1QAMuuaBQIverj3U2SHrhQWyMcNnc8_cw4452Z8jT-Ns/edit?usp=sharing)
+## [Sección 1](https://docs.google.com/spreadsheets/d/1QAMuuaBQIverj3U2SHrhQWyMcNnc8_cw4452Z8jT-Ns/edit#gid=0)
 ## Sección 2
