@@ -52,14 +52,17 @@ About macros.js: permite escalar las imágenes como [scale 50%](path to image), 
 
 ## *Sesión 5* : Regresión múltiple 1
 
-
----
+<!--- activar esta opcion para transiciones en todas las slides ...problema: afecta impresión en pdf
+este contenido tiene que ser incluido en una slide independiente
 
 layout: true
 class: animated, fadeIn
 
+--->
+
 ---
-class: inverse, bottom, left
+class: inverse, bottom, left, animated, slideInRight
+
 
 # **Contenidos**
 
