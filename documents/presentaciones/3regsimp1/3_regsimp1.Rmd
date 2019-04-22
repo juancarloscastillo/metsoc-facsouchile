@@ -24,7 +24,7 @@ class: bottom, left
 require("knitr")
 ## setting working directory
 options(htmltools.dir.version = FALSE)
-opts_knit$set(root.dir = "/home/juank/Dropbox/cursos 2/facso/multivariada/mulitva2018/sesiones/3regsimp1")
+#opts_knit$set(root.dir = "/home/juank/Dropbox/cursos 2/facso/multivariada/mulitva2018/sesiones/3regsimp1")
 ```
 
 <!---
