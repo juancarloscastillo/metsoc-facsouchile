@@ -19,3 +19,7 @@ output:
 <br/>
 
 - [3: Regresión Múltiple: Control y parcialización correlación](documents/practicas/3regmul/Practica_3regmul2.html)
+
+<br/>
+
+- [4: Regresión Múltiple: categoricos e inferencia](documents/practicas/4regmul/prac_4regmul2.html)
