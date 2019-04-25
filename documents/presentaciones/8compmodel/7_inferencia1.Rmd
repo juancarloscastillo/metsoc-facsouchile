@@ -70,10 +70,16 @@ class: inverse, middle, center
 ---
 class: inverse, middle, center
 
-# 2. Predictores Categóricos
-
+# 2. Comparación ajuste general de modelos
 
 ---
+# Antecedentes ajuste
+
+Recordando de   
+
+
+
+
 
 ## Variables categóricas
 
