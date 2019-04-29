@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html>
   <head>
     <title>Estadística Multivariada</title>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta name="author" content=".small[Juan Carlos Castillo &amp; Alejandro Plaza    Departamento de Sociología - UCH / COES   ]" />
     <link rel="stylesheet" href="../xaringan_custom/xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="../xaringan_custom/progress-bar.css" type="text/css" />
@@ -773,7 +773,7 @@ Lo que implica que:
 
 - La mayoría de los programas estadísticos incluyen el error estándar de `\(\beta{j}\)` o `\(SE(\beta{j})\)`.
 
-- `\(SE(\beta{j})\)` estima la desviación estándar de la distribución muestral de `\(\beta{j}\)`, cuando se toma una muestra aleatoria de tamaño N de una población y se estima un modelo de regresión lineal.
+- `\(SE(\beta{j})\)` estima el error estándar de la distribución muestral de `\(\beta{j}\)`, cuando se toma una muestra aleatoria de tamaño N de una población y se estima un modelo de regresión lineal.
 
 - Además se incluye el estadístico `\(t\)` el cual tiene una correspondencia con el valor p que cuantifica la probabilidad de obtener un valor de `\(\beta{j}\)` diferente de 0.
 
@@ -878,7 +878,7 @@ En este caso, estimamos el intervalo al 95% de confianza a dos colas, obtenemos 
 
 `$$LimiteSuperior= 1.368 + 1.9609*0.1037=1.57$$`
 `$$LimiteInferior= 1.368 - 1.9609*0.1037=1.17$$`
-Como se puede observar en ninguno de los límites el `\(\beta\)` "atraviesa" el cero, por lo que se puede rechazar con el 95% de confianza que `\(\beta \neq 0\)`
+Como se puede observar en ninguno de los límites el `\(\beta\)` "atraviesa" el cero, por lo que se puede rechazar con el 95% de confianza que `\(\beta = 0\)`
 
 ---
 
@@ -990,7 +990,6 @@ class: bottom, left
 
 ## **Sesión 7**: Inferencia Estadística
     </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="../xaringan_custom/macros.js"></script>
 <script>var slideshow = remark.create({
@@ -1002,79 +1001,26 @@ class: bottom, left
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
-})(document);
-
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
-  }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
 })();</script>
 
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
   }
-})();
-</script>
-
-<script>
-slideshow._releaseMath = function(el) {
-  var i, text, code, codes = el.getElementsByTagName('code');
-  for (i = 0; i < codes.length;) {
-    code = codes[i];
-    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
-      text = code.textContent;
-      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
-          /^\$\$(.|\s)+\$\$$/.test(text) ||
-          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
-        code.outerHTML = code.innerHTML;  // remove <code></code>
-        continue;
-      }
-    }
-    i++;
-  }
-};
-slideshow._releaseMath(document);
+});
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);

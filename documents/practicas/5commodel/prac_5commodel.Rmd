@@ -1,0 +1,315 @@
+---
+title: "Practica 5: Regresión múltiple - comparación de modelos"
+subtitle: "Estadistica Multivariada - Sociología FACSO Universidad de Chile"
+author: "Juan Carlos Castillo & Alejandro Plaza"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Refs:
+https://cran.r-project.org/web/packages/jtools/vignettes/summ.html
+Fields, Cap. 9: comparing two means
+Miles, understanding and using statistics
+
+
+#Introducción
+
+En esta práctica veremos unas últimas cosas respecto a inferencia estadística, y además entraremos a la lógica de la comparación de modelos.
+
+Trabajaremos con la base de datos **mlb1** de Wooldridge (2006), la cual la pueden descargar [aqui](https://www.dropbox.com/s/6f1821rrqiy8zhj/MLB1.DTA?dl=0)
+
+Esta base de datos corresponde a las estadísticas de baseball, de las ligas mayores de Estados Unidos. Concretamente lo que queremos ver en este ejemplo son los factores que predicen la variación de salario entre los jugadores. Para esto tenemos las siguientes variables.
+
+- lsalary = salario
+- years = años de experiencia en las ligas mayores
+- gamessyr = promedio de partidos jugados en años
+- bavg    = promedio de bateo
+- hrunsyr = Homeruns (cuadrangulares) por año
+- rbisyr = carreras impulsadas por año
+
+**[Recomendación cinematográfica sobre baseball y estadística](https://www.youtube.com/watch?v=ADJkxHWrFxI)**
+
+```{r message=FALSE, warning=FALSE}
+#cargar base de datos
+library(haven)
+library(stargazer)
+library(texreg)
+library(corrplot)
+
+mlb1 <- read_dta("C:/Users/Fondecyt R. Sociales/Desktop/Suplementos multivariable/bases de datos wooldridge/MLB1.DTA")
+```
+
+
+
+# Inferencía estadística
+
+En primer lugar revisamos los estadísticos descriptivos de las variables de interés.
+
+```{r message=FALSE, results='asis'}
+#filtramos las variables de interes
+descriptivos<- mlb1[c("lsalary","years","gamesyr",
+              "bavg","hrunsyr","rbisyr")]
+stargazer(as.data.frame(descriptivos),type = "html")
+
+```
+
+Y vemos las correlación que existe entre las variables
+```{r}
+round(cor(descriptivos),2)
+corrplot.mixed(cor(descriptivos))
+```
+
+Preliminarmente podemos observar que con exepción del promedio de bateo (bavg), todas las variables tiene una alta correlación con el salario. Pero además cabe a destacar que la correlación entre el promedio de cuadrangulares (hrunsyr) y las carreras impulsadas al año (rbisyr) tienen una correlación alta (r=0.89), esto tendrá implicancias en posteriores análisis.
+
+En segundo lugar estimamos un primer modelo que explique la variación del salario en los jugadores en base a los años de experiencia en las ligas mayores.
+
+```{r results='asis'}
+m0<- lm(lsalary~years+gamesyr, data = mlb1)
+#screenreg(m0)
+htmlreg(m0,custom.note = "Elaboración propia en base a mlb1", #Agregar una nota
+       single.row = T, #para que la DS este en una linea
+       booktabs = TRUE, dcolumn = TRUE, doctype = FALSE)
+
+```
+
+En la sesión anterior vimos que el estadístico $t$ es usado para probar la hipótesis nula de que el coeficiente poblacional en una sola variable explicativa es 0. Para analizar si las variables independientes en **su conjunto** tienen un valor de 0, analizamos la **prueba F**.
+
+La prueba F se define como la razón entre el promedio de la suma de los cuadrados de la regresión y el promedio de la suma de los cuadrados de los residuos. 
+
+$$F=\frac{MS_{regresion}}{MS_{residuos}}=\frac{(\sum({\hat{Y_{i}}-\bar{Y_{i}}}))/(k)}{(\sum({Y_{i}-\hat{Y_{i}}})^2)/(N-k-1)}$$
+
+Para satisfacer esa ecuación podemos ir haciendo la ecuación paso por paso en R.
+
+Estimamos $\hat{Y}$, es decir el salario predicho a partir de nuestro modelo.
+```{r}
+mlb1$salary_estimado<- fitted(m0) #Y gorro
+
+```
+Calculamos la Suma de los cuadrados de la Regresion $\sum({\hat{Y_{i}}-\bar{Y_{i}}})^2$
+
+```{r}
+(ss_reg<-sum((mlb1$salary_estimado-mean(mlb1$lsalary))^2)) #Suma cuadrados Reg
+```
+Luego la Suma de los cuadrados residuales $\sum({Y_{i}-\hat{Y_{i}}})^2$
+```{r}
+(ss_res<-sum((mlb1$lsalary-mlb1$salary_estimado)^2)) #Suma cuadrados Res
+```
+
+Luego la media de la suma de los cuadrados, considerando sus respectivos grados de libertad.
+```{r}
+MS_reg<- ss_reg/2 #2 predictores
+MS_res<- ss_res/(353-2-1) #(n-k-1)
+```
+Luego la razón de estas dos medias es el puntaje F
+```{r}
+(F_score<-MS_reg/MS_res)
+
+```
+
+Asumiendo un escenario en donde la hipótesis nula es verdadera ($H_{0}: \beta_{1}=\beta_{2}=...=\beta_{k}=0$) -es decir, que todos los coeficientes integrados al modelos son 0- nosotros queremos ver la probabilidad de fallar en rechazar la hipótesis nula. Para eso comparamos el puntaje F, con un valor crítico de F a un 95% de confianza y con dos indicadores de grados de libertad
+
+$gl_{1}$=2(número de coeficientes integrados) 
+
+$gl_{2}$=(353-2-1)
+
+```{r}
+#calculo del valor crítico de la distribución F al 95% de confianza
+qf(0.95,df1=2, df2=(353-2-1))
+
+```
+
+Como podemos observar el valor F que estimamos a partir de nuestro modelo es mucho más elevado que nuestro valor crítico (F=259.32>3.02). Al calcular el valor p, podemos constatar que a el 95% de confianza, la probabilidad de encontrar un valor de F asociado a nuestra hipótesis nula es p<0.05, por lo cual aceptamos la hipotesís alternativa de que al menos uno de los coeficientes estimados es diferente de 0.
+
+```{r}
+#calculo de valor p para distribucion F
+1-pf(F_score, df1=2, df2=(353-2-1))
+```
+
+Esto se puede visualizar en el siguiente gráfico, en donde la zona de rechazo de la hipótesis nula esta sombreado con azul:
+
+
+
+```{r echo=FALSE, warning=FALSE,message=FALSE}
+fstat <- summary(m0)$fstatistic
+#gráfico de area de rechazo
+library(HH)
+old.omd <- par(omd=c(.05,.88, .05,1))
+F.setup(df1=fstat['numdf'], df2=fstat['dendf'])
+F.curve(df1=fstat['numdf'], df2=fstat['dendf'], col='blue')
+F.observed(fstat['value'], df1=fstat['numdf'], df2=fstat['dendf'])
+par(old.omd)
+```
+
+# Comparación de modelos
+
+Ahora tenemos la habilidad de especificar distintos modelos, pero ¿cómo decidirnos por uno para nuestra investigación?
+
+Más allá del criterio sustantivo para nuestra investigación, aquí nos centraremos en el criterio estadadístico. Por un lado podemos evaluar y comparar modelos a partir del recién aprendido estadístico F.
+
+##Comparación de modelos en base al estadístico F
+
+
+
+En nuestra investigación sobre los salarios de los jugadores de baseball, se sugiere que el promedio de bateo (bavg), los cuadrangulares por año (hrunsyr), y las carreras impulsadas por año (rbisyr) tienen un efecto significativo.
+
+Por lo cual planteamos la siguiente ecuación:
+$$salario= \beta_{0}+\beta_{1}years+\beta_{2}gamesyr+\beta_{3}bavg+\beta_{4}hrunsyr+\beta_{5}rbisyr$$
+
+Para chequear esto podemos estimar el siguiente modelo.
+
+```{r}
+
+m0<- lm(lsalary~years+gamesyr, data = mlb1 )
+ma<- lm(lsalary~years+gamesyr+
+              bavg+hrunsyr+rbisyr, data = mlb1)
+
+#summary(m0)$coef
+#summary(ma)$coef
+screenreg(list(m0,ma))
+
+```
+
+Al revisarlos valores t de ambos modelos y sus respectivos valores p, podemos observar que las 3 variables nuevas incluidas en el modelo **ma** no tienen un efecto significativo. Por lo cual en razón de **parsimonía** podríamos quedarnos con el modelo **m0**. No obstante está decisión sería errada sino consideramos al estadístico F.
+
+A partir del estadístico F, planteamos la siguiente hipótesis nula.
+
+$$H_{0}: \beta_{3}=0,\beta_{4}=0,\beta_{5}=0$$
+
+Y la podemos expresar de la siguiente forma
+
+$$F=\frac{(SRC_{0}-SRC_{a})/q}{SRC_{a}/(n-k_{a}-1)}=\frac{R_{a}^2-R_{0}^2}{1-R_{a}}*\frac{n-k-1}{q}$$
+
+donde SRC es la suma de las regresión al cuadrado, el sub-indice **0** y **a** expresan al modelo restringido (**m0**) y completo (**ma**) respectivamente (los modelos que se quieren comparar), y q es la diferencia de parametros.
+y en R:
+
+```{r}
+#extraemos los R2 de los objetos de los modelos
+(r2.m0<- summary(m0)$r.squared)
+(r2.ma<- summary(ma)$r.squared)
+
+#Estadistico F:
+(F<- (r2.ma-r2.m0)/(1-r2.ma)* (353-5-1)/3) #q=3 diferencia de parametros
+
+#Valor crítico de F a 95% de confianza con grados de libertad 3 y (353-5-1)
+qf(0.95,3,(353-5-1))
+
+#si se quiere experimentar al 99% de confianza
+#qf(0.99,3,(353-5-1))
+
+#valor p de la distribución de F
+1-pf(F,3,(353-5-1)) 
+
+#o podemos comparar ambos modelos usando el comando anova
+anova(m0,ma)
+
+
+```
+
+El resultado es $F=9.55>2.63$, por lo cual con el 95% de confianza y p<0.05 rechazamos la hipótesis nula de que las tres variables no tienen un efecto significativos sobre el sueldo.
+
+En contraste con la prueba $t$ donde no se encontraban un resultado significativo, al realizar esta prueba exisitiría un **efecto en conjunto** de éstas variables que sí tendría un resultado.
+
+**Importante**
+La razón por la cual podemos llegar a diferentes resultados si utilizamos el estadístico t y el F, es que como vimos anteriormente la correlación entre cuadrangulares (hrunsyr) y carreras impulsadas (rbisyr) es bastante alta (r=0.89). Al estar fuertemente correlacionadas (fenómeno de **multicolinealidad** que veremos posteriormente) existe dificultad para descubrir el efecto parcial de cada variable, y esto se refleja en los estadísticos t individuales.
+
+A partir de esto, nos podriamos inclinar a quedarnos con el modelo que tiene éstas tres variables.
+
+## R2 ajustado para contrastes de modelos.
+
+Se podría pensar que una alternativa para comparar modelos, residiría en comparar los estadísticos de bondad de ajuste $R^{2}$ y quedarnos con el modelo que más varianza explicada genere.
+
+Recordando la ecuación de $R^{2}$:
+
+$$R^2= \frac{SS_{reg}}{SS_{tot}}=\frac{\sum(\hat{Y_{i}}-\bar{Y})^2}{\sum(Y_{i}-\bar{Y})^2}$$
+
+Desafortunadamente, e  $R^2$ tiene un valor limitado para la comparación de modelos porque siempre aumentará cuando se agreguen más variables explicativas. Es por este motivo que trabajamos con el $R^2$ ajustado que  **penaliza** por la cantidad de variables incluidas en el modelo al integrar el término $k$ (número de variables)
+
+$$R^2_{adj}=R^2 -\frac{k(1-R^2)}{N-k-1}= 1- \frac{N-1}{N-k-1)}(1-R^2)$$
+
+```{r results='asis'}
+htmlreg(list(m0, ma), #custom.model.names = "Estatus Social Subjetivo", # Cambiar nombre del título
+       #custom.coef.names = c("Intercepto", "Edad", "Ingreso", "Mujer"),   #Cambiar nombre de las variables
+       custom.note = "Elaboración propia en base a mlb1", #Agregar una nota
+       single.row = T, #para que la DS este en una linea
+       booktabs = TRUE, dcolumn = TRUE, doctype = FALSE)
+```
+
+Al observar tanto el $R^2$ como el $R^2$ ajustado, podemos establecer que el modelo que tiene las tres variables sigue teniendo mayores niveles de varianza explicada que el modelo restringuido que tiene sólo dos. A partir de éste segundo criterio, tenemos dos fuentes de criterio estadístico para quedarnos con el modelo no restringido.
+
+## R2 ajustado para contrastes de modelos no anidados.
+
+Como se pudo establecer anteriormente,  ni hrunsyr ni rbisyr eran significativas individualmente. Estas dos variables están muy correlacionadas, de manera que habrá que elegir entre los modelos
+
+$$salary= \beta_{0} + \beta_{1}years + \beta_{2}gamesyr + \beta_{3}bavg + \beta_{4}hrunsyr + u$$
+$$salary= \beta_{0} + \beta_{1}years + \beta_{2}gamesyr + \beta_{3}bavg + \beta_{4}rbisyr + u$$
+
+```{r}
+
+m1<- lm(lsalary~years+gamesyr+
+              bavg+hrunsyr, data = mlb1)
+m2<- lm(lsalary~years+gamesyr+
+              bavg+rbisyr, data = mlb1)
+screenreg(list(m1,m2))
+
+summary(m1)$adj.r.squared
+summary(m2)$adj.r.squared
+```
+En la regresión del sueldo de los jugadores de béisbol, el R2 ajustado en la regresión que contiene hrunsyr es .6211 y R2 ajustado en la regresión que contiene rbisyr es .6226. Por tanto, con base en la R-cuadrada ajustada, hay una muy ligera preferencia por el modelo que tiene rbisyr.
+
+
+
+# Comparación de predictores
+
+Recordamos que el $\beta$ se interpreta como la magnitud del cambio en la variable dependiente $Y$ producto del cambio en una unidad de las variables independiente $X_{j}$.
+
+Entonces el $\beta$ está profundamente condicionado a la escala de medición en de las variables independientes $X_{j}$.
+
+Para comparar los efectos es necesario **estándarizar** las variables a una misma medida de cambio
+
+
+- La estandarización corresponde a una operación aritmética, en la cual una variables es estandarizada sustrayendo su promedio y dividiendola por su desviación estandar.
+
+**Estandarización para la variable dependiente Y**
+
+$$z_{y}=\frac{y-\bar{y}}{sd(y)}$$
+**Estandarización para la variable dependiente X**
+
+$$z_{x_{1}}=\frac{x_{1}-\bar{x_{1}}}{sd(x_{1})}$$
+
+De esta manera un modelo de regresión lineal con las variables estandarizadas, corresponde a:
+
+$$z_{y}=\beta_{1}z_{x_{1}} + \beta_{2}z_{x_{2}} +...+z_{x_{j}}$$
+En R estandarizamos las variables y estimamos el modelo.
+```{r}
+mlb1$z_lsalary <- (mlb1$lsalary-mean(mlb1$lsalary))/sd(mlb1$lsalary)
+mlb1$z_years<- (mlb1$years-mean(mlb1$years))/sd(mlb1$years)
+mlb1$z_gamesyr<- (mlb1$gamesyr-mean(mlb1$gamesyr))/sd(mlb1$gamesyr)
+
+m0_z1<- lm(z_lsalary~z_years+z_gamesyr, data = mlb1)
+```
+
+o en una sola línea:
+
+```{r}
+m0_z2<- lm(scale(lsalary)~scale(years)+scale(gamesyr), data = mlb1 )
+```
+
+```{r }
+screenreg(list(m0_z1,m0_z2),single.row = T, #para que la DS este en una linea
+       booktabs = TRUE, dcolumn = TRUE, doctype = FALSE)
+
+```
+
+En este caso se puede observar que por el aumento en **una desviación estándar** de los años de experiencia de un jugador (z_years), su sueldo aumentará **0.23 desviaciones estándar**.
+
+

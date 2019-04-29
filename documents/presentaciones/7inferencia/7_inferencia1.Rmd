@@ -549,7 +549,7 @@ $H_{a}$: **Hay** asociación lineal entre el predictor $X$ y la variable $Y$ en 
 
 - La mayoría de los programas estadísticos incluyen el error estándar de $\beta{j}$ o $SE(\beta{j})$.
 
-- $SE(\beta{j})$ estima la desviación estándar de la distribución muestral de $\beta{j}$, cuando se toma una muestra aleatoria de tamaño N de una población y se estima un modelo de regresión lineal.
+- $SE(\beta{j})$ estima el error estándar de la distribución muestral de $\beta{j}$, cuando se toma una muestra aleatoria de tamaño N de una población y se estima un modelo de regresión lineal.
 
 - Además se incluye el estadístico $t$ el cual tiene una correspondencia con el valor p que cuantifica la probabilidad de obtener un valor de $\beta{j}$ diferente de 0.
 
@@ -625,7 +625,7 @@ En este caso, estimamos el intervalo al 95% de confianza a dos colas, obtenemos 
 
 $$LimiteSuperior= 1.368 + 1.9609*0.1037=1.57$$
 $$LimiteInferior= 1.368 - 1.9609*0.1037=1.17$$
-Como se puede observar en ninguno de los límites el $\beta$ "atraviesa" el cero, por lo que se puede rechazar con el 95% de confianza que $\beta \neq 0$
+Como se puede observar en ninguno de los límites el $\beta$ "atraviesa" el cero, por lo que se puede rechazar con el 95% de confianza que $\beta = 0$
 
 ---
 
