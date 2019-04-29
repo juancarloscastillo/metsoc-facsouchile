@@ -55,7 +55,12 @@ output:
 <iframe src=documents/presentaciones/6regmul2/6_regmul2.html height="500" width="775">
 </iframe>
 
-[*Sesión 7: Regresión múltiple 3: ŕedictores categóricos e inferencia*](documents/presentaciones/7inferencia/7_inferencia1.html)
+[*Sesión 7: Regresión múltiple 3: predictores categóricos e inferencia*](documents/presentaciones/7inferencia/7_inferencia1.html)
 
 <iframe src=documents/presentaciones/7inferencia/7_inferencia1.html height="500" width="775">
+</iframe>
+
+[*Sesión 8: Comparación de modelos*](documents/presentaciones/8compmodel/8_compmodel.html)
+
+<iframe src=documents/presentaciones/8compmodel/8_compmodel.html height="500" width="775">
 </iframe>
