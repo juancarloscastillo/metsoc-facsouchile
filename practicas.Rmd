@@ -23,3 +23,13 @@ output:
 <br/>
 
 - [4: Regresión Múltiple: categoricos e inferencia](documents/practicas/4regmul/prac_4regmul2.html)
+
+<br/>
+
+- [5: Regresión Múltiple: comparación de modelos](documents/practicas/8commodel/prac_5commodel.html)
+
+<br/>
+
+### Talleres/ Ayudantías
+
+- [Taller n°1: Manejo de bases de datos en R (abrir, filtrar, recodificar, descriptivos básicos, creación de índices y correlación de Pearson).](documents/ayudantias/Codigo_taller_1.R)
