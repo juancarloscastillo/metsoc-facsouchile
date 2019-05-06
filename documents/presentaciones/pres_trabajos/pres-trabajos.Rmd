@@ -1,0 +1,59 @@
+---
+title: "Estadística Multivariada"
+author: ".small[Juan Carlos Castillo & Alejandro Plaza <br><br> Departamento de Sociología - UCH / COES <br><br>]"
+date: "1er Sem 2019"
+output:
+  xaringan::moon_reader:
+    css: ["../xaringan_custom/xaringan-themer.css","../xaringan_custom/progress-bar.css"]
+    lib_dir: libs
+    nature:
+      slideNumberFormat:   |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>`
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "../xaringan_custom/macros.js"
+    seal: false # esto omite title slide automática
+---
+class: bottom, left
+
+```{r setup, include=FALSE, cache = FALSE}
+require("knitr")
+options(htmltools.dir.version = FALSE)
+```
+
+<!---
+Para correr en ATOM
+- open terminal, abrir R (simplemente, R y enter)
+- rmarkdown::render('pres-trabajos.Rmd', 'xaringan::moon_reader')
+
+About macros.js: permite escalar las imágenes como [scale 50%](path to image), hay si que grabar ese archivo js en el directorio.
+--->
+
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo & Alejandro Plaza
+
+## **Sesión 9**: Preparación trabajos de aplicación
+
+---
+class: inverse
+
+# Contenidos
+
+
+---
+class: roja, middle, center

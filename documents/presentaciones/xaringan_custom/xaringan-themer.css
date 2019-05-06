@@ -88,13 +88,35 @@ a, a > code {
 .inverse h1, .inverse h2, .inverse h3 {
   color: #fdf6e3;
 }
+
+.roja {
+  background-color: #d22000;
+  color: #fdf6e3;
+
+}
+.roja h1 {
+  color: #002b36;
+  font-size: 5em;
+  font-weight: bold;
+}
+
+.roja h2 {
+  color: #FFFFFF;
+  font-size: 3em;
+}
+
+.roja h3 {
+  color: #FFFFFF;
+  font-size: 2em;
+}
+
+
+
 .title-slide, .title-slide h1, .title-slide h2, .title-slide h3 {
   color: #fdf6e3;
 }
 .title-slide {
   background-color: #002b36;
-
-
 
 }
 .title-slide .remark-slide-number {

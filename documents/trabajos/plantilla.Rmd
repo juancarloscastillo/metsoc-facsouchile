@@ -1,0 +1,47 @@
+---
+title: "Plantilla trabajos de investigación en Markdown"
+author: "Juan Carlos Castillo"
+website: "https://www.rstudio.com/"
+output:
+  html_document:
+    toc: true
+    fig_caption: true
+---
+
+
+# Introducción
+
+Esta documento es una un ejemplo de plantilla para ser usada en los trabajos que utilicen Rmarkdown como lenguaje de escritura.
+Markdown es un formato de escritura en texto simple o plano, con muy pocos elementos o "marcas" de edición (de ahí el nombre markdown). Básicamente consiste en escribir, enfocándose en el contenido y no en el formato. Las pocas marcas de edición luego son tomadas por otros programas, que hacen el trabajo de transformar el texto simple a un texto con formato, por ejemplo a Word, HTML o pdf.
+
+_¿Por qué escribir en texto plano en lugar de un programa que me muestre inmediatamente el texto y su formato (tipo Word)?_
+Hay múltiples razones, solo resalto dos:
+
+1 - Propiedad: los contenidos guardados en formatos de procesadores comerciales (como Word) dependen del pago de una licencia para poder leerse. Si el software es imposible leerlos, por lo tanto la propiedad de los contenidos guardados en ese formato no son del autor/a, sino de la empresa de software. El texto plano no depende de un software comercial para poder leerse ni modificarse.
+
+2 - Incorporación de texto y análisis de datos: para quienes analizamos datos, si tenemos resultados luego de alguna forma hay que cortar / pegar en el documento de reporte, una práctica bastante trabajosa y muy poco reproducible. El escribir en texto plano permite incluir en un mismo documento análisis de datos realizado en texto plano, por lo tanto no se requiere cortar ni pegar en otro documento. Esto se encuentra actualmente muy desarrollado en el entorno R a traves de la librería `knitr`
+
+## Bases de formato
+
+### Encabezados
+
+```
+# Primer nivel
+## Segundo nivel
+### Tercer nivel
+```
+Al formatearse, se visualiza:
+
+# Primer nivel
+## Segundo nivel
+### Tercer nivel
+
+
+
+
+
+
+```{r}
+getwd()
+.libPaths()
+```
