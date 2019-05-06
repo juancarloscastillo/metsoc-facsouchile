@@ -47,13 +47,141 @@ About macros.js: permite escalar las imágenes como [scale 50%](path to image), 
 
 ## Juan Carlos Castillo & Alejandro Plaza
 
-## **Sesión 9**: Preparación trabajos de aplicación
+## **Sesión 9**: Trabajos de aplicación
+
 
 ---
 class: inverse
 
-# Contenidos
+# Objetivo
+
+## Aplicar los contenidos del curso a una temática de interés en formato de artículo de investigación breve.
+
+Detalles [aquí](https://juancarloscastillo.github.io/metsoc-facsouchile/trabajos.html)
+---
+# Datos
+
+## Propuesta:
+- ELSOC
+- ISSP
+- CASEN
+- Desiguales
+- LAPOP
+
+---
+# Secciones
+
+0 - Abstract
+
+1 - Introducción
+
+2 - Objetivos / hipótesis
+
+3 - Metodología (Datos, variables, métodos)
+
+4 - Resultados
+
+5 - Discusión / conclusiones
+
+---
+class: roja
+# Abstract: 5 partes
+
+### - Problema
+### - Pregunta / Objetivo
+### - Hipótesis
+### - Metodología: Datos, variable central, método
+### - Resultado principal
+
+---
+class: inverse
+# 1. Introducción (1):
+
+### - Relevancia
+  - Problema de investigación
+  - Tema de investigación (aporte académico desde la disciplina)
+
+### - Definición de concepto central (explanandum)
+
+### - Hipótesis central
+
+---
+class: inverse
+# 1. Introducción (2):
+
+### 1.1 Explanandum: orígenes del concepto, forma de estudio
+
+### 1.3 Explanans: definición, investigaciones recientes (en su relación con el explanandum)
+
+* Eventualmente presentar las hipótesis a medida que se desarrollan los argumentos
+
+---
+class: roja
+# Objetivos / Hipótesis
+
+### - Hipótesis DIRECCIONALES
+### - Hipótesis SIMPLES
+### - Hipótesis basadas en CONCEPTOS CENTRALES
+
+---
+class: roja
+
+# Metodología
+
+### - Datos
+### - Variables (incluye cuadro descriptivos univariados)
+### - Métodos: descripción de lo que se va a hacer en la presentación de resultados
+
+---
+class: inverse
+
+# Resultados
+
+## Descriptivos
+  - Gráficos uni / bivariados
+  - Correlaciones
+  - Scatters
+
+## Modelos
+  - Lógica de presentación de modelos
+  - Tabla(s) regresión
+
+---
+class: roja
+# Discusión
+
+### - Resumen
+### - Principales hallazgos
+### - Limitaciones
+### - Sugerencias para futuros estudios
+
+---
+# Notas escritura académica
+
+### - Una idea por párrafo
+
+### - Oración principal ("topic sentence")
+
+### - Argumentos basados en evidencia, no en opiniones personales
+
+### - Relevancia de la investigación: no solamente novedad, sino aporte a público específico
 
 
 ---
-class: roja, middle, center
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo & Alejandro Plaza
+
+## **Sesión 9**: Trabajos de aplicación
+
+

@@ -64,3 +64,8 @@ output:
 
 <iframe src=documents/presentaciones/8compmodel/8_compmodel.html height="500" width="775">
 </iframe>
+
+[*Sesión 9: Asesoría trabajos*](documents/presentaciones/pres_trabajos/pres-trabajos.html)
+
+<iframe src=documents/presentaciones/pres_trabajos/pres-trabajos.html height="500" width="775">
+</iframe>

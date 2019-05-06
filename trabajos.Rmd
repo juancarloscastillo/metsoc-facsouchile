@@ -58,8 +58,8 @@ En este apartado es importante considerar:
 - Precisar el concepto central que se va a investigar: Ejemplo "vamos a estudiar participación informal, entendiendo por ello la frecuencia de participación en actividades como marchas, boycotts y en redes sociales".
 - Precisar argumento / hipótesis central "proponemos que a medida que aumenta el nivel de contactos con identificación política de izquierda, aumenta la participación política informal"
 - El resto de la introducción usualmente se divide en dos secciones, que también son referidas como marco teórico, marco referencial, revisión bibliográfica, etc.
-  - El primer apartado corresponde al objeto central de estudio /variable dependiente (explanandum), donde se profundiza en su origen y definición, y se revisan las principales investigaciones que se asocian a este concepto.
-  - El segundo apartado corresponde a los conceptos relacionados con la variable dependiente (explanans) y en los cuales se basan las hipótesis. Se revisan en orden de relevancia.
+  - El primer apartado corresponde al objeto central de estudio /variable dependiente (explanandum), donde se profundiza en su origen y definición, y se revisan las principales investigaciones que se asocian a este concepto. (al menos 5 referencias)
+  - El segundo apartado corresponde a los conceptos relacionados con la variable dependiente (explanans) y en los cuales se basan las hipótesis. Se revisan en orden de relevancia. (al menos 5 referencias)
 
 4. Objetivos / hipótesis (alrededor de 3) (250 palabras)
 5. Metodología: datos (no olvidar número de casos), variables y métodos  (500 palabras)
