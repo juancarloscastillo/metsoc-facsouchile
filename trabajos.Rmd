@@ -26,8 +26,7 @@ Para poder lograr un mayor foco y colaboración en temáticas específicas, así
 - [LAPOP](https://www.vanderbilt.edu/lapop-espanol/) - OLA 2016
 - [Desiguales](https://www.desiguales.org/descripcin-del-libro)
 - CEP Chile - ISSP
-  - 2016 [Rol del gobierno](https://dbk.gesis.org/dbksearch/sdesc2.asp?no=6900&db=E&tab=3)
-  - 2017 [Redes sociales](https://dbk.gesis.org/DBKsearch/SDESC2.asp?no=6980&tab=3&db=E)
+  - 2016 [Rol del gobierno](documents/data/encuesta_cep77_jul_ago2016.zip)
 - * eventualmente otras bases
 
 ## Modalidad de trabajo y asesorías
