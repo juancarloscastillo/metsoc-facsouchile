@@ -30,18 +30,16 @@ Web link: [http://bit.ly/multivariada](http://bit.ly/multivariada)
 <br/>
 
 <div class="alert alert-info">
-  <strong>NOVEDADES</strong>
+  <strong>NOVEDADES (acualizadas 15 Mayo)</strong>
 
-
+  - Fecha controles recuperativos: 27 de Mayo 8:30
+  - Actualización pauta trabajo: detalles sobre mínimos entrega 1
+  - Lunes 20 no hay clases
+  - Actualización documento programación de sesiones
   - Notas control 1:
     - [Pauta](documents/controles/Control1_pauta.html)
     - [Notas seccion 1](http://bit.ly/2V8ejHm)
     - [Notas seccion 2](http://bit.ly/2V5xgdF)
-  - Fecha controles recuperativos: 27 de Mayo
-  - Actualización documento programación de sesiones
-  - Cambio en fecha de Control 2: 6 de Mayo
-  - Fechas de Talleres (ayudantías)
-  - Recordar entrega de tema de investigación a más tardar el 16 de Abril
 
 </div>
 

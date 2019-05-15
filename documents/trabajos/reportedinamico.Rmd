@@ -1,0 +1,39 @@
+---
+title: "Combinando escritura y análisis"
+author: "Juan Carlos Castillo"
+website: "https://jc-castillo.com/"
+output:
+  html_document:
+    toc: true
+    fig_caption: true
+---
+
+# Documentos dinámicos
+
+Usualmente el análisis de datos en ciencias sociales se realiza en un momento secundario, luego de desarrollar las hipótesis de trabajo y sus conceptos centrales, así como también de recoger o definir los datos y variables a utilizar. Además de lo secundario, también se suele hacer por separado, es decir, con un software distinto al con el que se escribe, y por lo tanto en un archivo distinto. Y el traspaso de información entre el programa de análisis y el programa de edición de texto se realiza con un clásico: cortar y pegar.
+
+_¿Cuáles son las desventajas de cortar y pegar?_
+- La principal es el límite a la reproducibilidad. ¿Cómo idenficar los análisis que finalmente son reportados?
+- Eficiencia: cada vez que se realicen cambios en los análisis, nuevamente cortar-pegar.
+
+Los **documentos dinámicos** permiten lidiar con las limitaciones anteriores, ya que los análisis y resultados están en un mismo documento. Esto es posible ya que se combinan dos lenguajes en texto plano: escritura y código de análisis. La clave es que el programa de edición y de análisis pueda identificar qué secciones del texto corresponden a escritura y cuáles corresponden a análisis. Esto es justamente lo que hace la librería Knitr.
+
+## Knitr
+
+Knitr es una librería de R que convierte (compila) documentos escritos en texto plano y que combinan texto y análisis hacia otros formatos. Esto es posible ya que reconoce marcas de edición y código de análisis y permite su transformación a formatos como pdf, word y html. El flujo es el siguiente:
+
+documento .Rmd / Rnw > knitr > md / tex > pandoc > html / pdf
+
+## Trozos (chunks) de código
+
+La caracteristica principal de Knitr es que identifica las secciones de código en la hoja y los ejecuta mediante R. Estos trozos de código se encuentran delimitados de la siguiente manera:
+
+```
+```r
+4+5
+```
+```
+
+Decir, todo lo que comience por ` ```r` y termine con ` ``` ` será identificado como código de análisis.
+
+Nota: atajo para generar un chunk en RStudio: `ctrl+alt+i`
