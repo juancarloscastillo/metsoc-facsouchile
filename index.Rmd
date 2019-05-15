@@ -30,7 +30,7 @@ Web link: [http://bit.ly/multivariada](http://bit.ly/multivariada)
 <br/>
 
 <div class="alert alert-info">
-  <strong>NOVEDADES (acualizadas 15 Mayo)</strong>
+  <strong>NOVEDADES (actualizadas 15 Mayo)</strong>
 
   - Fecha controles recuperativos: 27 de Mayo 8:30
   - Actualización pauta trabajo: detalles sobre mínimos entrega 1
