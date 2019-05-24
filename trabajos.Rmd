@@ -114,3 +114,7 @@ Formato:
 - [Gayo Cal, M. G., Cabrol, G. O., & Méndez, M. L. (2019). Elección escolar y selección de familias: reproducción de la clase media alta en Santiago de Chile. Revista Internacional de Sociología, 77(1), 120. https://doi.org/10.3989/ris.2019.77.1.17.310](http://revintsociologia.revistas.csic.es/index.php/revintsociologia/article/view/1020/1338)
 
 - [Delfini, M. (2013) La afiliación sindical en Argentina. Análisis sobre sus determinantes. Revista Internacional de Sociología, 71(1)91-114,  http://dx.doi.org/10.3989/ris.2012.01.24.](http://revintsociologia.revistas.csic.es/index.php/revintsociologia/article/view/485/507)
+
+# Guías de análisis de datos
+
+- [Flujo 1: Ajustando datos](documents/trabajos/flujo_analisis1.html)

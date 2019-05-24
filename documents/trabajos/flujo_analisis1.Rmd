@@ -1,0 +1,279 @@
+---
+title: "Flujo de análisis de datos 1: Ajustando"
+author: "Juan Carlos Castillo"
+website: "https://jc-castillo.com/"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    number_sections: true
+---
+
+```{css, echo=FALSE}
+
+pre code, pre, code {
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+    max-height: 300px;
+}
+
+
+```
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+options(width=1200)
+```
+
+A continuación se presenta un ejemplo de flujo de análisis utilizando R / RStudio. Este flujo corresponde a la primera parte de ajuste de los datos, y más adelante se presentaran flujos de descripción y de modelamiento.
+
+Actualmente existe mucha literatura y tutoriales sobre esto, pero en general se abordan aspectos del análisis por separado y con una profundidad y complejidad que en ocasiones es una barrera para utilizar los recursos de R de una manera más pragmática para análisis y reporte de datos.
+
+El flujo presentado acá proviene de mi experiencia personal analizando datos y enseñando a hacerlo, y se orienta por la reproducibilidad y la parsimonia En relación a la reproducibilidad, se trata de siempre tener en mente que el código y reporte tienen que ser entendidos por otros y por mí mismo en el futuro. Y la parsimonia es parte de esto: la menor cantidad de recursos posibles para hacer lo más posible, y buscar las funciones más intuitivas.
+
+# Librerías y datos 
+
+## Librerías
+
+El procedimiento de análisis en R requiere usualmente cargar librerías, que son un conjunto de funciones para análisis específicos. Las librerías para análisis básicos vienen pre-instaladas, y para funciones más específicas hay que instalarla (en caso de no estar ya instalada), y si ya está instalada se carga. Ejemplo, la librería `dplyr`
+
+```{r eval=FALSE}
+install.packages("dplyr")  # para instalar
+library(dplyr) # para cargar
+```
+
+Para hacer más expedito este procedimiento se recomienda utilizar la librería `pacman`, que sirve para instalar y cargar de manera expedita otras librerías. También se recomienda comentar luego de cada librería para qué se va a utilizar, para llevar un registro
+
+```{r}
+pacman::p_load(haven, # abrir bases de datos en otros formatos
+dplyr, # data management
+car, # recode
+sjmisc # descriptivos
+)
+```
+
+Recomendación general: cargar en el preámbulo las librerías que más se utilizan durante el análisis. Si alguna función de una librería se utiliza pocas veces, es mejor utilizar una segunda forma de acceder a las funciones sin necesidad de cargar la librería. Por ejemplo, si quiero utilizar la función para recodificar `rec` de la librería `sjmisc`:
+
+```{r eval=FALSE}
+sjmisc::rec(x, 1=2)
+```
+
+En este caso, la lógica es librería::función, y no se requiere cargar la librería pero sí *debe estar previamente instalada*.
+
+
+## Abrir base de datos
+
+En caso que las bases estén en formatos separados por comas u otro separador (tabulaciones, espacios):
+
+```{r eval=FALSE}
+data <-read.table("ruta/datos.csv",sep=",", header=TRUE)
+```
+
+Si se encuentran en un formato estándar tipo spss, stata, sas, se recomienda utilizar las funciones respectivas de la librería `haven`. En este caso, la base de datos a utilizar (ELSOC) se encuentra en formato Stata, y utilizamos la función `read_dta`. Se da la ruta al archivo local, en este caso la llamamos directamente de la web
+
+```{r}
+data<-read_dta("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/data/COESW1_Stata14_V3.dta")
+```
+
+Y realizamos un chequeo básico de la lectura de datos: nombres de las variables y tamaño de la base en términos de casos y variables (en este ejemplo, 2984 casos y 374 variables).
+
+```{r}
+dim(data) # dimension de la base
+```
+Y si se quiere revisar en formato de planilla de datos:
+
+```{r}
+View(data)
+```
+
+
+
+# Ajuste de los Datos
+
+Esta parte inicial del análisis es usualmente la más tediosa y la más larga, y consiste en dejar los datos listos para ser analizados. Los procedimientos usuales son selección y renombramiento de las variables, identificación de casos perdidos, recodificaciones y generación de índices simples.
+
+## Selección y renombre de variables
+
+Este paso es opcional y consiste en crear un subset de datos para continuar con los análisis, en lugar de hacerlo con la base completa. Para ello:
+
+- Primero, se identifica el nombre de las variables. Esto aparece en el libro de códigos y/o en el cuestionario, o también se puede hacer buscando en la base de datos mediante alguna palabra clave asociada a la pregunta. Por ejemplo, si queremos buscar variables asociadas a educación, utilizamos la función `find_var`, de `sjmisc` (entrega nombre de la variable en columna var.name)
+
+```{r}
+find_var(data,"edu")
+```
+
+- En segundo lugar se crea un subset que contiene solo las variables que se van a utilizar en el análisis, mediante la función `select` de `dplyr`. Con esta función se puede además en un paso otorgar un nombre más sustantivo a la variable, que facilite su posterior utilización. En este caso, daremos el nombre sstatus a la variable de estatus subjetivo d1_01, ingreso a m30, educación a m1, sexo se queda con su nombre y nhogar (número de personas del hogar) también. Este subset puede cambiar posteriormente, solo agregar/quitar variables y correr el código nuevamente
+
+```{r}
+data_n <- data %>% select(sstatus = d1_01, ingreso_monto=m29monto, ingreso_rango=m30,educacion=m1,sexo, nhogar)
+summary(data_n)
+```
+
+## Recodificación de variables
+
+**Introducción**
+
+En el caso de trabajar con R, el ajuste de las variables pasa por atender el distinto tipo de estructura, usualmente numérico (vector) o variable categórica (factor). Esta definición establece diferencias claras; por ejemplo, no se puede hacer un promedio con un factor, y los vectores númericos no tienen etiquetas. Dado que el límite entre lo categórico y lo continuo muchas veces es más relativo en ciencias sociales, para algunas operaciones resulta más eficiente contar con variables numéricas que puedan tener etiquetas, y que luego puedan ser transformadas a factor para operaciones específicas. En R este formato intermedio se denomina "vector atómico" o "vector etiquetado".
+
+En primer lugar revisaremos la estructura de las variables de la base de datos con el comando `str` (estructura)
+
+```{r}
+str(data_n)
+```
+
+En este caso, vemos que las cuatro vectores se definen como "haven_labelled", que hace referencia a vectores numéricos etiquetados. Esto ocurre en el proceso de conversión mediante el paquete `haven`, que transforma de esta manera a los valores numéricos con etiqueta que vienen de Stata.
+
+Los vectores que que aparecen aquí se caracterizan por una serie de atributos (attr):
+
+- label: etiqueta de la variable
+- format.stata: formato de la etiqueta de la variable
+- labels: niveles de respuesta de la variable (values) que están numerados
+- names: nombre de las etiquetas de los valores.
+
+Estos atributos luego van a facilitar algunas operaciones de recodificación y de descripción de los datos.
+
+**Proceso de recodificación**
+
+Para que esto sea lo más claro y reproducible posible, se recomienda hacer este procedimiento variable por variable, con la siguiente secuencia:
+- descripción inicial
+- transformaciones necesarias
+- descripción y chequeo final.
+
+Si bien hay una serie de librerías de R asociadas a esto, optamos por la librería `sjmisc` (cargada en el inicio), en primer lugar para minimizar el número de librerías y funciones asociadas, en segundo lugar por su versatilidad en el uso de etiquetas, y finalmente por su compatibilidad con `dplyr`. La librería `sjmisc` también tiene una hoja resumen que se puede encontrar [aquí](http://strengejacke.de/sjmisc-cheatsheet.pdf).
+
+- Variable dependiente: Estatus subjetivo
+
+Descripción inicial de la variable:
+```{r}
+frq(data_n$sstatus)
+```
+
+Vemos que los valores 88 y 99 corresponde recodificarlos a valores perdidos, que en el caso de R se define como `NA`. Lo hacemos mediante la funcion `recode` de la librería `car`  (Nota: dplyr, sjmisc y otras librerías tienen su propia versión de recodificación, pero la de car es más intuitiva)
+
+```{r}
+data_n$sstatus <- recode(data_n$sstatus, "c(88,99)=NA")
+frq(data_n$sstatus) # check
+
+```
+- Variable indepediente Ingreso
+
+Esta variable en general tiene dos formas de preguntarse: en el monto directo en pesos, o en rangos de ingreso. Hay una tercera variante donde se pregunta por el monto directo, y quienes no responden luego se les pregunta por el rango. Este último es el caso de ELSOC.
+Como estas variables en general tienen muchos datos perdidos, para poder aprovechar la información lo ideal es combinarlas. Una posibilidad es la siguiente:
+
+1 - crear una variable de ingresos en pesos a partir de la pregunta de rangos, mediante la imputación del promedio del rango
+2 - combinar las variables de ingreso (ing_comb)
+3 - para tener mayor sensibilidad a las implicancias del ingreso, crear una variable de ingreso equivalente por hogar, dividiendo la variable de ingreso por el número de personas del hogar.
+
+_ingreso_monto:_
+
+```{r}
+frq(data_n$ingreso_monto)
+```
+
+Recodificar 0, 8 y 9 como perdidos:
+
+```{r}
+data_n$ingreso_monto <- recode(data_n$ingreso_monto, "c(0,8,9)=NA")
+frq(data_n$ingreso_monto) # check ok
+```
+
+Esta variable queda con 642 NA, de los que se espera rescatar información mediante la variable de ingreso_rango
+
+_ingreso_rango_
+
+```{r}
+frq(data_n$ingreso_rango)
+
+```
+
+Recodificación: imputación del promedio del rango. Se genera una variable nueva (ingreso_rango_prom)  para luego poder comparar con la original:
+
+```{r}
+data_n$ingreso_rango_prom <- recode(data_n$ingreso_rango,"
+1=110000;
+2=250000;
+3=305000;
+4=325000;
+5=400000;
+6=445000;
+7=490000;
+8=535000;
+9=585000;
+10=640000;
+11=700000;
+12=765000;
+13=845000;
+14=935000;
+15=995000;
+16=1180000;
+17=1375000;
+18=1670000;
+19=2275000;
+20=3500000;
+c(88,99)=NA
+")
+
+
+frq(data_n$ingreso_rango_prom)
+
+```
+
+Ok, pero vemos que quedaron las etiquetas asociadas a los valores de la variable original; esto en general no es problema para los modelos pero si para descriptivos, así que mejor se borran con `drop_labels`, de `sjlabelled`
+
+```{r}
+data_n$ingreso_rango_prom <- sjlabelled::drop_labels(data_n$ingreso_rango_prom)
+frq(data_n$ingreso_rango_prom)
+```
+
+Ahora como tercer paso, combinamos ambas variables con rowSums (sumar las dos variables en una tercera). Al sumar ambas con `rowSums`, las que tienen doble missing quedan con valor 0, por lo tanto luego los 0 se recodifican a `NA`
+
+```{r}
+frq(data_n$ingreso_rango_prom)
+
+data_n <- data_n %>% mutate(ing_comb = rowSums(select(., "ingreso_monto", "ingreso_rango_prom"),na.rm = TRUE))
+
+data_n$ing_comb=recode(data_n$ing_comb, "0=NA")
+
+names(data_n)
+summary(data_n$ing_comb) 
+
+```
+
+Con esto disminuimos los missings de ingreso a solo 161. Ahora nos queda solamente dividir esta variable por el numero de integrantes del hogar:
+
+```{r}
+frq(data_n$nhogar)
+```
+No se detectan missins, así que se procede:
+
+```{r}
+names(data_n)
+data_n <- data_n %>%  mutate(ing_comb_eq = ing_comb / nhogar) 
+```
+
+
+*Generación de ingreso por categorías (quintiles/deciles)*
+
+
+Para quintiles vamos a crear una variable llamada quint, aplicando la función `ntile` a la variable de ingreso inc_comb_eq
+
+```{r}
+data_n <- data_n %>% mutate(quint = ntile(ing_comb_eq,5))
+frq(data_n$quint)
+```
+
+Y para deciles:
+
+
+```{r}
+data_n <- data_n %>% mutate(decil = ntile(ing_comb_eq,10))
+frq(data_n$decil)
+```
+
