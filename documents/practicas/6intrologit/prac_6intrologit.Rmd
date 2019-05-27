@@ -16,149 +16,215 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Refs:
-https://cran.r-project.org/web/packages/jtools/vignettes/summ.html
-Fields, Cap. 9: comparing two means
-Miles, understanding and using statistics
+
 
 
 #Introducción
 
 
+La siguiente práctica tiene el objetivo de introducir a los estudiantes a los modelos de regresión logística. Para consideraciones de este análisis vamos a utilizar la base de datos Titanic.
+
+El **RMS Titanic** fue un transatlántico británico, el mayor barco del mundo al finalizar su construcción, que se hundió en la madrugada del 15 de abril de 1912 durante su viaje inaugural desde Southampton a Nueva York. En el hundimiento del Titanic **murieron 619 personas** de las **1046** que iban a bordo, lo que convierte a esta tragedia en uno de los mayores naufragios de la historia ocurridos en tiempo de paz. 
+
+La base de datos la pueden descargar [acá](https://www.dropbox.com/s/eqbfd85jwyckafe/titanic.Rdata?dl=0
+)
+
+
+
+| Nombre   	| Descripción                        	| Valores 	| Categorías       	|
+|----------	|------------------------------------	|---------	|------------------	|
+| pclass   	| Clase del pasajero/a               	| 1       	| Clase Alta       	|
+|          	|                                    	| 2       	| Clase Intermedia 	|
+|          	|                                    	| 3       	| Clase Baja       	|
+| survived 	| Estatus sobrevivencia              	| 0       	| No sobrevive     	|
+|          	|                                    	| 1       	| Sobrevive        	|
+| name     	| Nombre                             	|         	|                  	|
+| sex      	| Sexo pasajero/a                    	| 0       	| Hombre           	|
+|          	|                                    	| 1       	| Mujer            	|
+| age      	| Edad pasajero/a                    	|         	| rango: 0.2-80.0  	|
+| sibsp    	| Número de hermanos /pareja a bordo 	|         	| rango: 0-8       	|
+| parch    	| Número de padres / niños a bordo   	|         	| rango: 0-9       	|
+
+
+#Preambulo
+
+En primer lugar cargamos los paquetes.
 
 ```{r message=FALSE, warning=FALSE}
-library(haven)
-library(data.table)
-library(sjmisc)
-library(sjlabelled)
-library(ggplot2)
-library(dplyr)
-el2 <- read_dta("C:/Users/Fondecyt R. Sociales/Dropbox/ELSOC/6_Envios_ELSOC/6_A_Comunidad_COES_ELSOC_2016_2017_y_Merge/6_Datos_Formato_Stata_14/ELSOC_W02_v2.00_Stata14.dta")
-table(el2$c36)
+pacman::p_load(tidyverse,data.table,sjmisc,sjlabelled,
+               dplyr,texreg,stargazer)
+```
+
+En segundo lugar cargamos la base de datos.
+```{r message=FALSE, warning=FALSE}
+#recordar definir en base al directorio de trabajo o working directory
+load("C:/Users/Fondecyt R. Sociales/Dropbox/mulitva2018/metsoc-facsouchile/documents/practicas/6intrologit/titanic.Rdata")
+names(tt)
+
 ```
 
 
 
-# Inferencía estadística
+# Concepto de razón o ratio
 
 En primer lugar revisamos los estadísticos descriptivos de las variables de interés.
 
 ```{r message=FALSE, results='asis'}
-#codificación de intención de voto
-el2$voto<- car::Recode(el2$c36, "-999:-888=0; 8:10=0; else=1")
-el2$voto<- remove_labels(el2$voto, labels = c(`Alejandro Guillier` = 1))
-table(el2$voto)
+
+table(tt$survived)
+table(tt$sex)
+#Porcentajes de sobrevientes
+prop.table(table(tt$survived))
+
 
 ```
+El resultado muestra que 427 personas sobrevivieron al hundimiento del Titanic. En terminos de porcentajes esto expresa el 40.8% de los datos(427/(427+619)=0.4082218) en contraste con el 59.1% de los pasajeros que no sobrevivieron (619/(427+619)=0.5917782).
 
-##concepto de razón o ratio
-```{r}
-#intención de voto por sexo
-table(el2$voto)
-prop.table(table(el2$voto))
-
-```
-La tabla muestra que 1167 personas se declaran dispuestos a a votar en las elecciones presidenciales de noviembre de 2017. En terminos de porcentajes esto expresa el 47% de la muestra (1167/2473=0.47) en contraste con el 53% de la muestra que no declara disposición de ir a votar (1306/2473=0.53).
 
 Esto se puede expresar de la misma forma en términos de razón.
 ```{r}
-1167/1306
-#0.8935681 existen 0.89 personas que votan por cada una que no lo hace
-#O alternartivamente por cada 100 personas que no van a votar, exitirian 89 personas que sí están dispuestas.
+427/619
 
+
+
+
+```
+Existen 0.69 personas  que sobreviven por cada persona que no sobrevive.
+
+O alternativamente, por cada 100 no sobrevivientes existen 69 sobrevivientes.
+
+
+```{r}
 ##Tambien se puede hacer la interpretación al revés
-1306/1167
+619/427
 #1.119109 existen 1.12 personas que no tienen disposición de ir a votar por cada una que esta dispuesta.
 
-
 ```
+Existen 1.45 personas que no sobreviven por cada persona que sobrevive.
 
+o alternativamente, por cada 100 sobrevivientes, existen 145 no sobrevivientes al hundimiento del Titanic.
 
-La razón o ratio es el coenciente entre dos cantidades y señala cuantas veces una cantidad es mayor o menor respecto a la otra
+**La razón o ratio es el coenciente entre dos cantidades y señala cuantas veces una cantidad es mayor o menor respecto a la otra**
 
-## voto en relación al género.
+# Concepto de Odds
 ```{r}
-addmargins(table(el2$voto,el2$m0_sexo))
-round(prop.table(table(el2$voto,el2$m0_sexo),2),2) #perfil columna
+addmargins(table(tt$survived,tt$sex))
+round(prop.table(table(tt$survived,tt$sex),2),2) #perfil columna se le indica a prop.table con el segundo argumento "2"
 ```
 
-Según esto los hombres participan más que las mujeres, 49% versus 46%
+
+Según esto el 21% de los hombres sobrevivieron al hundimiento y el 75% de las mujeres sobrevivieron.
+
 Tambien se puede expresar en términos de razón:
 
-la razón de los hombres que tienen disposición a votar frente a los que no es 
+la razón de los hombres que tienen de sobrevivir se puede expresar como:
+
+$$Odds_{hombres}=\frac{p}{(p-1)}=\frac{0.21}{0.79}=0.27$$
+y en R
+
 ```{r}
-0.49/0.51
+0.21/0.79
 ```
-existen 0.96 hombres que estarían dispuestos a votar por cada hombre que no estaría dispuesto.
+**Hay 0.27 hombres que sobreviven al titanic por cada uno que no sobrevive**
+
+o en otros términos
+
+**Hay 27 hombres que sobreviven al titanica por cada 100 hombres que no sobreviven**
+
 
 y para mujeres
-```{r}
-0.46/0.54
-```
-existen 0.85 mujeres que estarían dispuestos a votar por cada mujer que no estaría dispuesto.
 
-en términos generales esto se le suele llamar **ODD**
+$$Odds_{mujeres}=\frac{p}{(p-1)}=\frac{0.75}{0.25}=3$$
+
+```{r}
+0.75/0.25
+```
+
+**Hay 3 mujeres sobrevivientes por cada mujere que no sobrevive al hundimiento del titanic**
+
+
+El análisis que acabamos de realizar es un analisis de **Odds**
 
 $$0dd =\frac{p}{q}=\frac{p}{1-p}$$
 
 
 el término odd refiere a la razón que se establece entre la ocurriencia de un evento (o su probabilidad) respecto al suceso de su no ocurrencia.
 
-a través de los ratios se puede responder ¿cuántos más estan dispuestos las mujeres a votar en relación a los hombres?
+
+# Concepto de Odds Ratio
+
+La comparación de los Odds de dos grupos es conocido como **Odds Ratio (OR)**. Esto equivale a
+
+$$\theta=\frac{odds_{1}}{odds_{2}}=\frac{\pi_{1}/(1-\pi_{1})}{\pi_{2}/(1-\pi_{2})}$$
+**Propiedades:**
+
+- Cuando X e Y son independientes $\theta=1$ ya que $odds_{1}=odds_{2}$
+
+- El rango de posibles valores es: $0<\theta<\infty$
+
+  -Cuando los valores van de 0 a 1, $\theta$ indica que $odds_{1}<odds_{2}$
+  
+  -Cuando los valores van de 1 a $\infty$, $\theta$ indica que $odds_{1}>odds_{2}$
+  
+- Es una medida de magnitud de asociación simétrica: un $\theta=4$ es una asociació positiva proporcional a la asociación negativa $\theta=1/4=0.25$
+
+
+A través de los ratios se puede responder a la pregunta ¿Cuánto más probable es que las mujeres sobrevivan al titanic en relación a los hombres?**
 
 ```{r}
-prop.table(table(el2$voto,el2$m0_sexo),2)
-odd_voto_H<-0.4900105/0.5099895
-odd_voto_M<-0.4605782/0.5394218
+prop.table(table(tt$survived,tt$sex),2)
+odd_H<-0.2051672/0.7948328
+odd_M<-0.7525773/0.2474227
 
-odd_voto_M/odd_voto_H
+odd_M/odd_H
 
 ```
 
-La probabilidad de encontrar una mujer que este dispuesta a votar sobre una que no lo este es de 0.89 veces respecto el caso de los hombres. Es decir la probabilidad, se reduce a 11% respecto de los hombres (1-0.89).
+**La probabilidad de encontrar una mujer que sobreviva al titanic sobre una que no lo hace es de 11.78 veces respecto al caso de los varones.**
 
-Este término se le llama Odd ratio (o razón de ODD, o razón de momios) y puede interpretarse como una razón de probabilidades. EN nuestro caso la probabilidad de encontrar entre las mujeres una que este dispues a votar es menor que en el caso de los hombres. Cuando el Odd ratio alcanza un valor de 1 quiere decir que no hay diferencias
+o alternativamente:
 
-
-
-$$OddRatio=\frac{odd_{a}}{odd_{b}}=\frac{\frac{p_{a}}{(1-p_{a})}}{\frac{p_{b}}{(1-p_{b})}}$$
+**La probabilidad de sobrevivir al titanic entre las mujeres es [(11.78-1)*100]=1078% más altas que entre los hombres**
 
 
-
-## La relación entre odd y proporción
-
-
-$$odd=\frac{p}{1-p}$$
-$$p=\frac{odd}{1+odd}$$
+Este término se le llama Odd ratio (o razón de ODD, o razón de momios) y puede interpretarse como una razón de probabilidades. En nuestro caso la probabilidad de encontrar entre a una mujer sobreviviente es mucho más alta que la probabilidad de encontrar a un hombre superviviente.
 
 
-Los Odds pueden variar de 0 a $+\infty$. Teniendo en cuenta de que p varia de 0 a 1, por lo tanto cuando p está muy cerca a 1:
+
+
+## Odds y Logit: algunas consideraciones
+
+
+
+Los Odds pueden variar de 0 a $+\infty$. Teniendo en cuenta de que la probabilidad ($p$ o $\pi$ según sea la nomenclatura) varia de 0 a 1, por lo tanto cuando p está muy cerca a 1:
 
 $$odd=\frac{p}{1-p}=\frac{1}{0}=+\infty$$
-
 
 Y en el caso inverso
 
 $$odd=\frac{p}{1-p}=\frac{0}{1}=0$$
 
-A partir del Odd es posible definir el logit, es decir el logaritmo natural del Odd [^1] 
-[^1]: En regresión logística se emplea el logaritmo natural o neperiano cuya base es el número *e*, un número irracional cuyo valor aproximado es 2,718. El logaritmo natural de un número x, notado como ln(x), es el exponente al que debe ser elevado el número *e* para obtener x.
+A partir del Odd es posible definir el logit, es decir el logaritmo natural del Odd:
+
+```{r eval=FALSE}
+En regresión logística se emplea el logaritmo natural o neperiano cuya base es el número *e*, un número irracional cuyo valor aproximado es 2,718. El logaritmo natural de un número x, notado como ln(x), es el exponente al que debe ser elevado el número *e* para obtener x.
+```
 
 
 El logit puede tomar cualquier valor real entre $-\infty$ y $+\infty$, y permite una lectura simétrica de la relación entre proporciones.
 
 
-Vamos a tomar el caso de elsoc. En elsoc el 38% de los encuestados son hombres y el 62% son mujeres.
+Vamos a tomar el caso de los pasajeros del Titcanis. El 63% de los pasajeros corresponden a hombres y el 37% corresponden a mujer.
 ```{r}
-prop.table(table(el2$m0_sexo))
-(odd_h<-0.3845532/0.6154468)
-(odd_m<-0.6154468/0.3845532)
+prop.table(table(tt$sex))
+(odd_h<-0.6290631/0.3709369)
+(odd_m<-0.3709369/0.6290631)
 
 ```
 
-Se definomos *p* como la proporción de hombres, el odd será de 0.62(0.38/0.62), mientras que si definimos *p* como la proporción de mujeres, el odd será de  1.06(0.62/0.38)
+Se definomos *p* como la proporción de hombres, el odd será de 1.695876(0.6290631/0.3709369), mientras que si definimos *p* como la proporción de mujeres, el odd será de  0.5896656(0.3709369/0.6290631)
 
-Cuando *p* es menor que *q*, el Odd se moverá entre 0 y 1. mientras que cuando p>q el odd se moverá entre 1 y $+\infty$.
+Cuando *p* es menor que *q*, el Odd se moverá entre 0 y 1. mientras que cuando $p>q$ el odd se moverá entre 1 y $+\infty$.
 
 Sin embargo, mediante a la transformación logarítmica del odd los valores son comparables sin importar cuál sea la categória tomada para el cálculo de la proporición.
 
@@ -168,18 +234,21 @@ log(odd_m)
 
 ```
 
+En los siguientes gráficos se puede observar la comparación en el comportamiento de las odds y de logit en relación a las distintos valores que puede asumir la probabilidad
+
 ```{r warning=FALSE, message=FALSE,results='asis'}
-
-
-p<-seq(0,1,by=0.01)
-odd<- p/(1-p)
-logit<- log(p/(1-p))
-dat<- as.data.frame(cbind(p,odd,logit))
-library(tidyverse)
+#se cargan paquetes más especificos
 library(hrbrthemes)
 library(plotly)
 library(babynames)
 library(viridis)
+
+#ajustamos una variable de probabilidades y sus respectivas transformaciones a odds y logit
+p<-seq(0,1,by=0.01)
+odd<- p/(1-p)
+logit<- log(p/(1-p))
+dat<- as.data.frame(cbind(p,odd,logit))
+
 
 dat %>%
   ggplot( aes(x=p, y=odd)) +

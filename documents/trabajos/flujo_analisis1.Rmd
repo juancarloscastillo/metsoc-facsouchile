@@ -1,14 +1,9 @@
 ---
 title: "Flujo de análisis de datos 1: Ajustando"
-author: "Juan Carlos Castillo"
 website: "https://jc-castillo.com/"
 output:
-  html_document:
-    theme: flatly
-    highlight: tango
-    toc: true
-    toc_float: true
-    toc_depth: 2
+  rmdformats::readthedown:
+    highlight: kate
     number_sections: true
 ---
 
@@ -32,7 +27,13 @@ knitr::opts_chunk$set(cache = TRUE)
 options(width=1200)
 ```
 
-A continuación se presenta un ejemplo de flujo de análisis utilizando R / RStudio. Este flujo corresponde a la primera parte de ajuste de los datos, y más adelante se presentaran flujos de descripción y de modelamiento.
+
+*Juan Carlos Castillo / [jc-castillo.com](https://juancarloscastillo.github.io/jc-castillo/)*
+
+`r format(Sys.time(), '%d %B, %Y')`
+
+
+A continuación se presenta un ejemplo de flujo de análisis utilizando R / RStudio. Este flujo corresponde a la primera parte de ajuste de los datos, y más adelante se presentaran flujos de descripción y de modelamiento. 
 
 Actualmente existe mucha literatura y tutoriales sobre esto, pero en general se abordan aspectos del análisis por separado y con una profundidad y complejidad que en ocasiones es una barrera para utilizar los recursos de R de una manera más pragmática para análisis y reporte de datos.
 
@@ -49,7 +50,7 @@ install.packages("dplyr")  # para instalar
 library(dplyr) # para cargar
 ```
 
-Para hacer más expedito este procedimiento se recomienda utilizar la librería `pacman`, que sirve para instalar y cargar de manera expedita otras librerías. También se recomienda comentar luego de cada librería para qué se va a utilizar, para llevar un registro
+Para hacer más expedito este procedimiento se recomienda utilizar la librería `pacman`, que sirve para instalar y cargar de manera expedita otras librerías. También se recomienda comentar luego de cada librería para qué se va a utilizar, para llevar un registro ^[`pacman::p_load(library1,library2...)`]
 
 ```{r}
 pacman::p_load(haven, # abrir bases de datos en otros formatos
@@ -95,7 +96,7 @@ View(data)
 
 
 
-# Ajuste de los Datos
+# Ajuste y generación de variables
 
 Esta parte inicial del análisis es usualmente la más tediosa y la más larga, y consiste en dejar los datos listos para ser analizados. Los procedimientos usuales son selección y renombramiento de las variables, identificación de casos perdidos, recodificaciones y generación de índices simples.
 
