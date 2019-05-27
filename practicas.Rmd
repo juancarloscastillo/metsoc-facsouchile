@@ -30,6 +30,12 @@ output:
 
 <br/>
 
+- [6: Regresión logística](documents/practicas/6intrologit/prac_6intrologit.html)
+
+
+
+<br/>
+
 ### Talleres/ Ayudantías
 
 - [Taller n°1: Manejo de bases de datos en R (abrir, filtrar, recodificar, descriptivos básicos, creación de índices y correlación de Pearson).](documents/ayudantias/Taller_1_Estadística_multivariada.R)

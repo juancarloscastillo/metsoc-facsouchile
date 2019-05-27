@@ -4,8 +4,8 @@
     <title>Estadística Multivariada</title>
     <meta charset="utf-8" />
     <meta name="author" content=".small[Juan Carlos Castillo &amp; Alejandro Plaza    Departamento de Sociología - UCH / COES   ]" />
-    <link rel="stylesheet" href="..\xaringan_custom\xaringan-themer.css" type="text/css" />
-    <link rel="stylesheet" href="..\xaringan_custom\progress-bar.css" type="text/css" />
+    <link rel="stylesheet" href="../xaringan_custom/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="../xaringan_custom/progress-bar.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -195,7 +195,7 @@ En regresión logística se modela la probabilidad de que la variable respuesta 
 
 --
 
-formalmente las **odds** es la razón (o cociente) entre la ocurriencia de un evento ($p$) y su no ocurriencia ($q$) 
+formalmente las **odds** es la razón (o cociente) entre la ocurriencia de un evento ($p$) y su no ocurriencia ($q$)
 
 
 `$$Odds=\frac{p}{q}=\frac{p}{1-p}=\frac{\pi}{1-\pi}$$`
@@ -218,7 +218,7 @@ Esta base de datos contiene la información de los pasajeros del Titanic:
 
 ]
 .pull-right[
-![](postertitanic.jpg)&lt;!-- --&gt;
+&lt;img src="postertitanic.jpg" width="245" /&gt;
 ]
 
 ---
@@ -258,7 +258,7 @@ Existen 427 sobrevivientes, lo que expresa el 41% del total de pasajeros. Esto s
 
 **Es decir, la probabilidad de sobrevivir es de 0.69 veces a la probabilidad de no sobrevivir.**
 
-O alternativamente 
+O alternativamente
 
 **por cada 100 no sobrevivientes existen 69 sobrevivientes.**
 
@@ -308,9 +308,9 @@ Entonces los odds (o razón o ratio) de sobrevivir a la catastrofe del titanic p
 
 **La probabilidad de sobrevivencia en los hombres es 0.27 veces a la no sobrevivencia**
 
-... o en otros términos 
+... o en otros términos
 
-**Hay 0.27 hombres que sobreviven por cada uno que no sobrevive** 
+**Hay 0.27 hombres que sobreviven por cada uno que no sobrevive**
 
 **Hay 27 hombres que sobreviven por cada 100 hombres que no sobreviven**
 ]
@@ -576,7 +576,53 @@ A pesar de que el modelo está escrito para logit, es posible hacer la transform
 `$$\pi_{i}=\frac{exp(\beta_{0}+\beta_{1}X{1}+...+\beta_{k}X{k})}{(1+exp(\beta_{0}+\beta_{1}X{1}+...+\beta_{k}X{k}))}$$`
 ]
 ---
+class:inverse
 
+# Resumen
+
+--
+
+- DIFICIL
+
+--
+
+- ¿Para qué hacer regresión con dependientes categóricas? (...siendo que hay otras alternativas como diferencias de medias o tablas cruzadas)
+
+--
+  - CONTROL
+
+--
+
+- ¿Es gratis?
+
+  - ### NO
+
+--
+
+- Cuadrando el círculo: ¿Cómo utilizar una función lineal para variables categóricas?
+
+--
+
+  - Restricción del rango entre 1 y 0 de la dependiente para la predicción basada en el modelo.
+
+---
+class:inverse
+
+# Resumen
+
+- Requiere:
+
+  - redondear el cuadrado: probabilidad, odds, odds ratio, logit, exponenciar ....
+
+--
+
+- PERO: bases interpretación
+
+    - logits se interpretan directamente como log de los odds (valores negativos y positivos)
+
+    - Odds-ratio: se interpreta como razones o odds(desde 0 en adelante). Donde 1 indica ausencia de efecto, menor que 1 es negativo y mayor que 1 es positivo
+
+---
 class: bottom, left
 
 .right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
