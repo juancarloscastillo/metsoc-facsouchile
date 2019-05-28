@@ -78,6 +78,7 @@ prop.table(table(tt$survived))
 
 
 ```
+
 El resultado muestra que 427 personas sobrevivieron al hundimiento del Titanic. En terminos de porcentajes esto expresa el 40.8% de los datos(427/(427+619)=0.4082218) en contraste con el 59.1% de los pasajeros que no sobrevivieron (619/(427+619)=0.5917782).
 
 
@@ -89,6 +90,7 @@ Esto se puede expresar de la misma forma en términos de razón.
 
 
 ```
+
 Existen 0.69 personas  que sobreviven por cada persona que no sobrevive.
 
 O alternativamente, por cada 100 no sobrevivientes existen 69 sobrevivientes.
@@ -266,6 +268,38 @@ dat %>%
 
 
 ```
+
+```{r}
+m0<-lm(as.integer(survived)~sex,data=tt)
+stargazer::stargazer(m0, type="text")
+
+
+
+m1<-glm(survived~sex,data=tt, family = "binomial")
+
+
+summary(m1)
+stargazer::stargazer(m1, type="text")
+stargazer::stargazer(m1,apply.coef = exp,
+          apply.se   = exp,
+          covariate.labels = "Mujer",
+          dep.var.caption = "Variable dependiente",
+          dep.var.labels = "Sobrevivío",
+          type = "text")
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
