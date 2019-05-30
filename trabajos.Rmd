@@ -118,3 +118,4 @@ Formato:
 # Guías de análisis de datos
 
 - [Flujo 1: Ajustando datos](documents/trabajos/flujo_analisis1.html)
+- [Reportes dinámicos con Rmarkdown](documents/trabajos/guia_rep_dinamico/reportedinamico.html)

@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Juan Carlos Castillo" />
+  <title>Documentos dinámicos: Combinando escritura y análisis</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Documentos dinámicos: Combinando escritura y análisis</h1>
+<h2 class="author">Juan Carlos Castillo</h2>
+</div>
+<p>En la investigación académica en general el proceso de escritura se encuentra separado del análisis, en programas y documentos distintos. El traspaso de información entre el programa de análisis y el programa de edición de texto se realiza con un clásico: cortar y pegar.</p>
+<p><em>¿Cuáles son las desventajas de cortar y pegar?</em></p>
+<ul>
+<li><p>La principal es el límite a la reproducibilidad. ¿Cómo identificar los análisis que finalmente son reportados?</p></li>
+<li><p>Eficiencia: cada vez que se realicen cambios en los análisis, nuevamente implica cortar-pegar, y es difícil llevar un registro apropiado de las versiones de los documentos.</p></li>
+</ul>
+<p>Los <strong>documentos dinámicos</strong> permiten lidiar con las limitaciones anteriores, ya que los análisis y resultados están en un mismo documento. Esto es posible ya que se combinan dos lenguajes en texto plano: escritura y código de análisis. La clave es que el programa de edición y de análisis pueda identificar qué secciones del texto corresponden a escritura y cuáles corresponden a análisis.</p>
+<h1 id="sobre-texto-plano">Sobre texto plano</h1>
+<p><em>¿Por qué escribir en texto plano en lugar de un programa que me muestre inmediatamente el texto y su formato (tipo Word)?</em> Hay múltiples razones, solo resalto dos:</p>
+<p>1 - <strong>Propiedad</strong>: los contenidos guardados en formatos de procesadores comerciales (como Word) dependen del pago de una licencia para poder leerse. Si el software es imposible leerlos, por lo tanto la propiedad de los contenidos guardados en ese formato no son del autor/a, sino de la empresa de software. El texto plano no depende de un software comercial para poder leerse ni modificarse.</p>
+<p>2 - <strong>Flexibilidad en incorporación de texto y análisis</strong>: el escribir en texto plano permite incluir en un mismo documento elementos de escritura y de análisis de datos realizado en texto plano, por lo tanto no se requiere cortar ni pegar en otro documento.</p>
+<p>Actualmente existen una serie de herramientas que facilitan la elaboración de documentos dinámicos, en particular basados en la librería <code>knitr</code> (tejer). Esta librería permite generar documentos escritos en lenguaje Markdown y análisis realizado en R.</p>
+<h1 id="markdown">Markdown</h1>
+<p>Combinar texto y código de análisis requiere que ambos puedan ser generados en una misma plataforma. Y para poder hacer esto, una solución es que lo que se escriba en el documento sea libre de plataforma. El texto plano es una forma de escribir que no requiere ningún programa especial para poder acceder o generar un documento. El ejemplo más cercano para los usuarios de Windows son los archivos .txt, que se pueden abrir con cualquier editor simple.</p>
+<p>Ahora bien, también para escribir necesitamos elementos de edición, como por ejemplo encabezados, listas, imágenes, negritas, cursivas. Y es aquí donde Markdown permite integrar elementos de edición en texto plano. ¿Cómo se hace? incorporando código o &quot;marcas&quot; de edición, pero de la manera más simple posible (de ahí el nombre markdown, marcas bajas o pocas marcas). Estas marcas indican las partes del texto que luego serán interpretadas de una manera especial al momento de convertir el documento a otro formato que sea más amigable a la publicación (como html o pdf). Por lo tanto, la manera de trabajar es en base a un editor de texto plano, y que al final se convierte a un documento publicable.</p>
+<h2 id="marcas-de-edición">Marcas de edición</h2>
+<h3 id="títulos">Títulos</h3>
+<p>Los títulos se generan mediante el caracter # , de la siguiente manera:</p>
+<pre><code># Titulo 1
+## Título 2
+### Título 3</code></pre>
+<p>Lo que al convertir genera lo siguiente:</p>
+<h1 id="titulo-1">Titulo 1</h1>
+<h2 id="título-2">Título 2</h2>
+<h3 id="título-3">Título 3</h3>
+<h3 id="listas">Listas</h3>
+<pre><code>- item 1
+- item 2
+  - item sub 2
+    - item sub 2 sub 2
+
+1. item
+2. item
+    - item
+    - item</code></pre>
+<ul>
+<li>item 1</li>
+<li>item 2</li>
+<li>item sub 2
+<ul>
+<li>item sub 2 sub 2</li>
+</ul></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>item</li>
+<li>item
+<ul>
+<li>item</li>
+<li>item</li>
+</ul></li>
+</ol>
+<h3 id="imágenes">Imágenes</h3>
+<p>En general:</p>
+<pre><code>![](ruta-a-imagen/imagen.jpg)</code></pre>
+<p>Ejemplo:</p>
+<pre><code>![](images/knitr.png)</code></pre>
+<div class="figure">
+<img src="images/knitr.png" />
+</div>
+<p>Esta imagen se encuentra en el subdirectorio images</p>
+<p>Si se desea agregar otros elementos de edición como centrado o tamaño, hay que recurrir a marcas de html:</p>
+<pre><code>&lt;p align=&quot;center&quot;&gt;
+  &lt;img src=&quot;images/knitr.png&quot; width=&quot;240px&quot; height=&quot;280px&quot;/&gt;
+&lt;/p&gt;</code></pre>
+<p align="center">
+  
+<img src="images/knitr.png" width="240px" height="280px"/>
+</p>
+
+<p>Como se puede ver, markdown está hecho para edición simple, y cualquier aspecto que requiera una mayor edición implica recurrir a otros lenguajes, en este caso html.</p>
+<hr />
+<h3 id="tablas">Tablas</h3>
+<p>Markdown no es un lenguaje óptimo para generar tablas. Justamente se trata de que las tablas sean generadas automáticamente por los programas de análisis de datos. Sin embargo en ocasiones es necesario realizar tablas con contenidos de texto, por ejemplo</p>
+<pre><code>Esta        |es        | la tabla
+ -          |-         |-
+y           | este     | el
+contenido   | de las   | celdas</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Esta</th>
+<th align="left">es</th>
+<th align="left">la tabla</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">y</td>
+<td align="left">este</td>
+<td align="left">el</td>
+</tr>
+<tr class="even">
+<td align="left">contenido</td>
+<td align="left">de las</td>
+<td align="left">celdas</td>
+</tr>
+</tbody>
+</table>
+<h1 id="knitr">Knitr</h1>
+<p>Knitr es una librería de R que convierte (compila) documentos escritos en Rmarkdown y que combinan texto y análisis hacia otros formatos. Esto es posible ya que reconoce marcas de edición y código de análisis y permite su transformación a formatos como pdf, word y html. Una representación del flujo según Healey es la siguiente:</p>
+<div class="figure">
+<img src="images/healeysworkflow.png" />
+</div>
+<p>El documento central de trabajo es uno en formato .Rmd (Rmarkdown), que combina texto en Markdown y código R, lo que se detalla más abajo. La librería <code>Knitr</code> hace la transformación de este documento a formatos como html y/o pdf, para lo cual utiliza el convertidor pandoc.</p>
+<p>No es necesario conocer al detalle todos los elementos de este flujo para hacer funcionar un documento dinámico, sino básicamente dos: 1) Markdown, y 2) Trozos de código. Vamos por parte.</p>
+<h2 id="trozos-chunks-de-código">Trozos (chunks) de código</h2>
+<p>La caracteristica principal de <code>Knitr</code> es que identifica las secciones de código en la hoja y los ejecuta mediante R. Estos trozos de código se encuentran delimitados de la siguiente manera:</p>
+<pre><code>```{r}
+4+5
+```</code></pre>
+<p>Es decir, todo lo que comience por <code>```r</code> y termine con <code>```</code> será identificado como código de análisis (el atajo para generar un chunk en RStudio es <code>ctrl+alt+i</code>)</p>
+<h3 id="tipos-de-chunks">Tipos de chunks</h3>
+<p>En general hay cinco opciones básicas de edición relacionadas con chunks y su visualización en el documento final. Esto se maneja mediante opciones que aparecen al inicio en el chunk, luego de la letra <code>r</code></p>
+<ol style="list-style-type: decimal">
+<li>código y resultado (opción por defecto)</li>
+<li>solo código: <code>{r eval=FALSE}</code></li>
+<li>solo resultado <code>{r echo=FALSE}</code></li>
+<li>ni código ni resultado <code>{r echo=FALSE eval=FALSE}</code></li>
+<li>resultado &quot;tal cual como es&quot;: <code>{r results='asis'}</code> se utiliza principalmente para comandos de generación de tablas, que arrojan un código que luego puede ser interpretado por otro lenguaje (por ejemplo, html)</li>
+</ol>
+<h1 id="trabajando-con-documentos-dinámicos-en-rstudio">Trabajando con documentos dinámicos en RStudio</h1>
+<p>RStudio es principalmente un editor para análisis de datos con R, pero últimamente ha ido incorporando herramientas para reportes dinámicos. Para ello utiliza un tipo de archivos con extensión <code>Rmd</code> que significa Rmarkdown. Y en este contexto Rmarkdown es la forma en que Rstudio identifica los archivos que combinan texto y código.</p>
+<p>Para generar un archivo Rmarkdown, simplemente new file &gt; Rmarkdown</p>
+<div class="figure">
+<img src="images/rmarkdown.gif" />
+</div>
+<p>Y luego para convertir este documento, presionar el boton <code>Knitr</code>.</p>
+<p>El generador de documentos por defecto trae un texto de ejemplo donde hay analisis y tablas, y además dos cosas:</p>
+<ul>
+<li><p><strong>Preámbulo o YAML (Yet Another Markdown Language)</strong>: esta sección del inicio que se encuentra enmarcada entre <code>---</code> incluye algunos datos básicos del documento que luego se consideran al momento de convertirlo al documento editado final. Por ejemplo, si se prefiere que la conversión sea a html, se incluye la opción <code>output: html_document</code></p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">title: &quot;nuevo&quot;</td>
+</tr>
+<tr class="even">
+<td align="left">author: &quot;jc&quot;</td>
+</tr>
+<tr class="odd">
+<td align="left">date: &quot;5/30/2019&quot;</td>
+</tr>
+<tr class="even">
+<td align="left">output: html_document</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Chunk de opciones generales</strong>: va al inicio del documento, luego del YAML. En general, la que aparece por defecto <code>echo=TRUE</code> se refiere a que se muestren los resultados de los chunks de código.</p></li>
+</ul>
+</body>
+</html>
