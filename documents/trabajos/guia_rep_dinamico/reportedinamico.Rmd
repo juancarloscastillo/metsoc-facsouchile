@@ -68,17 +68,17 @@ esto es _cursiva_
 
 ### Listas
 
-```
-- item 1
-- item 2
-  - item sub 2
-    - item sub 2 sub 2
+        ```
+        - item 1
+        - item 2
+          - item sub 2
+            - item sub 2 sub 2
 
-1. item
-2. item
-    - item
-    - item
-```
+        1. item
+        2. item
+            - item
+            - item
+        ```
 
 - item 1
 - item 2
@@ -166,11 +166,11 @@ No es necesario conocer al detalle todos los elementos de este flujo para hacer 
 ## Trozos (chunks) de código
 
 La caracteristica principal de `Knitr` es que identifica las secciones de código en la hoja y los ejecuta mediante R. Estos trozos de código se encuentran delimitados de la siguiente manera:
-
-    ```{r}
+````
+```{r}`r ''`
     4+5
-    ```
-
+```
+````
 
 Es decir, todo lo que comience por ` ```r` y termine con ` ``` ` será identificado como código de análisis (el atajo para generar un chunk en RStudio es `ctrl+alt+i`)
 
@@ -179,9 +179,47 @@ Es decir, todo lo que comience por ` ```r` y termine con ` ``` ` será identific
 En general hay cinco opciones básicas de edición relacionadas con chunks y su visualización en el documento final. Esto se maneja mediante opciones que aparecen al inicio en el chunk, luego de la letra `r`
 
 1. código y resultado (opción por defecto)
-2. solo código: `{r eval=FALSE}`
-3. solo resultado `{r echo=FALSE}`
-4. ni código ni resultado `{r echo=FALSE eval=FALSE}`
+
+````
+```{r}`r ''`
+1 + 1
+```
+````
+
+Resulta
+```{r}
+1 + 1
+```
+
+2. solo código, ocultando resultados:
+
+````
+```{r, results='hide'}`r ''`
+1 + 1
+```
+````
+
+Resulta:
+
+```{r results='hide'}
+1 + 1
+```
+
+
+3. solo resultado 
+````
+```{r, echo=FALSE}`r ''`
+1 + 1
+```
+````
+
+Resulta:
+```{r, echo=FALSE}
+1 + 1
+```
+
+
+4. ni código ni resultado `{r echo=FALSE results='hide'}`
 5. resultado "tal cual como es": `{r results='asis'}` se utiliza principalmente para comandos de generación de tablas, que arrojan un código que luego puede ser interpretado por otro lenguaje (por ejemplo, html)
 
 # Trabajando con documentos dinámicos en RStudio
