@@ -134,16 +134,32 @@ contenido   | de las   | celdas</code></pre>
 <li>resultado &quot;tal cual como es&quot;: <code>{r results='asis'}</code> se utiliza principalmente para comandos de generación de tablas, que arrojan un código que luego puede ser interpretado por otro lenguaje (por ejemplo, html)</li>
 </ol>
 <h1 id="trabajando-con-documentos-dinámicos-en-rstudio">Trabajando con documentos dinámicos en RStudio</h1>
-<p>RStudio es principalmente un editor para análisis de datos con R, pero últimamente se ha ido incorporando herramientas para reportes dinámicos. Para ello utiliza un tipo de archivos con extensión <code>Rmd</code> que significa Rmarkdown. Y en este contexto Rmarkdown es la forma en que Rstudio identifica los archivos que combinan texto y código.</p>
+<p>RStudio es principalmente un editor para análisis de datos con R, pero últimamente ha ido incorporando herramientas para reportes dinámicos. Para ello utiliza un tipo de archivos con extensión <code>Rmd</code> que significa Rmarkdown. Y en este contexto Rmarkdown es la forma en que Rstudio identifica los archivos que combinan texto y código.</p>
 <p>Para generar un archivo Rmarkdown, simplemente new file &gt; Rmarkdown</p>
-<p align="center">
-  
-<img src="images/rmarkdown.mp4" width="600px" height="400px"/>
-</p>
-
-
 <div class="figure">
-<embed src="images/rmarkdown.mp4" />
+<img src="images/rmarkdown.gif" />
 </div>
+<p>Y luego para convertir este documento, presionar el boton <code>Knitr</code>.</p>
+<p>El generador de documentos por defecto trae un texto de ejemplo donde hay analisis y tablas, y además dos cosas:</p>
+<ul>
+<li><p><strong>Preámbulo o YAML (Yet Another Markdown Language)</strong>: esta sección del inicio que se encuentra enmarcada entre <code>---</code> incluye algunos datos básicos del documento que luego se consideran al momento de convertirlo al documento editado final. Por ejemplo, si se prefiere que la conversión sea a html, se incluye la opción <code>output: html_document</code></p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">title: &quot;nuevo&quot;</td>
+</tr>
+<tr class="even">
+<td align="left">author: &quot;jc&quot;</td>
+</tr>
+<tr class="odd">
+<td align="left">date: &quot;5/30/2019&quot;</td>
+</tr>
+<tr class="even">
+<td align="left">output: html_document</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Chunk de opciones generales</strong>: va al inicio del documento, luego del YAML. En general, la que aparece por defecto <code>echo=TRUE</code> se refiere a que se muestren los resultados de los chunks de código.</p></li>
+</ul>
 </body>
 </html>
