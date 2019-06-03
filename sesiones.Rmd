@@ -74,3 +74,8 @@ output:
 
 <iframe src=documents/presentaciones/9intrologit/9_intrologit.html height="500" width="775">
 </iframe>
+
+[*Sesión 11: Introducción regresión logística 2*](documents/presentaciones/10logit2/10_logit2.html)
+
+<iframe src=documents/presentaciones/10logit2/10_logit2.html height="500" width="775">
+</iframe>

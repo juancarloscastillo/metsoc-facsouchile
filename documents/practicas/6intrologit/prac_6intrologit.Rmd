@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 La siguiente práctica tiene el objetivo de introducir a los estudiantes a los modelos de regresión logística. Para consideraciones de este análisis vamos a utilizar la base de datos Titanic.
 
-El **RMS Titanic** fue un transatlántico británico, el mayor barco del mundo al finalizar su construcción, que se hundió en la madrugada del 15 de abril de 1912 durante su viaje inaugural desde Southampton a Nueva York. En el hundimiento del Titanic **murieron 619 personas** de las **1046** que iban a bordo, lo que convierte a esta tragedia en uno de los mayores naufragios de la historia ocurridos en tiempo de paz. 
+El **RMS Titanic** fue un transatlántico británico, el mayor barco del mundo al finalizar su construcción, que se hundió en la madrugada del 15 de abril de 1912 durante su viaje inaugural desde Southampton a Nueva York. En el hundimiento del Titanic **murieron 619 personas** de las **1046** que iban a bordo, lo que convierte a esta tragedia en uno de los mayores naufragios de la historia ocurridos en tiempo de paz.
 
 La base de datos la pueden descargar [acá](https://www.dropbox.com/s/eqbfd85jwyckafe/titanic.Rdata?dl=0
 )
@@ -58,12 +58,10 @@ pacman::p_load(tidyverse,data.table,sjmisc,sjlabelled,
 En segundo lugar cargamos la base de datos.
 ```{r message=FALSE, warning=FALSE}
 #recordar definir en base al directorio de trabajo o working directory
-load("C:/Users/Fondecyt R. Sociales/Dropbox/mulitva2018/metsoc-facsouchile/documents/practicas/6intrologit/titanic.Rdata")
+load("titanic.Rdata")
 names(tt)
 
 ```
-
-
 
 # Concepto de razón o ratio
 
@@ -75,7 +73,6 @@ table(tt$survived)
 table(tt$sex)
 #Porcentajes de sobrevientes
 prop.table(table(tt$survived))
-
 
 ```
 
@@ -165,9 +162,9 @@ $$\theta=\frac{odds_{1}}{odds_{2}}=\frac{\pi_{1}/(1-\pi_{1})}{\pi_{2}/(1-\pi_{2}
 - El rango de posibles valores es: $0<\theta<\infty$
 
   -Cuando los valores van de 0 a 1, $\theta$ indica que $odds_{1}<odds_{2}$
-  
+
   -Cuando los valores van de 1 a $\infty$, $\theta$ indica que $odds_{1}>odds_{2}$
-  
+
 - Es una medida de magnitud de asociación simétrica: un $\theta=4$ es una asociació positiva proporcional a la asociación negativa $\theta=1/4=0.25$
 
 
@@ -275,12 +272,12 @@ stargazer::stargazer(m0, type="text")
 
 
 
-m1<-glm(survived~sex,data=tt, family = "binomial")
+modelo_titanic<-glm(survived~sex,data=tt, family = "binomial")
 
 
-summary(m1)
-stargazer::stargazer(m1, type="text")
-stargazer::stargazer(m1,apply.coef = exp,
+summary(modelo_titanic)
+stargazer::stargazer(modelo_titanic, type="text")
+stargazer::stargazer(modelo_titanic,apply.coef = exp,
           apply.se   = exp,
           covariate.labels = "Mujer",
           dep.var.caption = "Variable dependiente",
@@ -291,15 +288,58 @@ stargazer::stargazer(m1,apply.coef = exp,
 
 ```
 
+# Ajuste
 
+## Devianza
 
+- Devianza =-2*log likelihood: Se utiliza como una medida de los residuos generados por el modelo, comparando con el modelo nulo (sin predictores). En general si disminuye, el modelo es mejor
 
+```{r}
+modelo_titanic$null.deviance # devianza modelo sin predictores
+modelo_titanic$deviance # devianza modelo con predictores
+```
+## Test de razón de verosimilitud
 
+Compara las verosimilitudes del modelo con otro con menos predictores
 
+```{r}
+null_titanic=glm(survived~1, data=tt, family=binomial)
 
+anova(modelo_titanic, null_titanic, test ="Chisq")
 
+```
 
+La diferencia entre los modelos es estadísticamente significativa con una probabilidad $p<0.01$. Por lo tanto el modelo con predictores (sexo) ofrece un mejor ajuste a los datos que un modelo sin predictores.
 
+##  McFadden (pseudo) R2
 
+Se define como: $1−[LL(LM)/LL(L0)]$, donde
 
+- LL es el log likelihood del modelo
+- LM es el modelo posterior (con predictores)
+- L0 es el modelo nulo
 
+```{r}
+logLik(modelo_titanic); logLik(null_titanic)
+1-(-551/-707)
+```
+
+También se puede obtener con la función `PseudoR2` de la librería `DescTools`, junto a otras versiones de pseudo R2s, como "Nagelkerke", "CoxSnell" y "Effron".
+
+## Akaike (AIC)
+
+AIC - Akaike information criteria, evalua la calidad del modelo a través de la comparación con otros modelos penalizando por la inclusión de predictores (análogo al R2 ajustado):
+
+$$AIC=-2(log-likelihood)+2K$$
+
+Donde K= número de parámetros del modelo (regresores + intercepto)
+
+```{r}
+logLik(modelo_titanic)
+
+2*551
+
+```
+$$AIC=-2(-551)+2(2)=1102+4=1106$$
+
+En sí mismo no es interpretable, solo como criterio comparativo: menor AIC es mejor fit.

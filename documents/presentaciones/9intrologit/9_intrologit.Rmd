@@ -168,6 +168,9 @@ Si una variable cualitativa con dos niveles se codifica como **1** y **0**, mate
 library(tidyverse)
 library(ISLR)
 datos <- Default
+str(datos$default)
+table(datos$default)
+
 
 # Se recodifican los niveles No, Yes a 1 y 0
 datos <- datos %>%

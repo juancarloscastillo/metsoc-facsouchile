@@ -96,7 +96,7 @@ a, a > code {
 }
 .roja h1 {
   color: #002b36;
-  font-size: 5em;
+  font-size: 4em;
   font-weight: bold;
 }
 
@@ -161,33 +161,14 @@ blockquote {
   border-left: solid 5px #cb4b16;
   padding-left: 1em;
 }
-.remark-slide table {
+
+table {
   margin: auto;
-  border-top: 1px solid #839496;
-  border-bottom: 1px solid #839496;
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
 }
-.remark-slide table thead th { border-bottom: 1px solid #839496; }
+table thead th { border-bottom: 1px solid #ddd; }
 th, td { padding: 5px; }
-.remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) { background: #eee8d5 }
-table.dataTable tbody {
-  background-color: #FFF;
-  color: #000;
-}
-table.dataTable.display tbody tr.odd {
-  background-color: #FFF;
-}
-table.dataTable.display tbody tr.even {
-  background-color: #eee8d5;
-}
-table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
-  color: #000;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-  color: #000 !important;
-}
 
 .large { font-size: 130%
 }
@@ -213,7 +194,7 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
 }
 
 .MathJax_CHTML {
-    font-size: 25px !important;
+    font-size: 30px !important;
     color: #225b7c;
 }
 
