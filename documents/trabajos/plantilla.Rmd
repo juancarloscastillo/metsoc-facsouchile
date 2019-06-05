@@ -12,13 +12,6 @@ output:
 
 Markdown es un formato de escritura en texto simple o plano, con muy pocos elementos o "marcas" de edición (de ahí el nombre markdown). Básicamente consiste en escribir, enfocándose en el contenido y no en el formato. Las pocas marcas de edición luego son tomadas por otros programas, que hacen el trabajo de transformar el texto simple a un texto con formato, por ejemplo a Word, HTML o pdf.
 
-_¿Por qué escribir en texto plano en lugar de un programa que me muestre inmediatamente el texto y su formato (tipo Word)?_
-Hay múltiples razones, solo resalto dos:
-
-1 - Propiedad: los contenidos guardados en formatos de procesadores comerciales (como Word) dependen del pago de una licencia para poder leerse. Si el software es imposible leerlos, por lo tanto la propiedad de los contenidos guardados en ese formato no son del autor/a, sino de la empresa de software. El texto plano no depende de un software comercial para poder leerse ni modificarse.
-
-2 - Incorporación de texto y análisis de datos: para quienes analizamos datos, si tenemos resultados luego de alguna forma hay que cortar / pegar en el documento de reporte, una práctica bastante trabajosa y muy poco reproducible. El escribir en texto plano permite incluir en un mismo documento análisis de datos realizado en texto plano, por lo tanto no se requiere cortar ni pegar en otro documento. Esto se encuentra actualmente muy desarrollado en el entorno R a traves de la librería `knitr`
-
 # Comienzo
 
 ## Archivo de escritura
@@ -31,7 +24,6 @@ En este documento entonces está la escritura en texto plano que genera el archi
 
 Si se desea comenzar con un archivo vacío, entonces en RStudio Edit>New File ...
 
-
 (Las características y funciones de RStudio se encuentran fuera del alcance de este tutorial, para ello se recomienda visitar : (). Sin embargo, no es necesario conocer muchos detalles si lo que se desea es utilizarlo como editor de Markdown).
 
 Dos aspectos básicos del trabajo con RStudio como editor de markdown
@@ -40,50 +32,4 @@ Dos aspectos básicos del trabajo con RStudio como editor de markdown
 
 2. R y RStudio permiten una conversión rápida de Markdown a otros formatos como HTML, PDF o Word. Para ello, las clave es la librería knitr (de knit: tejer) que se detalla más abajo.
 
-## Bases de formato
 
-Cinco aspectos centrales a considerar en la escritura:
-
-- Encabezados de secciones
-- Énfasis (negritas / cursivas)
-- Insertar imágenes
-- Insertar vínculos a páginas web
-- Tablas
-
-Estos elementos nos van a permitir generar documentos con aspectos básicos de edición. Luego mediante otros procedimientos es posible generar documentos con edición más sofisticada mediante plantillas y preámbulo (más adelante).
-
-### Encabezados
-
-```
-# Primer nivel
-## Segundo nivel
-### Tercer nivel
-```
-Se visualiza:
-
-# Primer nivel
-## Segundo nivel
-### Tercer nivel
-
-### Énfasis
-
-```
-**negritas**
-_cursivas_
-*cursivas*
-```
-Al formatearse, se visualiza:
-
-**negritas**
-_cursivas_
-*cursivas*
-
-### Imágenes
-
-
-
-### Vínculos
-
-
-
-### Tablas
