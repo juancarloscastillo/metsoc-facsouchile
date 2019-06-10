@@ -119,3 +119,7 @@ Formato:
 
 - [Flujo 1: Ajustando datos](documents/trabajos/flujo_analisis1.html)
 - [Reportes dinámicos con Rmarkdown](documents/trabajos/guia_rep_dinamico/reportedinamico.html)
+
+# Otros links
+
+- [Imágenes en Rmarkdown](http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/#default-settings-for-including-images-and-figures-in-r-markdown)

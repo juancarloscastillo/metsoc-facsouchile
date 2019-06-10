@@ -79,3 +79,8 @@ output:
 
 <iframe src=documents/presentaciones/10logit2/10_logit2.html height="500" width="775">
 </iframe>
+
+[*Sesión 12: Diagnóstico de supuestos*](documents/presentaciones/11Diagnostico/11_diagnostico.html)
+
+<iframe src=documents/presentaciones/11Diagnostico/11_diagnostico.html height="500" width="775">
+</iframe>

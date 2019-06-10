@@ -1,0 +1,485 @@
+---
+title: "Practica 8: Diagnóstico y Análisis de Sensibilidad"
+subtitle: "Estadistica Multivariada - Sociología FACSO Universidad de Chile"
+author: "Juan Carlos Castillo & Alejandro Plaza"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introducción
+
+La siguiente guía tiene como objetivo mostrar los comandos y funciones asociados al análisis de diagnóstico de un modelo de regresión lineal OLS.
+
+Para realizar el diagnóstico al modelo de regresión lineal trabajaremos con una base de datos que evalua el efecto del comercio en el crecimiento económico.
+
+**Frankel, Jeffrey A., and David Romer. 1999. "Does trade cause growth?", American Economic Review 89(3): 379–99.**
+
+Se estudia los factores que predicen el PIB per capita (**logy**) en los paises, a partir de las siguientes variables independientes:
+
+ - **open**: Apertura comercial.
+ 
+ - **loglab**: la población económicamente activa
+ 
+ - **Logland**: Área de la tierra.
+ 
+Para consideraciones de este ejercicio sólo trabajaremos con los datos de 1985.
+
+La base de datos la puedes descarcar desde [AQUI](https://www.dropbox.com/s/qde1gapk6bvo8x0/final.85.RData?dl=0)
+
+## Preambulo de paquetes
+
+```{r}
+
+pacman::p_load(stargazer,tidyverse,gridExtra,ggplot2,gridExtra,broom,
+car,lmtest,sandwich,interplot,ape,multiwayvcov)
+```
+
+
+##Motivación: el cuarteto de anscombe
+Como motivación al analisis de diagnóstico, revisemos la base de datos de Anscombe
+
+
+###Modelos de regresión
+```{r}
+a1<-lm(y1~x1,data=anscombe)
+a2<-lm(y2~x2,data=anscombe)
+a3<-lm(y3~x3,data=anscombe)
+a4<-lm(y4~x4,data=anscombe)
+```
+
+
+```{r}
+stargazer(a1, a2, a3, a4, type="text", no.space=TRUE,
+model.names=FALSE, notes="Errores Estándares en Parentesis")
+```
+
+
+##Construcción de gráficos
+```{r}
+# 4 nubes de puntos con las rectas de regresión.
+F1 <- ggplot(anscombe)+aes(x1,y1)+geom_point()+
+geom_abline(intercept=3,slope=0.5)
+
+F2 <- ggplot(anscombe)+aes(x2,y2)+geom_point()+
+geom_abline(intercept=3,slope=0.5)
+
+F3 <- ggplot(anscombe)+aes(x3,y3)+geom_point()+
+  geom_abline(intercept=3,slope=0.5)
+
+F4 <- ggplot(anscombe)+aes(x4,y4)+geom_point()+
+  geom_abline(intercept=3,slope=0.5)
+
+# Mostrar los 4 gráficos en una figura
+grid.arrange(F1,F2,F3,F4, ncol = 2)
+```
+
+Si bien las estimaciones del modelo de regresión son las mismas, en los gráficos podemos observar que el comportamiento de las variables evidentemente es distinto.
+
+
+
+```{r echo=FALSE, eval=FALSE}
+pacman::p_load(pwt,wbstats, data.table,devtools)
+
+#Construcción de base de datos
+
+#Frankel, Jeffrey A., and David Romer. 1999. "Does trade cause growth?"American Economic Review 89(3): 379–99.
+
+# check variable names
+names(pwt5.6)
+
+# create new variable: economically active population
+pwt5.6$labor <- pwt5.6$rgdpch*pwt5.6$pop/pwt5.6$rgdpwok
+# compare total population and new population variables
+summary(pwt5.6$pop)
+
+summary(pwt5.6$labor)
+
+# create new dataset: subset of pwt5.6, select variables, 1985
+pwt.85 <- pwt5.6[pwt5.6$year==1985, c("wbcode", "country",
+"year", "rgdpwok", "rgdpch", "open", "labor", "continent")]
+
+# Extract land area variable from World Bank statistics
+# install new package for extracting most up to date data
+#install.packages("devtools")
+#devtools::install_github("GIST-ORNL/wbstats")
+# load packages
+library(wbstats)
+library(data.table)
+# search for a list of area related variables
+# choose one needed
+wbsearch(pattern = "total area")
+#extract land area variable based on indicator, sq km
+area <- data.table(
+wb(country="all", indicator = c("AG.LND.TOTL.K2"))
+)
+# view the last observation extracted
+#tail(area, n=1)
+
+
+# rename variables
+names(area)[names(area)=="value"] <- "landarea"
+names(area)[names(area)=="date"] <- "year"
+# list variable names
+names(area)
+#download country mappings from wbstat package
+countries <- data.table(wbcountries())
+# list variable names in countries
+names(countries)
+# merge area and countries according to iso2c
+area <- merge(area, countries, by=c("iso2c"), sort=TRUE)
+area <- data.frame(area)
+
+# keep needed variables and observations from area dataset
+area <- area[area$year==1985, c("iso3c.x","landarea","year",
+"region","lat","long")]
+# rename iso3c to wbcode to merge with pwt.85
+names(area)[names(area)=="iso3c.x"] <- "wbcode"
+# list variable names in dataset
+names(area)
+
+# merge area1 and pwt.85 to create the analysis dataset
+# keep only observations that match with pwt.85 data
+final.85 <- merge(pwt.85, area, by=c("wbcode", "year"),
+all.x=TRUE, sort=TRUE)
+# display object class, variable names, and last observation
+class(final.85)
+
+names(final.85)
+
+tail(final.85, n=1)
+# create new variables for analysis
+final.85$logy <- log(final.85$rgdpch)
+final.85$loglab <- log(final.85$labor)
+final.85$logland <- log(final.85$landarea)
+
+#save(final.85, file="final.85.RData")
+```
+
+
+##Diagnóstico
+
+Cargamos la base de datos
+
+```{r}
+load("final.85.RData")
+```
+
+Producimos los estadísticos descriptivos.
+```{r}
+# produce formatted descriptive statistics in pwt7.final
+stargazer(final.85, type="text", median = TRUE)
+```
+
+Estimamos el modelo de regresión lineal
+
+
+```{r}
+# estimate OLS model and create output object
+model1 <- lm(logy ~ open + loglab + logland, data=final.85)
+# show model output
+summary(model1)
+```
+
+A partir de la función **tidy** y **augment_columns** de la librería **broom**, podemos extraer las estimaciones del modelo de regresión lineal en formato de base de datos. 
+
+Lo que hacemos posteriormente, es armar una nueva base de datos final.85v2 la cual contiene las siguientes variables nuevas para necesarios últeriores análisis
+
+  - .fitted = Valores predichos de model1
+  
+  - .resid  = Residuos de model1
+  
+  - .hat    = Hat values para análisis de casos influyentes
+  
+  - cooksd  = Distancia de Cook para análisis de casos influyentes
+
+```{r}
+# tidy regression output
+tidy(model1)
+final.85v2 <- augment_columns(model1, final.85)
+
+# show variables in new data
+names(final.85v2)
+
+# produce descriptive statistics for new data
+stargazer(as.data.frame(final.85v2), type = "text", median = TRUE)
+
+```
+
+
+
+## Linealidad y Especificación del modelo
+
+
+Los residuos deben ser independientes de los valores predichos de las variables dependientes. Cualquier correlación entre los residuos y los valores predichos violarian este supuesto.
+
+- Sí los residuos muestran una patrón no lineal, como una **relación curvilinea**, el modelo esta especificado incorrectamente.
+
+- Si la variable dependiente está relacionada linealmente con las variables independientes, el gráfico no deberia mostrar una **relación sistematica entre valores predichos y residuos**.
+
+
+
+```{r}
+ggplot(final.85v2, aes(x=.fitted, y=.resid)) +
+geom_hline(yintercept=0) +
+geom_point() +
+geom_smooth(method='loess', se=TRUE)
+
+
+```
+
+
+En el caso del gráfico anterior:
+
+- La mayoría de los puntos están distribuidos aleatoriamente alrededor de la linea residual=0, y el intervalo de confianza de la curva ajustada se solapara con la línea residual=0.
+
+
+También podemos hacer la observación por variable
+
+```{r}
+# residuals against trade
+ropen <- ggplot(final.85v2, aes(x=open, y=.resid)) +
+geom_hline(yintercept=0) +
+geom_point() +
+geom_smooth(method='loess', se=TRUE)
+# residuals against land
+rland <- ggplot(final.85v2, aes(x=logland, y=.resid)) +
+geom_hline(yintercept=0) +
+geom_point() +
+geom_smooth(method='loess', se=TRUE)
+# residuals against labor
+rlab <- ggplot(final.85v2, aes(x=loglab, y=.resid)) +
+geom_hline(yintercept=0) +
+geom_point() +
+geom_smooth(method='loess', se=TRUE)
+# display plots together
+grid.arrange(ropen, rland, rlab, ncol=3)
+```
+
+
+Si bien, los gráficos pueden ser ilustrativos, no reemplazan un posterior análisis estadístico. En este caso realizamos el test de la especificación del error de Ramsey o **RESET**.
+
+En términos generales, a partir del modelo estimado, se estima otro "expandido" el cuál incluye términos cuadráticos ( $\hat{y^2}$ ) o cúbicos ( $\hat{y^3}$ )  (para modelar la no linealidad), y luego se compara este modelo expandido con el modelo original.
+
+La comparación se realiza a partir de la prueba $F$ (recordar F para comparación de modelos), en donde se prueba la hipótesis nula de que el modelos original  el expandido explicación el mismo monto de variación sobre la variable dependiente.
+
+Si la hipótesis nula es rechazada, entonces algunas de las variables independientes afectan a la variable dependiente de manera no-lineal.
+
+Por lo que se espera que no exista diferencias estadísticamente significativas.
+
+```{r}
+model1.q1 <- lm(logy ~ open + loglab + logland + I(.fitted^2),
+data = final.85v2)
+# F test of model difference
+anova(model1, model1.q1)
+```
+
+En este caso se puede ver que $F=1.424$ con un valor $p=0.2349$. Por lo cual si trabajos como una significación del 5%, fallamos en rechazar la hipótesis nula de que los dos modelos son idénticos.
+
+
+## Multicolinealidad perfecta y alta
+
+Una segunda condición del teorema de Gauss-Markov es que las variables independientes no deben estar perfectamente correlacionadas.
+
+
+Cuando dos variables están correlacionadas,la estimación por mínimos cuadrados se vuelve sensible a pequeños cambios en la muestra y en la especificación del modelo.
+
+Además los errores estándar son más grandes que en situaciones con ausencia de multicolinealidad, por lo que las pruebas t son pequeñas, haciendo más dificil rechazar la hipótesis nula para las estimaciones de los Beta
+
+
+Para ilustrar esta situación, crearemos una nueva variable **open4**, la cual es 4 veces la variable **open**, lo cual hace que estas dos variables esten perfectamente correlacionadas.
+
+```{r}
+# create a variable perfectly correlating with open
+final.85v2$open4 <- 4 * final.85v2$open
+# check correlation between two variables
+cor(final.85v2$open, final.85v2$open4, use = "complete.obs")
+
+# estimate model 1 adding open4 in two different orderings OLS model
+lm(logy ~ open + open4 + loglab + logland, data = final.85v2)
+
+```
+
+Para análizar el supuesto de no multicolinealidad en R, usamos la función **vif** de la librería car.
+
+```{r}
+vif(model1)
+```
+
+
+En este caso, ninguna de las variables independientes del modelo parece sufrir de serios problemas de multicolinealidad.
+
+
+En caso de presencia de multicolinealidad, remover unos de los predictores del modelo.
+
+
+##Error Constante de la Varianza u Homocedasticidad
+
+
+El teorema Gauss-Markov asume que la varianza del error debe permanecer constante a través de todas las observaciones.
+
+En presencia de no varianza constante de los errores (también conocido como Heterocedasticidad), los paramétros estimados en un modelo de mínimos cuadrados permanencen insesgodos y consistentes.
+
+
+...No obstante, los errores estándar de los coeficientes beta son estimados incorrectamente, por lo cual la prueba $t$ que utiliza éstos errores éstandares se vuelve invalida.
+
+
+Para detectar Heterocedasticidad, podemos realizar los test Breush-Pagan y Cook-Weisberg.
+
+Para ambos test, se contrasta la hipótesis nula de que la varianza del error es constante, y la hipótesis alternativa de que el error de la varianza no es constante.
+
+
+```{r}
+# test heteroskedasticity,
+# estimate OLS model and create output object
+model1 <- lm(logy ~ open + loglab + logland, data = final.85v2)
+
+
+# Cook/Weisberg score test of constant error variance
+car::ncvTest(model1)
+
+# Breush/Pagan test of constant error variance
+
+lmtest::bptest(model1)
+
+```
+
+Los valores p de los test estadísticos son 0.44 (Cook-Weisberg) y 0.22 (Breusch-Pagan). Por lo que se falla en rechazar la hipótesis nula de que la varianza de los errores es contante, por lo que se puede concluir que se cumple el supuesto de **Homocedasticidad** del modelo.
+
+##Correción Errores estándares robustos
+
+
+En caso de encontrar problemas de heterocedasticidad, una de las formas más usuales de corregirla, es estimando un modelo de regresión con errores estándar robustos a heterocedasticidad (Errores Estándar Robustos de White).
+
+Los errores estándar robustos solo tienen problemas en muestras pequeñas, donde el estadístico t no tendrá una distribución probabilística cercana a t, y la inferencia estadística podría ser errónea.
+
+En R, existen diferentes variantes de errores estándar robustos, en relación a la matriz de varianza-covarianza. R por default ocupa HC3, no obstante también se recomienda revisar HC1, la cuál es la variante por Default que ocupa Stata.
+
+```{r}
+model1.hc3 <- coeftest(model1, vcov=vcovHC)
+model1.hc3
+
+# report HC1 robust standard errors as Stata
+# variants:"HC3","HC","HC0","HC1","HC2","HC4","HC4m","HC5"
+model1.hc1 <- coeftest(model1, vcov=vcovHC(model1, type="HC1"))
+model1.hc1
+
+```
+
+
+## Observaciones influyentes
+
+A partir de la librería car, podemos obtener el siguiente gráfico de influencia, el cuál nos presenta los siguientes estadísticos.
+
+1. Residuo stundetizado para cada observación, la cual se basa en el error estándar de la regresión re-estimada sin la observación. Observaciones fuera del rango $\pm2$ son outliers residuales
+
+2. *Hat Values* mide el nivel de apalancamiento. Es construído en base a la medida ponderada de la distancia de cada observación del promedio de diferentes variables independientes. Sus rangos van de $1/n$ a $1$
+
+3. Distancia de Cook, la cual se formaliza a partir de: 
+
+$$DCook=\frac{\sum(\hat{y_{j}}-\hat{y_{j(i)}})^2}{p*MSE}$$
+Para cada observación i, $\hat{y_{j}}$ es la predicción para la observación j de la regresión, $\hat{y_{j(i)}}$ es la preducción para cada observación j de un nuevo modelo de regresión omitiendo la observación i. $p$ es el número de parametros en el modelo, y MSE es la media cuadrática del error.
+
+
+```{r}
+# influence plot for influential observations
+influencePlot(model1)
+```
+
+Para tener un punto de orientación respecto a qué tan influyente es una observación se calcula un corte.
+
+Este se basa en la D de Cook. y su punto de corte es $4/(n-k-1)$, donde n es la cantidad de observaciones,y k el número de variables independientes.
+
+
+COn este cálculo podemos saber cuáles son los casos más influyentes
+```{r}
+# cutoff point
+round(4/(138-3-1),3)
+
+# create observation id
+final.85v2$id <- as.numeric(row.names(final.85v2))
+# identify obs with Cook's D above cutoff
+ggplot(final.85v2, aes(id, .cooksd))+
+geom_bar(stat="identity", position="identity")+
+xlab("Obs. Number")+ylab("Cook's distance")+
+geom_hline(yintercept=0.03)+
+geom_text(aes(label=ifelse((.cooksd>0.03),id,"")),
+vjust=-0.2, hjust=0.5)
+
+
+
+```
+
+con esta función podemos ver el detalle de estos casos.
+
+```{r}
+# list observations whose cook's D above threshold
+final.85v2[final.85v2$.cooksd > 0.03, c("id", "country", "logy",
+"open", ".std.resid", ".hat", ".cooksd")]
+```
+
+una vez identificados los casos, podemos estimar distintos modelos de regresión, quitando de a poco estos casos, por un lado hacemos una regresión quitando el caso de Singapur, y luego los otros 5 casos.
+
+
+```{r}
+# re-estimate model 1 without Singapore
+model1.no1 <- lm(logy ~ open + loglab + logland,
+data=final.85v2[final.85v2$.cooksd<0.18,])
+summary(model1.no1)
+
+# re-estimate model 1 without Singapore and five others
+model1.no2 <- lm(logy ~ open + loglab + logland,
+data=final.85v2[final.85v2$.cooksd<0.03,])
+summary(model1.no2)
+
+
+```
+
+## Normalidad
+
+Si bien el teórema de Gauss-Markov, no requiere que los residuos estén distribuidos normalmente, las inferencias basadas en $z$ o $t$ sí lo requieren.
+
+Para visualizar la normalidad de los residuos usamos el gráfico de comparación Cuartil-Cuartil (QQPlot). Este gráfico nos muestra la comparación de los cuartiles empiricos de los residuos stunderizados del modelo1 (casos), contra los cuartiles teóricos de una distribución $t$ o normal (línea azul)
+
+
+```{r}
+# Normality diagnostic plot
+
+car::qqPlot(model1, distribution = "t", simulate = TRUE)
+```
+
+Para testear la normalidad de los residuos, utilizamos la **prueba Shapiro-Wilks**. Esta prueba, testea la hipótesis nula de los residuos están normalmente distribuidos.
+
+```{r}
+# normality test
+shapiro.test(final.85v2$.resid)
+```
+
+En este caso, p<0.05, sugiriendo que la hipótesis nula de normalidad es rechazada.
+
+##Reporte de resultados
+
+en relación a los distintos modelos que hemos estimado, y todas las revisiones podemos mostrar la siguiente tabla, donde vemos cómo son las estimaciones considerando todos los aspectos anteriores.
+
+
+
+```{r, results='asis'}
+# robustness checks I
+stargazer(model1, model1.hc3, model1.no2, type="html",column.labels = c("OLS","Robusto H.","Sin Influyentes",single.row=TRUE),
+          model.names = FALSE)
+
+```
+
+
+
+

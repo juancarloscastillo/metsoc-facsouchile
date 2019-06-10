@@ -32,7 +32,8 @@ Web link: [http://bit.ly/multivariada](http://bit.ly/multivariada)
 <div class="alert alert-info">
   <strong>NOVEDADES (actualizadas 28 Mayo)</strong>
 
-  - [Notas control 2](https://docs.google.com/spreadsheets/d/1bFQiz0MIpXs28tMSlnHI6VqEQB-o9qPKLA0ZNpD9iq0/edit#gid=0)
+    - [Comentarios generales corrección trabajos entrega 1](documents/trabajos/notas_corr_ent1.html)
+    - [Notas control 2](https://docs.google.com/spreadsheets/d/1bFQiz0MIpXs28tMSlnHI6VqEQB-o9qPKLA0ZNpD9iq0/edit#gid=0)
     - [Pauta Control 2](documents/controles/Control2_pauta.html)
 
 

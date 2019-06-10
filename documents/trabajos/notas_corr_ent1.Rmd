@@ -1,0 +1,47 @@
+# Comentarios corrección primera entrega trabajos Estadística Multivariada
+
+## Introducción
+
+Esta sección en general está bien para los requisitos del trabajo. No se evalúa la novedad del problema de investigación, pero sí su adecuación a lo enseñado durante este curso (explicación en ciencias sociales y regresión múltiple). Es importante recalcar:
+
+- Clara identificación y definición conceptual del objeto central de estudio (explanandum, que luego será la variable dependiente).
+
+- Respecto a los conceptos explicativos (explanans), importante también definirlos y establecer relaciones con el explanandum en base a evidencia.
+
+- En general se espera más de un elemento explicativo, principalmente dado que para aplicar de manera adecuada los contenidos del curso se debe establecer un problema a ser respondido mediante regresión múltiple.
+
+## Metodología
+
+- Para poder interpretar bien, se debe conocer el rango/escala de respuestas y el fraseo literal de las preguntas, sobre todo en la variable dependiente
+
+- En metodología y también en abstract: dejar claramente establecido el método de estimación (mínimos cuadrados ordinarios, logístico ...)
+
+## Análisis
+
+- Uso de índices: ¿son estrictamente necesarios? Tener mucha precaución en su construcción, al menos demostrar que las variables utilizadas en el índice se encuentran correlacionadas (estarían midiendo algo similar). En el caso de las variables independientes, se recomienda no construir índices ya que justamente la regresión múltiple ofrece la posibilidad de incorporar distintas variables en el modelo.
+
+- Cuando las variables dependientes están muy sesgadas, evaluar recodificación a dicotómica y realizar regresión logística.
+
+- Rescate de casos perdidos: en el caso de las variables independientes categóricas, se puede agregar una categoría de "No responde" para rescatar observaciones
+
+- Sentido principal del método de regresión múltiple: control estadístico. Por lo tanto, el modelo debe incluir más de una variable independiente, y en el análisis se debe enfatizar el tema del control. En caso de una variable independiente categórica con más de dos niveles, también se evalúa como una sola variable.
+
+- No interpretar R2 en términos de significación **estadística** (ser cuidadoso con esta palabra)
+
+- En un par de trabajos se confunde el no presentar predictores adicionales (ej regresión simple) con control estadistico ("mantiene el resto constante"). Esto es un erro de interpretación.
+
+- El utilizar dos variables dependientes para grupos de 3 integrantes es una consideración que se tendrá en cuentan en la evaluación del trabajo final.
+
+- Interpretación de betas pequeños o grandes: depende de la escala de la variable dependiente /independiente. Sucede principalmente con varaibles como ingreso, transformar.
+
+- No corresponde entregar detalles de uso de Rstudio, Rmarkdown, manipulación de variables, uso de comandos.
+
+- "Existe correlación positiva": no corresponde al interpretar los beta
+
+- Lógica de presentación de modelos: Presentar los modelos de manera parcelada y secuencial en el orden de las hipótesis. En general el primer modelo incluye sólo la principal variable independiente, luego el segundo suma otra variable, y así sucesivamente. Si se suman grupos de variables deben corresponder a un concepto común o también variables de control.
+
+- Interpretación: considerar para cada modelo lo siguiente:
+  - magnitud del beta e implicancias en su relación con la variable dependiente
+  - significación estadística, prueba de hipótesis
+  - ajuste general del modelo, R2
+  - control estadístico en el caso de haber sumado al modelo variables que no estaban en el anterior

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Estadística Multivariada</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=".small[Juan Carlos Castillo &amp; Alejandro Plaza    Departamento de Sociología - UCH / COES   ]" />
+    <link rel="stylesheet" href="../xaringan_custom/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="../xaringan_custom/progress-bar.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: bottom, left
+
+
+
+&lt;!---
+Para correr en ATOM
+- open terminal, abrir R (simplemente, R y enter)
+- rmarkdown::render('11_diagnostico.Rmd', 'xaringan::moon_reader')
+
+About macros.js: permite escalar las imágenes como [scale 50%](path to image), hay si que grabar ese archivo js en el directorio.
+---&gt;
+
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo &amp; Alejandro Plaza
+
+## **Sesión 11**: Diagnóstico de supuestos
+
+---
+class:roja,center, middle
+
+.large[
+# ¿Supuestos?
+]
+
+---
+class: inverse
+
+## Contenidos
+
+### 1. Motivación: El cuarteto de Anscombe
+
+### 2. Linealidad y Especificación del Modelo
+
+### 3. Perfecta y Alta Multicolinealidad
+
+### 4. Error Constante de la varianza (u Homocedasticidad)
+
+### 5. Observaciones Influyentes
+
+### 6. Normalidad de los residuos
+
+### 7. Reporte de Resultados
+
+---
+class: inverse, middle, center
+
+# 1. Motivación: El cuarteto de Anscombe
+
+
+---
+#El cuarteto de Anscombe
+
+Para ilustrar la importancia de la revisión de supuestos, partiremos trabajando con el cuarteto de Anscombe.
+
+El cuarteto de Anscombe es una base de datos donde se pueden estimar distintos modelos de regresión, obteniendo las mismas estimaciones, pero el comportamiento de las variables es diferente.
+
+
+---
+
+##Modelos de Regresión en base a Anscombe
+
+
+
+.small[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="5" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="4"&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;y1&lt;/td&gt;&lt;td&gt;y2&lt;/td&gt;&lt;td&gt;y3&lt;/td&gt;&lt;td&gt;y4&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;td&gt;(3)&lt;/td&gt;&lt;td&gt;(4)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="5" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;x1&lt;/td&gt;&lt;td&gt;0.500&lt;sup&gt;***&lt;/sup&gt; (0.118)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;x2&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.500&lt;sup&gt;***&lt;/sup&gt; (0.118)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;x3&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.500&lt;sup&gt;***&lt;/sup&gt; (0.118)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;x4&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.500&lt;sup&gt;***&lt;/sup&gt; (0.118)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;3.000&lt;sup&gt;**&lt;/sup&gt; (1.125)&lt;/td&gt;&lt;td&gt;3.001&lt;sup&gt;**&lt;/sup&gt; (1.125)&lt;/td&gt;&lt;td&gt;3.002&lt;sup&gt;**&lt;/sup&gt; (1.124)&lt;/td&gt;&lt;td&gt;3.002&lt;sup&gt;**&lt;/sup&gt; (1.124)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="5" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.667&lt;/td&gt;&lt;td&gt;0.666&lt;/td&gt;&lt;td&gt;0.666&lt;/td&gt;&lt;td&gt;0.667&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.629&lt;/td&gt;&lt;td&gt;0.629&lt;/td&gt;&lt;td&gt;0.629&lt;/td&gt;&lt;td&gt;0.630&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error (df = 9)&lt;/td&gt;&lt;td&gt;1.237&lt;/td&gt;&lt;td&gt;1.237&lt;/td&gt;&lt;td&gt;1.236&lt;/td&gt;&lt;td&gt;1.236&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic (df = 1; 9)&lt;/td&gt;&lt;td&gt;17.990&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;17.966&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;17.972&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;18.003&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="5" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="4" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="4" style="text-align:right"&gt;Errores Estándares en Parentesis&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]]
+
+---
+#Visualización de las regresiones
+
+![](11_diagnostico_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+##¿Qué implica esto?
+
+OLS captura de manera certera la relación entre x1 e y1, pero falla en...
+
+  - x2 e y2 tienen una relación curvilinea entre sí.
+
+  - x3 e y3 tienen una moderada influencia de un outlier.
+
+  - x4 e y4 tienen una severa influencia de un outlier.
+
+--
+
+Una de las formas más sencillas de realizar un diagnóstico de los modelos de regresión es gráficar la relación entre los valores predichos (recordemos `\(\hat{Y}\)`) y los residuos (recordando `\(\hat{Y}-Y\)`).
+
+Estos gráficos nos permiten detectar problemas de **No linealidad**, **Heterocedasticidad (varianza del error no constate)**, y **outliers**.
+
+---
+##Gráficos de Diagnóstico
+
+![:scale 90%](fittedresidAnscombe.png)
+---
+## ¿Cómo interpretamos estos gráficos?
+
+--
+* Si el **supuesto de linealidad ** y correcta especificación del modelo se sostiene, entonces:
+
+   - Los residuos deberían verse distribuidos aleatorialemte alrededos de la linea residual=0. Cualquier patrón sistemático violaría este supuesto.
+
+--
+* Si el **supuesto de Homocedasticidad** o la varianza del error es constante en las observacione, se sostiene entonces:
+
+   - Los residuos deberían estar distribuidos de manera constate en la banda alrededor de la linea residual=0. Formas de abanico, o de embudo indicarian que la varianza de los errores no son constantes.
+
+--
+* Presencia de **observaciones influyentes o outliers**
+
+   - Ninguna observación debería desviarse muy lejos de otras observaciones, tanto para los residuos como para los valores predichos.  De encontrarse un patrón de esta forma estariamos ante la presencia de outliers.
+
+---
+
+## Entonces... ¿Cómo deberían verse los gráficos?
+
+
+![:scale 100%](fittedresSimulado.png)
+
+
+---
+## ...Pero además debemos revisar los siguientes aspectos
+
+No obstante hay cosas que no se pueden observar en estos gráficos:
+
+### - Supuesto de no **Multicolinealidad**
+
+  - Inflación de los erros éstandar de los coeficientes betas, por lo cual la inferencia poblacional de los parametros se vuelve dudosa o problemática.
+
+### - Supuesto de **Normalidad de los residuos**
+
+ - De no cumplirse vuelve las estimaciones más ineficientes.
+
+---
+
+
+
+## Datos con los que trabajaremos
+
+
+Para realizar el diagnóstico al modelo de regresión lineal trabajaremos con una base de datos que evalua el efecto del comercio en el crecimiento económico.
+
+**Frankel, Jeffrey A., and David Romer. 1999. "Does trade cause growth?", American Economic Review 89(3): 379–99.**
+
+--
+Se estudian los factores que predicen el PIB per capita (**logy**) en los paises, a partir de las siguientes variables independientes:
+
+ - **open**: Apertura comercial.
+
+ - **loglab**: la población económicamente activa
+
+ - **Logland**: Área de la tierra.
+
+Para consideraciones de este ejercicio sólo trabajaremos con los datos de 1985.
+
+---
+class: inverse, middle, center
+
+#  2. Linealidad y Especificación del Modelo
+
+---
+## Linealidad
+
+Una de la condiciones del teorema Gauss-Markov es que en el modelo estimado los parámetros son lineales entre sí. Es decir:
+
+`$$y=\beta_{0}+\beta_{1}x+u$$`
+
+**Especificación correcta** implica la forma funcional correcta y que no se han omitido variables relevantes en la estimación.
+
+--
+
+Ej: _Sesgo de variable omitida_
+
+Ej. Predecir la disposición favorable hacia la protesta, a partir de la percepción de la desigualdad, pero no se incluye la posición política.
+
+
+---
+## Linealidad del modelos
+
+.pull-left[.small[
+
+
+
+
+
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="1" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;logy&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;open&lt;/td&gt;&lt;td&gt;0.008&lt;sup&gt;***&lt;/sup&gt; (0.003)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;loglab&lt;/td&gt;&lt;td&gt;0.152&lt;sup&gt;**&lt;/sup&gt; (0.066)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;logland&lt;/td&gt;&lt;td&gt;-0.041 (0.056)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;6.584&lt;sup&gt;***&lt;/sup&gt; (0.722)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;138&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.097&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.077&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;0.989 (df = 134)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;4.784&lt;sup&gt;***&lt;/sup&gt; (df = 3; 134)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
+]]
+--
+.pull-right[.small[
+![](11_diagnostico_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+]]
+
+---
+## Interpretación del gráfico de Diagnóstico.
+
+Los residuos deben ser **independientes** de los valores predichos de las variables dependientes. Cualquier correlación entre los residuos y los valores predichos violarían este supuesto.
+
+--
+
+- Sí los residuos muestran una patrón no lineal, como una **relación curvilinea**, el modelo esta especificado incorrectamente.
+
+--
+
+- Si la variable dependiente está relacionada linealmente con las variables independientes, el gráfico no deberia mostrar una **relación sistematica entre valores predichos y residuos**.
+
+--
+
+En el caso del gráfico anterior:
+
+- La mayoría de los puntos están distribuidos aleatoriamente alrededor de la linea residual=0, y el intervalo de confianza de la curva ajustada se solapara con la línea residual=0.
+
+
+
+---
+## Análisis de Linealidad por variable
+
+
+.small[
+![](11_diagnostico_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Análisis de Linealidad por test estadístico.
+
+Si bien, los gráficos pueden ser ilustrativos, no reemplazan un posterior análisis estadístico. En este caso realizamos el test de la especificación del error de Ramsey o **RESET**.
+
+--
+
+En términos generales, a partir del modelo estimado, se estima otro "expandido" el cuál incluye términos cuadráticos ( `\(\hat{y}^2\)` ) o cúbicos ( `\(\hat{y}^3\)` )  (para modelar la no linealidad), y luego se compara este modelo expandido con el modelo original.
+
+--
+
+La comparación se realiza a partir de la prueba `\(F\)` (recordar F para comparación de modelos), en donde se prueba la hipótesis nula de que el modelos original  el expandido explicación el mismo monto de variación sobre la variable dependiente.
+
+--
+
+Si la hipótesis nula es rechazada, entonces algunas de las variables independientes afectan a la variable dependiente de manera no-lineal.
+
+--
+
+Por lo que se espera que **no existan diferencias** estadísticamente significativas.
+
+---
+## Análisis de Linealidad por test estadístico.
+
+
+```r
+#Estimamos el modelo
+model1 &lt;- lm(logy ~ open + loglab + logland, data=final.85v2)
+final.85v2$predicho&lt;- fitted(model1) #Valores predichos Y gorro.
+
+#estimados el modelo expandido, incluyendo los valores predichos al cuadrado
+model1.q1 &lt;- lm(logy ~ open + loglab + logland + I(predicho^2),
+data = final.85v2)
+
+# Prueba F para diferencias de modelo
+anova(model1, model1.q1)
+```
+---
+## Análisis de Linealidad por test estadístico.
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: logy ~ open + loglab + logland
+## Model 2: logy ~ open + loglab + logland + I(predicho^2)
+##   Res.Df    RSS Df Sum of Sq     F Pr(&gt;F)
+## 1    134 130.97                          
+## 2    133 129.58  1    1.3875 1.424 0.2349
+```
+
+En este caso se puede ver que `\(F=1.424\)` con un valor $p=0.2349 que con un nivel de confianza mayor a 5% no permite rechazar la hipótesis nula que refiere a igualdad entre los modelos.
+
+
+--
+.small[
+
+*En el caso de que no exista una relación lineal entre las variables del modelo, habrá que explorar relaciones no lineales, que es el contenido de la próxima clase*]
+
+---
+class: inverse, middle, center
+
+# 3. Perfecta y Alta Multicolinealidad
+
+---
+## Perfecta y Alta Multicolinealidad.
+
+Una segunda condición del teorema de Gauss-Markov es que las variables independientes no deben estar perfectamente correlacionadas.
+
+Cuando dos variables están correlacionadas,la estimación por mínimos cuadrados se vuelve sensible a pequeños cambios en la muestra y en la especificación del modelo.
+
+Además los errores estándar son más grandes que en situaciones con ausencia de multicolinealidad, por lo que las pruebas t son pequeñas, haciendo más difícil rechazar la hipótesis nula para las estimaciones de los Beta.
+
+
+---
+## Ejemplo de Multicolinealidad.
+
+Para ilustrar esta situación, crearemos una nueva variable **open4**, la cual es 4 veces la variable **open**, lo cual hace que estas dos variables esten perfectamente correlacionadas.
+
+
+```r
+# crear una variable que este perfectamente correlacionada con open
+final.85v2$open4 &lt;- 4 * final.85v2$open
+# revisar correlación entre ambas variables
+cor(final.85v2$open, final.85v2$open4,
+    use = "complete.obs")
+```
+
+```
+## [1] 1
+```
+
+---
+## Ejemplo de Multicolinealidad.
+
+.pull-left[.small[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="1" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;logy&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;open&lt;/td&gt;&lt;td&gt;0.008&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.003)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;open4&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;loglab&lt;/td&gt;&lt;td&gt;0.152&lt;sup&gt;**&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.066)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;logland&lt;/td&gt;&lt;td&gt;-0.041&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.056)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;6.584&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.722)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;138&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.097&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.077&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;0.989 (df = 134)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;4.784&lt;sup&gt;***&lt;/sup&gt; (df = 3; 134)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]]
+
+.pull-right[
+Como la variable open y open4 están perfectamente correlacionadas, éstas no pueden ser estimadas simultáneamente, y cualquiera sea ingresada en segundo lugar será descartada de la estimación.
+]
+
+
+---
+## Detección: VIF
+
+El factor de inflación de la varianza (VIF por sus siglas en inglés) es la prueba que más frecuentemente se utiliza para diagnósticar multicolinealidad.
+
+Está prueba literalmente significar que el factor que infla los errores estándar de los coeficientes de regresión.
+
+`$$VIF=\frac{1}{1-R^{2}_{open}}$$`
+donde `\(R^{2}_{open}\)` es el coeficiente de determinación de un nuevo modelo de regresión con open como la variable dependiente, y las variables independientes corresponden al resto de las covariables ingresadas en el modelo original (**loglab +logland**)
+
+---
+## Detección: VIF
+
+Para entender como VIF es un buen indicador para detectar alta colinealidad, veremos una forma alternativa para estimar la varianza del `\(\beta\)`
+
+`$$\hat{var}(\beta)=\frac{s^2}{(n-1)\hat{var}(open)}*\frac{1}{1-R^{2}_{open}}$$`
+
+Donde `\(s^2\)` es la media de los errores el cuadrado (un estimado de la varianza verdadera del término del error en el modelo de regresión poblacional), y `\(\hat{var}(open)\)` es la varianza muestral de la variable open.
+
+
+Si el VIF aumenta (en la ecuación `\(1/1-R^{2}_{open}\)`), `\(\hat{var}(\beta)\)` aumenta por lo que el estadístico `\(t\)` disminuye.
+
+--
+
+
+Al disminuir `\(t\)`, mayor probabilidad de no encontrar estimaciones estadísticamente significativas (Error Tipo I)
+
+---
+## Interpretación del VIF
+
+Si `\(VIF=1\)`, entonces `\(R^{2}_{open}=0\)`, queriendo decir que la variable open es completamente independiente de las otras variables explicativas del modelo original.
+
+Sin embargo, si `\(VIF=10\)`, entonces `\(R^{2}_{open}=0.9\)`, queriendo decir que el 90% de la varianza de la variable open puede ser explicada por las otras variables explicatias del modelo original.
+
+---
+## Interpretación del VIF
+
+### En Resumen
+
+  - Valores cercanos a 1 implica ausencia de multicolinealidad para la variable j.
+
+  - Valores cercanos a 10 implica una severa multicolinealidad para la variable j.
+
+  - Valores mayores a 4 o 5 implica una multicolinealidad moderadamente alta.
+
+--
+
+(Aunque Ojo, cada disciplina tiene su propio estándar, en economía valores mayores a 2 implica severos problemas.)
+
+---
+## Aplicaciones en R de VIF
+
+Para análizar el supuesto de no multicolinealidad en R, usamos la función **vif** de la librería car.
+
+
+```r
+car::vif(model1)
+```
+
+```
+##     open   loglab  logland 
+## 1.881422 2.271540 2.465689
+```
+
+En este caso, ninguna de las variables independientes del modelo parece sufrir de serios problemas de multicolinealidad.
+
+
+En caso de presencia de multicolinealidad, remover unos de los predictores del modelo.
+
+---
+class: inverse, middle, center
+
+# 4. Error Constante de la varianza (u Homocedasticidad)
+
+---
+## Error Constante de la Varianza
+
+El teorema Gauss-Markov asume que la varianza del error debe permanecer constante a través de todas las observaciones.
+
+En presencia de no varianza constante de los errores (también conocido como Heterocedasticidad), los paramétros estimados en un modelo de mínimos cuadrados permanencen insesgodos y consistentes.
+
+--
+
+
+...No obstante, los errores estándar de los coeficientes beta son estimados incorrectamente, por lo cual la prueba `\(t\)` que utiliza éstos errores éstandares se vuelve invalida.
+
+
+---
+## Error Constante de la Varianza
+
+
+![:scale 100%](homocedasticidad.png)
+
+---
+## Detección gráfica de Heterocedasticidad
+
+.pull-left[
+Viendo nuevamente el gráfico de valores predichos vs. residuos, se puede apreciar que los residuos tienden a "abrirse" en la medida de que los valores predichos aumentan.
+
+Esto, se puede observar en los intervalos de confianza de la recta ajustada (área sombreada) del gráfico.
+
+Como lo anterior, esta primera aproximación es algo ilustrativa, pero no reemplaza las pruebas éstadísticas.
+
+]
+
+.pull-right[
+![](11_diagnostico_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+]
+
+
+---
+## Detección Estadística de Heterocedasticidad
+
+Para detectar Heterocedasticidad, podemos realizar los test Breush-Pagan y Cook-Weisberg.
+
+Para ambos test, se contrasta la hipótesis nula de que la varianza del error es constante, y la hipótesis alternativa de que el error de la varianza no es constante.
+
+???
+
+Ojo: en este caso esperamos fallar en rechazar la hipótesis nula, por lo que buscamos valores p&gt;0.05
+
+---
+## Detección Estadística de Heterocedasticidad
+
+En R
+
+.small[
+
+```r
+# Test de heterocedasticidad
+# Estimación de modelo OLS
+model1 &lt;- lm(logy ~ open + loglab + logland, data = final.85v2)
+
+# Cook/Weisberg score test of constant error variance
+car::ncvTest(model1)
+```
+
+```
+## Non-constant Variance Score Test 
+## Variance formula: ~ fitted.values 
+## Chisquare = 0.5913018, Df = 1, p = 0.44192
+```
+
+```r
+# Breush/Pagan test of constant error variance
+
+lmtest::bptest(model1)
+```
+
+```
+## 
+## 	studentized Breusch-Pagan test
+## 
+## data:  model1
+## BP = 4.3377, df = 3, p-value = 0.2272
+```
+]
+
+Los valores p de los test estadísticos son 0.44 (Cook-Weisberg) y 0.22 (Breusch-Pagan). Por lo que se falla en rechazar la hipótesis nula de que la varianza de los errores es contante, por lo que se puede concluir que se cumple el supuesto de **Homocedasticidad** del modelo.
+
+---
+##Correciones a problemas de Heterocedasticidad.
+
+En caso de encontrar problemas de heterocedasticidad, una de las formas más usuales de corregirla, es estimando un modelo de regresión con errores estándar robustos a heterocedasticidad (Errores Estándar Robustos de White).
+
+Los errores estándar robustos solo tienen problemas en muestras pequeñas, donde el estadístico t no tendrá una distribución probabilística cercana a t, y la inferencia estadística podría ser errónea.
+
+
+
+```r
+library(lmtest);library(sandwich)
+model1.hc3 &lt;- coeftest(model1, vcov=vcovHC)
+```
+
+
+---
+##Correciones a problemas de Heterocedasticidad.
+
+
+.small[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="2"&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;logy&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;OLS&lt;/td&gt;&lt;td&gt;Robusto&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;open&lt;/td&gt;&lt;td&gt;0.008&lt;sup&gt;***&lt;/sup&gt; (0.003)&lt;/td&gt;&lt;td&gt;0.008&lt;sup&gt;***&lt;/sup&gt; (0.003)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;loglab&lt;/td&gt;&lt;td&gt;0.152&lt;sup&gt;**&lt;/sup&gt; (0.066)&lt;/td&gt;&lt;td&gt;0.152&lt;sup&gt;**&lt;/sup&gt; (0.067)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;logland&lt;/td&gt;&lt;td&gt;-0.041 (0.056)&lt;/td&gt;&lt;td&gt;-0.041 (0.058)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;6.584&lt;sup&gt;***&lt;/sup&gt; (0.722)&lt;/td&gt;&lt;td&gt;6.584&lt;sup&gt;***&lt;/sup&gt; (0.730)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;138&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.097&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.077&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;0.989 (df = 134)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;4.784&lt;sup&gt;***&lt;/sup&gt; (df = 3; 134)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="2" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]
+
+---
+class: inverse, middle, center
+
+# 5. Observaciones Influyentes
+
+---
+
+##Observaciones influyentes
+
+.pull-left[El coeficiente de regresión representa el efecto promedio de una variable independiente en una variable dependiente, manteniendo el resto de las variables constantes.
+
+No obstante, algunas observaciones pueden tener una influencia excesiva dentro de la estimación de los coeficientes.
+]
+.pull-right[.small[
+
+![](11_diagnostico_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+]]
+
+---
+## Observaciones influyentes
+
+
+Las observaciones influyentes tienden a estar asociadas con grandes valores en los residuos, y un alto **"apalancamiento"** (leverage).
+
+Outliers en los residuos implica que los valores observados de la variable dependiente etan lejos de los valores predichos.
+
+Observaciones con apalancamiento refieren a aquellos valores extremos en las variables independientes, esto significa que los valores observados de una variable dependientes estan lejos de su media.
+
+Observaciones influyentes afectan los coeficientes estimados y los valores predicho del modelo de regresión.
+
+---
+## Formas de detectar casos influyentes
+
+1. Residuo stundetizado para cada observación, la cual se basa en el error estándar de la regresión re-estimada sin la observación. Observaciones fuera del rango `\(\pm2\)` son outliers residuales
+
+2. *Hat Values* mide el nivel de apalancamiento. Es construído en base a la medida ponderada de la distancia de cada observación del promedio de diferentes variables independientes. Sus rangos van de `\(1/n\)` a `\(1\)`
+
+3. Distancia de Cook, la cual se formaliza a partir de:
+
+`$$DCook=\frac{\sum(\hat{y_{j}}-\hat{y_{j(i)}})^2}{p*MSE}$$`
+Para cada observación i, `\(\hat{y_{j}}\)` es la predicción para la observación j de la regresión, `\(\hat{y_{j(i)}}\)` es la preducción para cada observación j de un nuevo modelo de regresión omitiendo la observación i. `\(p\)` es el número de parametros en el modelo, y MSE es la media cuadrática del error.
+
+
+---
+##Detección de casos influyentes
+
+.pull-left[
+
+A partir de la función **InfluencePlot** se obtienen los tres estadísticos simultaneamente. Los *Hat Values* en el eje x, los residuos stunderizados en el eje y, y la distancia de cook, en el tamaño de los circulos.
+
+- La observación 101 tiene un residuo Stunderizado fuera del rango `\(\pm 2\)`.
+
+- La observación 103 tiene gran nivel de apalancamiento y de distancia de Cook-
+]
+
+.pull-right[.small[
+![](11_diagnostico_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+```
+##         StudRes        Hat        CookD
+## 15  -2.15836103 0.01759566 2.030510e-02
+## 28  -1.49604438 0.08185103 4.942487e-02
+## 84   0.01656972 0.15454007 1.264069e-05
+## 101  2.18471536 0.02520437 3.000771e-02
+## 103 -1.15752266 0.33781389 1.704497e-01
+```
+]]
+
+---
+## Cálculo de corte para D de Cook
+
+Para tener un punto de orientación respecto a qué tan influyente es una observación se calcula un corte.
+
+Este se basa en la D de Cook. y su punto de corte es `\(4/(n-k-1)\)`, donde n es la cantidad de observaciones,y k el número de variables independientes.
+
+
+```r
+round(4/(138-3-1),3)
+```
+
+```
+## [1] 0.03
+```
+
+
+Cuando las observaciones tienen una D de Cook mayor al punto de corte, se les considera que son influyentes.
+
+---
+## Cálculo de corte para D de Cook
+.small[
+![](11_diagnostico_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+
+---
+## Cálculo de corte para D de Cook
+
+A partir de la siguiente función, podemos establecer que las observaciones 28 (Mauritania),51 (Canada),101 (Qatar),103 (Singapore),118 (Islandia) y 131 (Australia), tienen una influencia sobre el modelo de regresión. Por lo que volvemos a estimar este modelo sin estos casos.
+
+
+```r
+# list observations whose cook's D above threshold
+final.85v2[final.85v2$.cooksd &gt; 0.03, c("id", "country", "logy",
+"open", ".std.resid", ".hat", ".cooksd")]
+```
+
+```
+## # A tibble: 6 x 7
+##      id country     logy  open .std.resid   .hat .cooksd
+##   &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+## 1    28 Mauritania  6.71 142.       -1.49 0.0819  0.0494
+## 2    51 Canada      9.65  54.5       1.91 0.0406  0.0386
+## 3   101 Qatar       9.74  80.9       2.15 0.0252  0.0300
+## 4   103 Singapore   9.06 318.       -1.16 0.338   0.170 
+## 5   118 Iceland     9.41  81.8       1.95 0.0375  0.0372
+## 6   131 Australia   9.52  35.3       2.00 0.0361  0.0375
+```
+
+
+---
+## Re-estimación de modelo sin influyentes
+.small[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="2"&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="2"&gt;logy&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;OLS&lt;/td&gt;&lt;td&gt;Sin Influyentes&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;open&lt;/td&gt;&lt;td&gt;0.008&lt;sup&gt;***&lt;/sup&gt; (0.003)&lt;/td&gt;&lt;td&gt;0.012&lt;sup&gt;***&lt;/sup&gt; (0.003)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;loglab&lt;/td&gt;&lt;td&gt;0.152&lt;sup&gt;**&lt;/sup&gt; (0.066)&lt;/td&gt;&lt;td&gt;0.229&lt;sup&gt;***&lt;/sup&gt; (0.068)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;logland&lt;/td&gt;&lt;td&gt;-0.041 (0.056)&lt;/td&gt;&lt;td&gt;-0.068 (0.057)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;6.584&lt;sup&gt;***&lt;/sup&gt; (0.722)&lt;/td&gt;&lt;td&gt;6.033&lt;sup&gt;***&lt;/sup&gt; (0.760)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;138&lt;/td&gt;&lt;td&gt;132&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.097&lt;/td&gt;&lt;td&gt;0.147&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.077&lt;/td&gt;&lt;td&gt;0.127&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;0.989 (df = 134)&lt;/td&gt;&lt;td&gt;0.931 (df = 128)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;4.784&lt;sup&gt;***&lt;/sup&gt; (df = 3; 134)&lt;/td&gt;&lt;td&gt;7.364&lt;sup&gt;***&lt;/sup&gt; (df = 3; 128)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="2" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]
+---
+class: inverse, middle, center
+
+#  6. Normalidad de los residuos
+
+
+---
+## Normalidad visualmente
+
+Si bien el teórema de Gauss-Markov, no requiere que los residuos estén distribuidos normalmente, las inferencias basadas en `\(z\)` o `\(t\)` sí lo requieren.
+
+Para visualizar la normalidad de los residuos usamos el gráfico de comparación Cuartil-Cuartil (QQPlot). Este gráfico nos muestra la comparación de los cuartiles empiricos de los residuos stunderizados del modelo1 (casos), contra los cuartiles teóricos de una distribución `\(t\)` o normal (línea azul)
+
+---
+## Normalidad visualmente
+.small[
+![](11_diagnostico_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+```
+## [1]  15 101
+```
+]
+
+---
+## Normalidad por prueba estadística
+
+Para testear la normalidad de los residuos, utilizamos la **prueba Shapiro-Wilks**. Esta prueba, testea la hipótesis nula de los residuos están normalmente distribuidos.
+
+
+```r
+shapiro.test(final.85v2$.resid)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  final.85v2$.resid
+## W = 0.97594, p-value = 0.01527
+```
+En este caso, p&lt;0.05, sugiriendo que la hipótesis nula de normalidad es rechazada.
+---
+#Violación de supuesto de normalidad
+
+De no cumplirse el supuesto de normalidad de los residuos, existen dos respuestas:
+
+1. Dado el teórema del límite central, los estimadores de OLS pueden seguir siguendo asintóticamente normales, cuando la muestra es los suficientemente grande. Entonces si la muestra es grande la normalidad puede ser ignorada (Li, 2019:246).
+
+2. Aplicar una transformación a la variable que este causando el problema de supuesto de violación. En el caso que estamos revisando se podría aplicar una transformación logarítmica.
+
+--
+
+
+Las transformaciones de las variables las veremos en la siguiente clase, por lo que lo dejaremos por aquí por el momento.
+
+
+---
+class: inverse, middle, center
+
+#  Reporte de Resultados
+
+---
+##Reporte de Sensibilidad
+
+.small[.small[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="3"&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;logy&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;logy&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;OLS&lt;/td&gt;&lt;td&gt;Robusto H.&lt;/td&gt;&lt;td&gt;Sin Influyentes&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;td&gt;(3)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;open&lt;/td&gt;&lt;td&gt;0.008&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.008&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.012&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.003)&lt;/td&gt;&lt;td&gt;(0.003)&lt;/td&gt;&lt;td&gt;(0.003)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;loglab&lt;/td&gt;&lt;td&gt;0.152&lt;sup&gt;**&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.152&lt;sup&gt;**&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.229&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.066)&lt;/td&gt;&lt;td&gt;(0.067)&lt;/td&gt;&lt;td&gt;(0.068)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;logland&lt;/td&gt;&lt;td&gt;-0.041&lt;/td&gt;&lt;td&gt;-0.041&lt;/td&gt;&lt;td&gt;-0.068&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.056)&lt;/td&gt;&lt;td&gt;(0.058)&lt;/td&gt;&lt;td&gt;(0.057)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;6.584&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;6.584&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;6.033&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.722)&lt;/td&gt;&lt;td&gt;(0.730)&lt;/td&gt;&lt;td&gt;(0.760)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;138&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;132&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.097&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.147&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.077&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.127&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;0.989 (df = 134)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.931 (df = 128)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;4.784&lt;sup&gt;***&lt;/sup&gt; (df = 3; 134)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;7.364&lt;sup&gt;***&lt;/sup&gt; (df = 3; 128)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="3" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]
+]
+
+
+---
+class: bottom, left
+
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo &amp; Alejandro Plaza
+
+## **Sesión 11**: Diagnóstico de supuestos
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../xaringan_custom/macros.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>` ",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
