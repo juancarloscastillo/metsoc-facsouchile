@@ -32,7 +32,10 @@ output:
 
 - [6: Regresión logística](documents/practicas/6intrologit/prac_6intrologit.html)
 
+- [7: Diagnóstico supuestos](documents/practicas/8diagnostico/prac_8doagnostico.html)
 
+
+documents/practicas/8diagnostico/prac_8doagnostico.html
 
 <br/>
 

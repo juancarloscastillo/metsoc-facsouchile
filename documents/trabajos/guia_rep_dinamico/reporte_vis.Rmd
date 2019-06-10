@@ -12,7 +12,7 @@ output:
 ![](ggplot2.png)
 ```
 
-![](ggplot2.png)
+![](images/ggplot2.png)
 
 Es importante que en un informe acádemico se incorpore visualización de datos, pues muchas veces resulta agobiante al lector solo reportar los análisis en textos y tablas. A continuación, introduciremos algunos tópicos básicos y avanzados en visualización de datos con ggplot2. Utilizaremos como ejemplo los datos del Estudio Longitudinal Social de Chile (ELSOC, 2016).
 
@@ -21,13 +21,13 @@ Es importante que en un informe acádemico se incorpore visualización de datos,
 #Instalamos los paquetes que necesitaremos
 #install.packages("ggplot2") #Gráficos
 library(ggplot2)
+library(haven)
 ```
 
 - **Tratamiento de los datos**
 ```{r}
 #Leemos el conjunto de datos.
-load("ELSOC_W01_v2.00.RData")
-
+elsoc_w01<-read_dta("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/data/COESW1_Stata14_V3.dta")
 #Establecemos los casos perdidos a variables de interés.
 elsoc_w01[elsoc_w01==-999 | elsoc_w01==-888] <- NA
 
