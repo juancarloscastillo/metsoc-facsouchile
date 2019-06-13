@@ -15,8 +15,12 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r eval=FALSE, include=FALSE}
+rmarkdown::render("prac1_regsimp.Rmd", "html_document")
+cd
+```
 # Practica 1: Primera estimación regresión simple
-Estadistica Multivariada - Sociología FACSO Universidad de Chile
+Sociología FACSO Universidad de Chile
 
 # Introducción
 
@@ -42,7 +46,9 @@ datos<- read.csv("( ...ruta hacia el archivo ...)\golf.txt", sep="")
   - 2. Más fácil: mouse sobre archivo, boton derecho, _copiar_ (o ctrl+c); luego, en el archivo de R, en el lugar que corresponde _pegar_ (o ctrl+v)
 </div>
 
-```{r echo=FALSE}
+Alternativamente, en este caso se pueden llamar los datos directamente desde la web:
+
+```{r }
 datos<- read.csv("https://juancarloscastillo.github.io/jc-castillo/documents/multiva/sesiones/3regsimp1/practica/golf.txt", sep="")
 ```
 
@@ -53,7 +59,7 @@ Verificamos si los datos están siendo bien leidos:
 View(datos)
 ```
 
-![](../../images/tacataca.png)
+![](../../presentaciones/images/tacataca.png)
 
 Tenemos entonces tres columnas:
 - id: número único que identifica a cada sujeto
@@ -121,7 +127,7 @@ Tenemos una correlación positiva y de un tamaño de efecto grande (para ciencia
 Antes de avanzar desde la correlación al método de regresión es importante conocer el concepto de media condicional. Como sabemos el promedio de Y (puntos) es 4. Es decir, si conocemos a algun individuo que pertence al grupo de "datos", sabemos que su puntaje se encuentra probablemente cercano a 4. ¿Podemos mejorar nuestra estimación utilizando el puntaje de X? Como lo conocemos, si el sujeto nos dice que ha jugado antes 6 veces, dada la información que conocemos probablemente vamos a estimar un puntaje superior de puntos, tal vez más cercano a 6. Lo que estamos haciendo es utilizar la información que conocemos de X para dar una estimación de Y que sea más precisa que el promedio bruto.
 
 
-![](../../images/condmeans.png)
+![](../../presentaciones/images/condmeans.png)
 
 
 Mirando el gráfico de nube de puntos, sabemos que tres personas han jugado antes una vez, pero una de ellas tuvo 2 puntos, otra 3 y otra 4. Con estos datos podemos calcular la media de Y para X=1, que sería igual a 3. En otras palabras, *la media condicional de Y cuando X=1 es 3*. Con esto, uno podría calcular la media condicional para cada punto de X y hacer una estimación más precisa de Y. Sin embargo, este proceso todavía no nos permite generalizar más precisamente la relación entre X e Y: ¿Cuántos puntos (Y) aumento segun mi experiencia previa de juego (X)? Esta pregunta nos conduce al cálculo de una recta que atraviese los puntos y que generalice la relación entre X e Y:
