@@ -45,3 +45,5 @@ Esta sección en general está bien para los requisitos del trabajo. No se eval�
   - significación estadística, prueba de hipótesis
   - ajuste general del modelo, R2
   - control estadístico en el caso de haber sumado al modelo variables que no estaban en el anterior
+  
+  

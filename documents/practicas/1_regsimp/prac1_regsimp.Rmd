@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r eval=FALSE, include=FALSE}
-rmarkdown::render("prac1_regsimp.Rmd", "html_document")
+rmarkdown::render("documents/practicas/1_regsimp/prac1_regsimp.Rmd", "html_document")
 cd
 ```
 # Practica 1: Primera estimación regresión simple

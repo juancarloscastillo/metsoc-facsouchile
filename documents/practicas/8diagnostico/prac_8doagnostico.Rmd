@@ -16,56 +16,32 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r include=FALSE, eval=FALSE}
+setwd("documents/practicas/8diagnostico")
+```
 
-## Introducción
+# Introducción
 
-La siguiente guía tiene como objetivo mostrar los comandos y funciones asociados al análisis de diagnóstico de un modelo de regresión lineal OLS.
+La siguiente guía tiene como objetivo mostrar los comandos y funciones asociados al análisis de diagnóstico de supuestos de un modelo de regresión lineal OLS.
 
-Para realizar el diagnóstico al modelo de regresión lineal trabajaremos con una base de datos que evalua el efecto del comercio en el crecimiento económico.
+En primer lugar revisaremos un ejemplo clásico de violación de supuestos en modelo de regresión, denominado _El cuarteto de Anscombe_. Luego, se desarrollan una serie de ejericicios de detección de supuestos y de qué hacer frente a estas situaciones.
 
-**Frankel, Jeffrey A., and David Romer. 1999. "Does trade cause growth?", American Economic Review 89(3): 379–99.**
+# El cuarteto de Anscombe
 
-Se estudia los factores que predicen el PIB per capita (**logy**) en los paises, a partir de las siguientes variables independientes:
+_Anscombe, Francis J. (1973) Graphs in statistical analysis. American Statistician, 27, 17–21._
 
- - **open**: Apertura comercial.
- 
- - **loglab**: la población económicamente activa
- 
- - **Logland**: Área de la tierra.
- 
-Para consideraciones de este ejercicio sólo trabajaremos con los datos de 1985.
+Este es un conocido ejemplo que demuestra las posibles falencias de un modelo de regresión a la hora de modelar datos. Para ello ejemplifica el cálculo de modelos de regresión similares para distintas distribuciones de datos, las que podrían estar violando los supuestos del modelo de regresión.
 
-La base de datos la puedes descarcar desde [AQUI](https://www.dropbox.com/s/qde1gapk6bvo8x0/final.85.RData?dl=0)
-
-## Preambulo de paquetes
+## Librerias
 
 ```{r}
 
-pacman::p_load(stargazer,tidyverse,gridExtra,ggplot2,gridExtra,broom,
-car,lmtest,sandwich,interplot,ape,multiwayvcov)
+pacman::p_load(stargazer,tidyverse,gridExtra,ggplot2,gridExtra,broom,car,lmtest,sandwich,interplot,ape,multiwayvcov)
 ```
 
-
-##Motivación: el cuarteto de anscombe
-Como motivación al analisis de diagnóstico, revisemos la base de datos de Anscombe
+## Visualización de los datos
 
 
-###Modelos de regresión
-```{r}
-a1<-lm(y1~x1,data=anscombe)
-a2<-lm(y2~x2,data=anscombe)
-a3<-lm(y3~x3,data=anscombe)
-a4<-lm(y4~x4,data=anscombe)
-```
-
-
-```{r}
-stargazer(a1, a2, a3, a4, type="text", no.space=TRUE,
-model.names=FALSE, notes="Errores Estándares en Parentesis")
-```
-
-
-##Construcción de gráficos
 ```{r}
 # 4 nubes de puntos con las rectas de regresión.
 F1 <- ggplot(anscombe)+aes(x1,y1)+geom_point()+
@@ -84,9 +60,47 @@ F4 <- ggplot(anscombe)+aes(x4,y4)+geom_point()+
 grid.arrange(F1,F2,F3,F4, ncol = 2)
 ```
 
+### Estimación de Modelos de regresión
+```{r}
+a1<-lm(y1~x1,data=anscombe)
+a2<-lm(y2~x2,data=anscombe)
+a3<-lm(y3~x3,data=anscombe)
+a4<-lm(y4~x4,data=anscombe)
+```
+
+
+```{r, results='asis'}
+stargazer(a1, a2, a3, a4, type="html", no.space=TRUE,model.names=FALSE, notes="Errores Estándares en Parentesis")
+```
+
+
 Si bien las estimaciones del modelo de regresión son las mismas, en los gráficos podemos observar que el comportamiento de las variables evidentemente es distinto.
 
+Por lo tanto, es necesario revisar en qué medida la distribución de los datos es apropiada para la estimación de un modelo de regresión. Para ello se revisan una serie de supuestos.
 
+# Revisión de supuestos de regresión
+
+Para estar seguros que la estimación de un modelo de regresión está dando buena cuenta de las relaciones que existen entre las variables del modelo, vamos a revisar los siguientes supuestos:
+
+- linealidad
+- multicolinealidad
+- homocedasticidad
+- casos influyentes
+- normalidad
+
+Trabajaremos con una base de datos que evalúa el efecto del comercio en el crecimiento económico.
+
+**Frankel, Jeffrey A., and David Romer. 1999. "Does trade cause growth?", American Economic Review 89(3): 379–99.**
+
+Se estudia los factores que predicen el PIB per capita (**logy**) en los países, a partir de las siguientes variables independientes:
+
+ - **open**: Apertura comercial.
+
+ - **loglab**: la población económicamente activa
+
+ - **Logland**: Área de la tierra.
+
+Para consideraciones de este ejercicio sólo trabajaremos con los datos de 1985.
 
 ```{r echo=FALSE, eval=FALSE}
 pacman::p_load(pwt,wbstats, data.table,devtools)
@@ -166,23 +180,19 @@ final.85$logland <- log(final.85$landarea)
 #save(final.85, file="final.85.RData")
 ```
 
-
-##Diagnóstico
-
-Cargamos la base de datos
+- Cargamos la base de datos del ejemplo
 
 ```{r}
-load("final.85.RData")
+load(url("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/practicas/8diagnostico/final.85.RData"))
 ```
 
-Producimos los estadísticos descriptivos.
-```{r}
+- Descriptivos.
+```{r results='asis'}
 # produce formatted descriptive statistics in pwt7.final
-stargazer(final.85, type="text", median = TRUE)
+stargazer(final.85, type="html", median = TRUE)
 ```
 
-Estimamos el modelo de regresión lineal
-
+### Modelo de regresión lineal
 
 ```{r}
 # estimate OLS model and create output object
@@ -191,16 +201,16 @@ model1 <- lm(logy ~ open + loglab + logland, data=final.85)
 summary(model1)
 ```
 
-A partir de la función **tidy** y **augment_columns** de la librería **broom**, podemos extraer las estimaciones del modelo de regresión lineal en formato de base de datos. 
+A partir de la función **tidy** y **augment_columns** de la librería **broom**, podemos extraer las estimaciones del modelo de regresión lineal en formato de base de datos.
 
-Lo que hacemos posteriormente, es armar una nueva base de datos final.85v2 la cual contiene las siguientes variables nuevas para necesarios últeriores análisis
+Lo que hacemos posteriormente, es armar una nueva base de datos final.85v2 la cual contiene las siguientes variables nuevas para análisis posteriores:
 
   - .fitted = Valores predichos de model1
-  
+
   - .resid  = Residuos de model1
-  
+
   - .hat    = Hat values para análisis de casos influyentes
-  
+
   - cooksd  = Distancia de Cook para análisis de casos influyentes
 
 ```{r}
@@ -216,35 +226,24 @@ stargazer(as.data.frame(final.85v2), type = "text", median = TRUE)
 
 ```
 
-
-
 ## Linealidad y Especificación del modelo
 
+Un primer supuesto de la estimación de regresión es que los residuos deben ser independientes de los valores predichos. De otra manera, no debería haber una notoria "mejor predicción" (menores residuos) para algunos valores estimados, y peor para otros. Por lo tanto, cualquier correlación entre los residuos y los valores predichos violaría este supuesto.
 
-Los residuos deben ser independientes de los valores predichos de las variables dependientes. Cualquier correlación entre los residuos y los valores predichos violarian este supuesto.
+- Se grafica una nube de puntos entre valores estimados y residuos. Los puntos se deberían distribuir aleatoriamente, sin observar presencia de correlación.
 
-- Sí los residuos muestran una patrón no lineal, como una **relación curvilinea**, el modelo esta especificado incorrectamente.
-
-- Si la variable dependiente está relacionada linealmente con las variables independientes, el gráfico no deberia mostrar una **relación sistematica entre valores predichos y residuos**.
-
-
+En el ejemplo, vamos a graficar los residuos y valores estimados para el modelo completo:
 
 ```{r}
 ggplot(final.85v2, aes(x=.fitted, y=.resid)) +
 geom_hline(yintercept=0) +
 geom_point() +
 geom_smooth(method='loess', se=TRUE)
-
-
 ```
-
-
-En el caso del gráfico anterior:
 
 - La mayoría de los puntos están distribuidos aleatoriamente alrededor de la linea residual=0, y el intervalo de confianza de la curva ajustada se solapara con la línea residual=0.
 
-
-También podemos hacer la observación por variable
+También podemos hacer la observación para cada variable
 
 ```{r}
 # residuals against trade
@@ -266,10 +265,9 @@ geom_smooth(method='loess', se=TRUE)
 grid.arrange(ropen, rland, rlab, ncol=3)
 ```
 
-
 Si bien, los gráficos pueden ser ilustrativos, no reemplazan un posterior análisis estadístico. En este caso realizamos el test de la especificación del error de Ramsey o **RESET**.
 
-En términos generales, a partir del modelo estimado, se estima otro "expandido" el cuál incluye términos cuadráticos ( $\hat{y^2}$ ) o cúbicos ( $\hat{y^3}$ )  (para modelar la no linealidad), y luego se compara este modelo expandido con el modelo original.
+En términos generales, a partir del modelo estimado, se estima otro "expandido" el cuál incluye términos cuadráticos ( $\hat{y^2}$ ) o cúbicos ( $\hat{y^3}$ ) (para modelar la no linealidad), y luego se compara este modelo expandido con el modelo original.
 
 La comparación se realiza a partir de la prueba $F$ (recordar F para comparación de modelos), en donde se prueba la hipótesis nula de que el modelos original  el expandido explicación el mismo monto de variación sobre la variable dependiente.
 
@@ -291,11 +289,9 @@ En este caso se puede ver que $F=1.424$ con un valor $p=0.2349$. Por lo cual si 
 
 Una segunda condición del teorema de Gauss-Markov es que las variables independientes no deben estar perfectamente correlacionadas.
 
-
 Cuando dos variables están correlacionadas,la estimación por mínimos cuadrados se vuelve sensible a pequeños cambios en la muestra y en la especificación del modelo.
 
 Además los errores estándar son más grandes que en situaciones con ausencia de multicolinealidad, por lo que las pruebas t son pequeñas, haciendo más dificil rechazar la hipótesis nula para las estimaciones de los Beta
-
 
 Para ilustrar esta situación, crearemos una nueva variable **open4**, la cual es 4 veces la variable **open**, lo cual hace que estas dos variables esten perfectamente correlacionadas.
 
@@ -319,20 +315,16 @@ vif(model1)
 
 En este caso, ninguna de las variables independientes del modelo parece sufrir de serios problemas de multicolinealidad.
 
-
 En caso de presencia de multicolinealidad, remover unos de los predictores del modelo.
 
-
-##Error Constante de la Varianza u Homocedasticidad
-
+## Error Constante de la Varianza u Homocedasticidad
 
 El teorema Gauss-Markov asume que la varianza del error debe permanecer constante a través de todas las observaciones.
 
-En presencia de no varianza constante de los errores (también conocido como Heterocedasticidad), los paramétros estimados en un modelo de mínimos cuadrados permanencen insesgodos y consistentes.
+En presencia de no varianza constante de los errores (también conocido como Heterocedasticidad), los paramétros estimados en un modelo de mínimos cuadrados permanencen insesgados y consistentes.
 
 
 ...No obstante, los errores estándar de los coeficientes beta son estimados incorrectamente, por lo cual la prueba $t$ que utiliza éstos errores éstandares se vuelve invalida.
-
 
 Para detectar Heterocedasticidad, podemos realizar los test Breush-Pagan y Cook-Weisberg.
 
@@ -356,8 +348,7 @@ lmtest::bptest(model1)
 
 Los valores p de los test estadísticos son 0.44 (Cook-Weisberg) y 0.22 (Breusch-Pagan). Por lo que se falla en rechazar la hipótesis nula de que la varianza de los errores es contante, por lo que se puede concluir que se cumple el supuesto de **Homocedasticidad** del modelo.
 
-##Correción Errores estándares robustos
-
+### Correción Errores estándares robustos
 
 En caso de encontrar problemas de heterocedasticidad, una de las formas más usuales de corregirla, es estimando un modelo de regresión con errores estándar robustos a heterocedasticidad (Errores Estándar Robustos de White).
 
@@ -375,8 +366,6 @@ model1.hc1 <- coeftest(model1, vcov=vcovHC(model1, type="HC1"))
 model1.hc1
 
 ```
-
-
 ## Observaciones influyentes
 
 A partir de la librería car, podemos obtener el siguiente gráfico de influencia, el cuál nos presenta los siguientes estadísticos.
@@ -385,7 +374,7 @@ A partir de la librería car, podemos obtener el siguiente gráfico de influenci
 
 2. *Hat Values* mide el nivel de apalancamiento. Es construído en base a la medida ponderada de la distancia de cada observación del promedio de diferentes variables independientes. Sus rangos van de $1/n$ a $1$
 
-3. Distancia de Cook, la cual se formaliza a partir de: 
+3. Distancia de Cook, la cual se formaliza a partir de:
 
 $$DCook=\frac{\sum(\hat{y_{j}}-\hat{y_{j(i)}})^2}{p*MSE}$$
 Para cada observación i, $\hat{y_{j}}$ es la predicción para la observación j de la regresión, $\hat{y_{j(i)}}$ es la preducción para cada observación j de un nuevo modelo de regresión omitiendo la observación i. $p$ es el número de parametros en el modelo, y MSE es la media cuadrática del error.
@@ -416,8 +405,6 @@ geom_hline(yintercept=0.03)+
 geom_text(aes(label=ifelse((.cooksd>0.03),id,"")),
 vjust=-0.2, hjust=0.5)
 
-
-
 ```
 
 con esta función podemos ver el detalle de estos casos.
@@ -428,7 +415,7 @@ final.85v2[final.85v2$.cooksd > 0.03, c("id", "country", "logy",
 "open", ".std.resid", ".hat", ".cooksd")]
 ```
 
-una vez identificados los casos, podemos estimar distintos modelos de regresión, quitando de a poco estos casos, por un lado hacemos una regresión quitando el caso de Singapur, y luego los otros 5 casos.
+Una vez identificados los casos, podemos estimar distintos modelos de regresión, quitando de a poco estos casos, por un lado hacemos una regresión quitando el caso de Singapur, y luego los otros 5 casos.
 
 
 ```{r}
@@ -441,8 +428,6 @@ summary(model1.no1)
 model1.no2 <- lm(logy ~ open + loglab + logland,
 data=final.85v2[final.85v2$.cooksd<0.03,])
 summary(model1.no2)
-
-
 ```
 
 ## Normalidad
@@ -481,5 +466,12 @@ stargazer(model1, model1.hc3, model1.no2, type="html",column.labels = c("OLS","R
 ```
 
 
+# Cuadro resumen
 
-
+| Supuesto |Diagnostico      | Corrección  |
+|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| Linealidad                 | Visual: gráfico de residuos vs valores predichos. La curva (loess) debería superponerse a la linea de residuos 0  Estadístico: Especificación de error de Ramsey.  - Se estima el modelo nuevamente pero agregando como predictor los valores predichos  con alguna transformación (típicamente al cuadrado o al cubo) - Se compara el ajuste de este modelo con el modelo original mediante prueba F - Si la diferencia no es significativa, entonces el predictor agregado no genera diferencia en la estimación, y por lo tanto no existe evidencia de relación entre residuos y valores predichos. | Realizar el análisis separado variable por variable, y evaluar transformación para variables problemáticas.                            |
+| Multicolinealidad          | Variance Inflation Factor (VIF) - En R: car::vif(model1)  # library car Valor cercano a 10 se relaciona con alta multicolinealidad                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Analizar la correlación entre predictores, si hay una correlación muy alta entre ambos evaluar construir índice o remover uno de ellos |
+| Homocedasticidad           | Se refiere a la varianza constante de los errores. Su antónimo es heterocedasticidad. Para detectar Heterocedasticidad, podemos realizar los test Breush-Pagan y Cook-Weisberg.   car::ncvTest(model1) # Breush-Pagan  lmtest::bptest(model1) # Cook-Weisberg  Valores no significativos indican homocedasticidad.                                                                                                                                                                                                                                                                                     | Estimar modelo con errores estándar robustos (White)  model1.hc3 <- coeftest(model1, vcov=vcovHC)                                      |
+| Casos influyentes          | influencePlot(model1)  D de Cook: valores que superan 4/(n−k−1) son posibles casos influyentes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Estimar modelo con / sin el caso influyente                                                                                            |
+| Normalidad de los residuos | car::qqPlot(model1, distribution = "t", simulate = TRUE)  Prueba Shapiro-Wilks: testea la hipótesis nula de los residuos están normalmente distribuidos.   shapiro.test(final.85v2$.resid)                                                                                                                                                                                                                                                                                                                                                                                                             | Identificar posibles observaciones influyentes.                                                                                        |
