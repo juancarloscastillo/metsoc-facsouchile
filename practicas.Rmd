@@ -37,8 +37,6 @@ output:
 - [7: Diagnóstico supuestos](documents/practicas/8diagnostico/prac_8doagnostico.html)
 
 
-documents/practicas/8diagnostico/prac_8doagnostico.html
-
 <br/>
 
 ### Talleres/ Ayudantías
