@@ -70,6 +70,11 @@ En este apartado es importante considerar:
 
 **Para la primera entrega llegar al menos a estimar un modelo de regresión e interpretarlo.**
 
+<div class="alert alert-info">
+En la **segunda entrega** se incorpora la revisión de supuestos, el análisis de dos variables dependientes para los grupos de 3 integrantes, y la aplicación de regresión logística para quienes analizan dependientes categóricas. Tener en cuenta además las consideraciones generales respecto a la revisión 1 (ver [aquí](documents/trabajos/notas_corr_ent1.html)), y por supuesto los comentarios específicos de cada trabajo.
+
+</div>
+
 7. Discusión de los resultados, con énfasis en la relación entre variable dependiente e independientes, limitaciones, posibles estudios futuros. (500 palabras) (3 puntos)
 
 Notas básicas de escritura académica:

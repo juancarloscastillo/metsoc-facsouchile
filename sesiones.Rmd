@@ -84,3 +84,8 @@ output:
 
 <iframe src=documents/presentaciones/11Diagnostico/11_diagnostico.html height="500" width="775">
 </iframe>
+
+[*Sesión 13: Transformaciones*](documents/presentaciones/12transform/12_transform.html)
+
+<iframe src=documents/presentaciones/12transform/12_transform.html height="500" width="775">
+</iframe>

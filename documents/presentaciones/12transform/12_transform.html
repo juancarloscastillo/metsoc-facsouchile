@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Estadística Multivariada</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=".small[Juan Carlos Castillo &amp; Alejandro Plaza    Departamento de Sociología - UCH / COES   ]" />
+    <link rel="stylesheet" href="../xaringan_custom/xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="../xaringan_custom/progress-bar.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: bottom, left
+
+
+
+&lt;!---
+Para correr en ATOM
+- open terminal, abrir R (simplemente, R y }enter)
+- rmarkdown::render('12_transform.Rmd', 'xaringan::moon_reader')
+
+About macros.js: permite escalar las imágenes como [scale 50%](path to image), hay si que grabar ese archivo js en el directorio.
+---&gt;
+
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo &amp; Alejandro Plaza
+
+## **Sesión 12**: Transformación de variables
+
+---
+class: inverse
+
+https://cran.r-project.org/web/packages/bestNormalize/vignettes/bestNormalize.html
+https://cran.r-project.org/web/packages/dlookr/vignettes/transformation.html
+http://www.sthda.com/english/articles/40-regression-analysis/162-nonlinear-regression-essentials-in-r-polynomial-and-spline-regression-models/
+
+# Contenidos
+
+## 1. Repaso supuestos
+
+## 2. Transformación
+
+  - Polinomios
+
+  - Logaritmos
+
+  - Centrado
+
+---
+class: inverse, middle, center
+
+# 1. Repaso supuestos
+
+---
+class: roja, middle, center
+
+## ¿Qué tan eficiente es mi modelo para dar cuenta de las asociaciones entre las variables?
+
+
+---
+# El cuarteto de Anscombe
+
+
+.center[
+![](12_transform_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+---
+# El cuarteto de Anscombe
+
+.small[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="5" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="4"&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;y1&lt;/td&gt;&lt;td&gt;y2&lt;/td&gt;&lt;td&gt;y3&lt;/td&gt;&lt;td&gt;y4&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;td&gt;(3)&lt;/td&gt;&lt;td&gt;(4)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="5" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;x1&lt;/td&gt;&lt;td&gt;0.500&lt;sup&gt;***&lt;/sup&gt; (0.118)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;x2&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.500&lt;sup&gt;***&lt;/sup&gt; (0.118)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;x3&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.500&lt;sup&gt;***&lt;/sup&gt; (0.118)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;x4&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.500&lt;sup&gt;***&lt;/sup&gt; (0.118)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;3.000&lt;sup&gt;**&lt;/sup&gt; (1.125)&lt;/td&gt;&lt;td&gt;3.001&lt;sup&gt;**&lt;/sup&gt; (1.125)&lt;/td&gt;&lt;td&gt;3.002&lt;sup&gt;**&lt;/sup&gt; (1.124)&lt;/td&gt;&lt;td&gt;3.002&lt;sup&gt;**&lt;/sup&gt; (1.124)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="5" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;11&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.667&lt;/td&gt;&lt;td&gt;0.666&lt;/td&gt;&lt;td&gt;0.666&lt;/td&gt;&lt;td&gt;0.667&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.629&lt;/td&gt;&lt;td&gt;0.629&lt;/td&gt;&lt;td&gt;0.629&lt;/td&gt;&lt;td&gt;0.630&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error (df = 9)&lt;/td&gt;&lt;td&gt;1.237&lt;/td&gt;&lt;td&gt;1.237&lt;/td&gt;&lt;td&gt;1.236&lt;/td&gt;&lt;td&gt;1.236&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic (df = 1; 9)&lt;/td&gt;&lt;td&gt;17.990&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;17.966&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;17.972&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;18.003&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="5" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="4" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="4" style="text-align:right"&gt;Errores Estándares en Parentesis&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]
+
+---
+class: roja
+
+## Por lo tanto:
+
+### No basta con que un beta de regresión sea significativo para poder contrastar adecuadamente las hipótesis
+
+--
+
+### Es necesario revisar la distribución de las asociaciones entre variables y el cumplimiento de supuestos que se encuentran a la base de una estimación de regresión.
+
+---
+## ... Recordando: Medias condicionales
+
+.center[
+![:scale 65%](../images/condmeans.png)
+]
+---
+## ... Recordando: Mínimos cuadrados
+
+.center[
+![:scale 85%](../images/fig2-4woo.png)
+]
+---
+# Posibles problemas
+
+### - subpredicción
+
+### - sobrepredicción
+
+### - sub o sobre predicción diferenciada según valores de X
+
+---
+class: roja
+
+# Detectando problemas
+
+### Revisar VISUALMENTE la distribución de los residuos alrededor de la recta de regresión.
+
+### La forma más eficiente es analizar la relación entre valor predicho (recta) y residuos.
+
+---
+## Gráficos de Diagnóstico
+
+.center[
+![:scale 80%](../images/fittedresidAnscombe.png)
+]
+
+---
+## Chequeo de supuestos
+
+--
+- **Linealidad**: distribución aleatoria de residos alrededor de linea residual=0. .
+
+--
+
+- **Homocedasticidad**: además de aleatoria, los residuos deberían estar distribuidos de manera constante en la banda alrededor de la linea residual=0 para los distintos valores estimados. Formas de abanico, o de embudo indicaría que la varianza de los errores no es constante.
+
+--
+
+- **Normalidad de residuos**
+
+--
+
+- **Observaciones influyentes**: un outlier es una observación que se separa mucho del resto y que puede afectar la estimación
+
+--
+
+- **Multicolinealidad**: asociación estrecha entre predictores
+
+
+--
+
+(ver cuadro resumen en Guía 8)
+
+---
+class: inverse, middle, center
+
+# 2. Transformaciones
+
+---
+# Modelos lineales de relaciones no-lineales
+
+### - Uno de los supuestos principales del modelo de regresión es la relación lineal (recta) entre las variables.
+
+--
+
+### - Esta linealidad se expresa en una distribución aleatoria de los residuos en relación a los valores estimados
+
+--
+
+## - ¿Qué sucede en el caso de relaciones no lineales?
+
+--
+### - Para poder capturar eficientemente relaciones no lineales entre las variables y evitar la violación de supuestos una alternativa es la TRANSFORMACIÓN de las variables
+
+---
+# Ejemplo Relaciones no lineales
+
+.center[
+![:scale 50%](../images/curvareg.png)
+]
+
+## ¿Es posible modelar más apropiadamente esta relación?
+
+---
+# Tipos usuales de transformación
+
+## - Polinomial
+
+## - Logarítmica
+
+---
+## Transformación polinomial
+
+- Usa regresores que son transformaciones de potencias sucesivas, tales como `\(X\)`, `\(X^2\)`, `\(X^3\)`
+
+.center[
+![:scale 60%](../images/polinomial.png)
+]
+---
+## Polinomial
+
+`$$Y=\beta_0+\beta_{1}X+\beta_{2}X^2$$`
+
+- Polinomio cuadrático o de segundo orden, permite una curva en la relación entre X e Y
+
+--
+
+`$$Y=\beta_0+\beta_{1}X+\beta_{2}X^2+\beta_{2}X^3$$`
+
+- Polinomio cúbico o de tercer orden, permite dos curvas en la relación entre X e Y
+
+--
+## Implica que el aumento de una unidad de X tendrá un efecto diferente en Y dependiendo de dónde se encuentra el valor de X
+
+---
+# Ejemplo
+
+.large[
+- Base de datos `Boston`: incluye variables.
+
+  - `mdev`: valor promedio de las viviendas por barrio
+
+  - `lstat` : porcentaje de personas de bajo estatus
+
+
+]
+
+
+- Cargar datos: para realizar los ejercicios de esta sesión, cargar los datos así:
+
+
+
+
+```r
+load(url(https://juancarloscastillo.github.io/
+metsoc-facsouchile/documents/data/boston.rda))
+```
+
+---
+## Scatter medv y lstat
+
+
+```r
+ggplot(boston, aes(lstat, medv)) +
+  geom_point() +
+  stat_smooth()
+```
+
+![](12_transform_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+## Modelo
+
+.pull-left[
+
+```r
+# modelo
+model1 &lt;- lm(medv ~ lstat,
+  data = boston)
+```
+]
+
+.pull-right[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;medv&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="1" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;lstat&lt;/td&gt;&lt;td&gt;-0.956&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.043)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;34.653&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.623)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;407&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.551&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;499.157&lt;sup&gt;***&lt;/sup&gt; (df = 1; 405)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]
+
+---
+## Modelo
+
+
+```r
+ggplot(train.data, aes(lstat, medv) ) +
+  geom_point() +
+  stat_smooth(method = lm, formula = y ~ x)
+```
+
+![](12_transform_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+## Análisis linealidad
+
+- agregar variables para análisis de supuestos a la base de datos
+
+
+```r
+boston_s &lt;- broom::augment_columns(model1, boston)
+names(boston_s)
+```
+
+```
+##  [1] ".rownames"  "medv"       "lstat"      ".fitted"    ".se.fit"   
+##  [6] ".resid"     ".hat"       ".sigma"     ".cooksd"    ".std.resid"
+```
+---
+## Análisis linealidad
+
+
+```r
+ggplot(boston_s, aes(x=.fitted, y=.resid)) +
+  geom_hline(yintercept=0) +
+  geom_point() +  geom_smooth(method='loess', se=TRUE)
+```
+
+![](12_transform_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+## Inclusión de término cuadrático ( `\(+\beta_{2}lstat^2\)` )
+
+.pull-left[
+
+
+```r
+model2 &lt;- lm(medv ~ lstat +
+  I(lstat^2),
+  data = boston)
+```
+]
+
+.pull-right[.medium[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="2"&gt;medv&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;lstat&lt;/td&gt;&lt;td&gt;-0.956&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;-2.267&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.043)&lt;/td&gt;&lt;td&gt;(0.136)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;I(lstat2)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.041&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(0.004)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;34.653&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;42.574&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.623)&lt;/td&gt;&lt;td&gt;(0.965)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;407&lt;/td&gt;&lt;td&gt;407&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.551&lt;/td&gt;&lt;td&gt;0.640&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;499.157&lt;sup&gt;***&lt;/sup&gt; (df = 1; 405)&lt;/td&gt;&lt;td&gt;361.940&lt;sup&gt;***&lt;/sup&gt; (df = 2; 404)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="2" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]
+]
+---
+## Comparación ajuste modelos
+
+.large[
+
+```r
+anova(model1,model2)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: medv ~ lstat
+## Model 2: medv ~ lstat + I(lstat^2)
+##   Res.Df   RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1    405 15286                                  
+## 2    404 12224  1    3062.3 101.21 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+- por lo tanto, se rechaza la hipótesis nula de igualdad de ajuste de los modelos. El modelo con el término cuadrático es significativamente superior al anterior.
+
+]
+---
+## Análisis residuos vs predichos model2
+
+
+
+
+```r
+ggplot(boston_s2, aes(x=.fitted, y=.resid)) +
+  geom_hline(yintercept=0) +
+  geom_point() +  geom_smooth(method='loess', se=TRUE)
+```
+
+![](12_transform_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+## Inclusión de término cúbico ( `\(+\beta_{3}lstat^3\)` )
+.medium[
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="3"&gt;medv&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;td&gt;(3)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;lstat&lt;/td&gt;&lt;td&gt;-0.956&lt;sup&gt;***&lt;/sup&gt; (0.043)&lt;/td&gt;&lt;td&gt;-2.267&lt;sup&gt;***&lt;/sup&gt; (0.136)&lt;/td&gt;&lt;td&gt;-3.841&lt;sup&gt;***&lt;/sup&gt; (0.370)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;I(lstat2)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.041&lt;sup&gt;***&lt;/sup&gt; (0.004)&lt;/td&gt;&lt;td&gt;0.148&lt;sup&gt;***&lt;/sup&gt; (0.024)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;I(lstat3)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;-0.002&lt;sup&gt;***&lt;/sup&gt; (0.0004)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;34.653&lt;sup&gt;***&lt;/sup&gt; (0.623)&lt;/td&gt;&lt;td&gt;42.574&lt;sup&gt;***&lt;/sup&gt; (0.965)&lt;/td&gt;&lt;td&gt;48.574&lt;sup&gt;***&lt;/sup&gt; (1.619)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;407&lt;/td&gt;&lt;td&gt;407&lt;/td&gt;&lt;td&gt;407&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.551&lt;/td&gt;&lt;td&gt;0.640&lt;/td&gt;&lt;td&gt;0.657&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;499.157&lt;sup&gt;***&lt;/sup&gt; (df = 1; 405)&lt;/td&gt;&lt;td&gt;361.940&lt;sup&gt;***&lt;/sup&gt; (df = 2; 404)&lt;/td&gt;&lt;td&gt;260.030&lt;sup&gt;***&lt;/sup&gt; (df = 3; 403)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="3" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+]
+---
+## Comparación ajuste modelos
+
+
+```r
+anova(model1,model2,model3)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: medv ~ lstat
+## Model 2: medv ~ lstat + I(lstat^2)
+## Model 3: medv ~ lstat + I(lstat^2) + I(lstat^3)
+##   Res.Df   RSS Df Sum of Sq       F    Pr(&gt;F)    
+## 1    405 15286                                   
+## 2    404 12224  1   3062.33 106.167 &lt; 2.2e-16 ***
+## 3    403 11624  1    599.27  20.776 6.855e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+- por lo tanto, se rechaza la hipótesis nula de igualdad de ajuste de los modelos. El modelo con el término cúbico es significativamente superior al anterior.
+
+
+---
+## Análisis residuos vs valores predichos model3
+
+
+
+![](12_transform_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+## Graficando predicción polinomial cúbica
+
+
+```r
+ggplot(boston, aes(lstat, medv) ) +  geom_point() +
+  stat_smooth(method = lm, formula = y ~ poly(x, 3, raw = TRUE))
+```
+
+![](12_transform_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+## Explorando polinomiales
+
+
+```r
+lm(medv ~ poly(lstat, 6, raw = TRUE), data = boston) %&gt;% summary()
+```
+
+```
+## 
+## Call:
+## lm(formula = medv ~ poly(lstat, 6, raw = TRUE), data = boston)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -13.1962  -3.1527  -0.7655   2.0404  26.7661 
+## 
+## Coefficients:
+##                               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                  7.788e+01  6.844e+00  11.379  &lt; 2e-16 ***
+## poly(lstat, 6, raw = TRUE)1 -1.767e+01  3.569e+00  -4.952 1.08e-06 ***
+## poly(lstat, 6, raw = TRUE)2  2.417e+00  6.779e-01   3.566 0.000407 ***
+## poly(lstat, 6, raw = TRUE)3 -1.761e-01  6.105e-02  -2.885 0.004121 ** 
+## poly(lstat, 6, raw = TRUE)4  6.845e-03  2.799e-03   2.446 0.014883 *  
+## poly(lstat, 6, raw = TRUE)5 -1.343e-04  6.290e-05  -2.136 0.033323 *  
+## poly(lstat, 6, raw = TRUE)6  1.047e-06  5.481e-07   1.910 0.056910 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.188 on 400 degrees of freedom
+## Multiple R-squared:  0.6845,	Adjusted R-squared:  0.6798 
+## F-statistic: 144.6 on 6 and 400 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+class: inverse
+
+# Resumen transformación polinomial
+
+.large[
+- alternativa en casos de no linealidad
+
+- agregar polinomios secuencialmente y realizar test de ajuste
+
+- interpretación sustantiva de los efectos
+
+]
+---
+# Transformación logarítmica
+
+.large[
+
+- Posibilidad adicional de transformación para asociaciones no lineales
+
+- Ej: efecto de ingreso, ¿es lo mismo una diferencia de 100.000 para alguien que gana 400.000 que para alguien que gana 5.000.000?
+
+- La transformación logarítmica permite incorporar mayor "peso" a diferencias en el extremo inferior de la escala.
+
+- Por ejemplo, los logaritmos de 10, 100, y 1,000 son, respectivamente, 1, 2, y3, porque `\(10^1=10\)`, `\(10^2=100\)`, `\(10^3=1000\)`.
+
+]
+---
+# Transformación logarítmica
+
+.center[
+![:scale 130%](../images/logtrans1.png)
+
+![:scale 130%](../images/logtrans2.png)
+]
+
+---
+## Modelo con predictor logarítmico
+
+
+```r
+model_log &lt;- lm(medv ~ log(lstat), data = boston)
+```
+
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="2"&gt;medv&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;lstat&lt;/td&gt;&lt;td&gt;-0.956&lt;sup&gt;***&lt;/sup&gt; (0.043)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;log(lstat)&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;-12.567&lt;sup&gt;***&lt;/sup&gt; (0.441)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;34.653&lt;sup&gt;***&lt;/sup&gt; (0.623)&lt;/td&gt;&lt;td&gt;52.380&lt;sup&gt;***&lt;/sup&gt; (1.081)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;407&lt;/td&gt;&lt;td&gt;407&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.551&lt;/td&gt;&lt;td&gt;0.666&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic (df = 1; 405)&lt;/td&gt;&lt;td&gt;499.157&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;812.064&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="2" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
+---
+## Residuos vs valores predichos
+
+.pull-left[
+
+### Original
+
+![](12_transform_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+### Log
+
+
+![](12_transform_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+]
+
+
+---
+## Ajuste regresión log
+
+
+```r
+ggplot(boston, aes(lstat, medv) ) +
+  geom_point() +
+  stat_smooth(method = lm, formula = y ~ log(x))
+```
+
+![](12_transform_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+class: inverse, middle, center
+
+# Notas sobre centrado de variables
+
+---
+## Centrado
+
+.large[
+- El centrado de las variables en regresión simple posee consecuencias en el valor del intercepto
+
+- Intercepto: estimación del valor de la variable dependiente cuando los predictores son 0
+
+- La estimación sin centrar en algunos casos puede llevar a algunos problemas en la interpretación de los parámetros del modelo
+
+- El centrado se implementa restando una constante del predictor (usualmente el promedio )
+]
+
+---
+## Ejemplo centrado regresión simple
+
+### Datos: puntaje en CI y en una escala de felicidad 1-7
+
+.large[
+```
+&gt; mydata
+  felicidad  ci
+1         1  	90
+2         3  	95
+3         4  	98
+4         6 	105
+
+lm(formula = felicidad ~ ci)
+
+(Intercept)           ci
+-28.5593       0.3305
+```
+]
+
+--
+
+### **¿Qué significa el valor del intercepto?**
+
+---
+## Ejemplo centrado regresión simple
+
+&lt;br&gt;
+&lt;br&gt;
+
+![:scale 120%](../images/plot_feli.png)
+
+---
+## Ejemplo centrado regresión simple
+
+.large[
+```
+&gt; mydata
+  felicidad  ci mean_ci cicent_mean cicent_100
+1         1  90      97          -7        -10
+2         3  95      97          -2         -5
+3         4  98      97           1         -2
+4         6 105      97           8          5
+
+lm(formula = felicidad ~ cicent_mean)
+(Intercept): 3.5000  ; cicent_mean:0.3305
+
+lm(formula = felicidad ~ cicent_100)
+(Intercept): 4.4915  ; mydata$cicent_100: 0.3305
+```
+]
+---
+## Ejemplo centrado regresión simple
+
+&lt;br&gt;
+&lt;br&gt;
+
+![](../images/plot_feli2.png)
+
+---
+## Resumen centrado
+
+.large[
+- `\(\beta\)` constante en todos los modelos, varı́a solo intercepto
+
+- Modelo sin centrar: intercepto -28,5, felicidad para alguien
+con inteligencia 0 (no tiene mucho sentido ...)
+
+- Centrado al promedio: 3.5, estimación de la felicidad para
+alguien con inteligencia promedio
+
+- Centrado a 100: 4.49, estimación de la felicidad para alguien
+con inteligencia 100
+]
+
+---
+class: bottom, left
+
+.right[![:scale 30%](https://escudouchile.files.wordpress.com/2012/06/logotipo-facso-ciencias-sociales-u-de-chile.png)]
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+# Estadística multivariada, 1 sem. 2019
+
+## Juan Carlos Castillo &amp; Alejandro Plaza
+
+## **Sesión 12**: Transformación de variables
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../xaringan_custom/macros.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>` ",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
