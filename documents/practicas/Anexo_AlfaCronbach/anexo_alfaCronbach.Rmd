@@ -1,0 +1,170 @@
+---
+title: "Anexo: Análisis de Alfa de Cronbach"
+subtitle: "Estadistica Multivariada - Sociología FACSO Universidad de Chile"
+author: "Juan Carlos Castillo & Alejandro Plaza"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE, eval=FALSE}
+setwd("C:/Users/Fondecyt R. Sociales/Dropbox/mulitva2018/metsoc-facsouchile/documents/practicas/Anexo_AlfaCronbach")
+```
+
+
+# Introducción
+
+El presente documento tiene el objetivo de introducir a los estudiantes al análisis de confiabilidad por medio del estadístico alfa de Cronbach. Se presentan algunos fundamentos básicos y el computo de este estadístico.
+
+# Motivación
+
+Al momento del diseño de cuestionarios nos encontramos con el desafio de medir aspectos de la realidad que son observales y otros aspectos que no son observables.
+
+Cuando nos encontramos con hechos que son directamente observables en la realidad podemos preguntales directamente a los sujetos del estudio (por ejemplo su edad).
+
+No obstante, en ciencias sociales nos encontramos recurrentemente con aspectos de la sociedad que no son directamente medibles a partir de una pregunta, como por ejemplo el grado de justificación de la violencia o la desafección política.
+
+Fenómenos complejos -en general- requieren de una medición que requiere más de una pregunta, con el objetivo de dar cuenta de mejor manera, con el objetivo de minimizar el **error de medición**
+
+
+
+$$\alpha=\frac{N^{2}\bar{Cov}}{\sum{S^{2}_{item}}+\sum{Cov_{item}}}$$
+
+Para cada ítem en una escala calculamos la varianza entre los ítems $S^{2}_{item}$ y la covarianza entre un ítem en particular con el resto de los items $Cov_{item}$. En el númerador se encuentra el número de ítems de la escala, al cuadrado multiplicado por el promedio de la covarianza entre los ítems (el promedio de los coeficientes fuera de la diagonal de la matriz de varianza-covarianza). La versión estándarizada de este estadístico utiliza la matriz de correlaciones.
+
+Con valores superiores a 0.7 se puede asumir que la escala en cuestión es **confiable**, es decir, los ítems que de la escala miden de manera apropiada un constructo latente asociado a su variación conjunta.
+
+##Algunas precauciones sobre este estadístico.
+
+* Como se puede ver en la ecuación, el estadístico depende directamente de la cantidad de ítems, si la cantidad de ítems aumenta es más probable encontrar valores superiores a 0.7, por lo que este debe ser un punto que deben tener en cuenta los investigadores.
+
+* Comúnmente se interpreta que este estadístico mide la "unidimensionalidad" de una escala, o en otras palabras que la escala mide un factor o constructo latente subyacente a los ítems. No obstante, pueden encontrar una escala que obtiene valores de alfa de Cronbach superiores a 0.7, no obstante pueden existira dos o más factores subyacentes a está escala que globalmente pueden estar correlacionados. En este aspecto sería necesario revisar otros procedimientos estadísticos como el Análisis Factorial.
+
+* Ítems invertidos: Es una práctica general dentro de la construcción de escalas agregar items de manera inversa para reducir el sesgo de respuesta de los encuestados, de manera que los encuestados tengan que de verdad leer todos los ítems y no contestar en "modo automático".  
+
+Para realizar un análisis de confiabilidad mediante a este estadístico, revisar bien la escala, detectar la presencia de ítems inversos, y proceder a recodificarlos re-invirtiendo su dirección de manera que no afecta las relaciones de la matriz de varianza-covarianza.
+
+<div class="alert alert-info">
+  <strong>Comentario del autor</strong> Respecto a ítems inversos:
+
+A partir de la literatura de medición y de la experiencia en investigación, se recomienda al momento de construir un cuestionario o de seleccionar la traducción de un cuestionario en otro idioma, tomar con suma precaución la presencia de los ítems inversos en las escalas.
+
+El motivo de esto, es que la presencia de los ítems inversos podría involucrar la presencia de un constructo extra en la medición asociado a los ítems inversos y no necesariamente al constructo teórico que está subyacente.
+
+Otra implicancia que es necesario tener en cuenta, es que por motivos linguísticos  el inglés (de donde en general se traducen las escalas) la inversión de los ítems semanticamente es más drastica en relación al resto de los ítems, mientras que el español la inversión tiende a ser mucho más suave.
+
+</div>
+
+
+# Análisis de Alfa de Cronbach con R
+
+Para consideraciones de este análisis trabajaremos con los datos de **Field et al (2012) Discovering Statistics with R.**
+
+
+```{r message=FALSE}
+library(dplyr)
+#url contains the data set
+url <- "http://www.uk.sagepub.com/dsur/study/DSUR%20Data%20Files/Chapter%2017/raq.dat"
+dat <- read.table(url, header = TRUE)
+```
+
+
+La base de datos es un cuestionario de 23 ítems con cuatro subescalas que miden distintos tipos de miedos.
+
+
+*Subescala 1 (Miedo a los computadores): items 6, 7, 10, 13, 14, 15, 18
+
+*Subescala 2 (Miedo a la Estadística): items 1, 3 (inverso), 4, 5, 12, 16, 21
+
+*Subescala 3 (Miedo a las Matemáticas): items 8, 11, 17
+
+*Subescala 4 (Miedo a la evaluación de pares): items 2, 9, 19, 22
+
+```{r}
+tbl_df(dat)
+```
+
+
+Creamos una nueva variables que guarde los items para cada subescala. Esto hace más facil el análisis. Para esto ocuparemos el comando select() del paquete dplyr.
+
+
+```{r}
+computerFear <- select(dat, 6, 7, 10, 13, 14, 15, 18) #Cada número refiere a las columnas
+statsFear <- select(dat, 1, 3, 4, 5, 12, 16, 20, 21)
+mathsFear <- select(dat, 8, 11, 17)
+peerFear <- select(dat, 2, 9, 19, 22, 23)
+```
+
+
+Para realizar el analiss utilizaremos la librería psych
+
+```{r}
+library(psych)
+```
+
+
+
+Si la escala contiene un ítem inverso es necesario especificarlo. Con el arumento keys se permite especificar el ítem inverso
+
+```{r eval=FALSE}
+alpha(statsFear, keys = c(1, -1, 1, 1, 1, 1, 1, 1)) #Q03, es el ítem que esta inverso.
+```
+
+Si no hay presencia de ítems inversos, se puede seguir con el análisis de confiabilidad
+
+```{r eval=FALSE}
+alpha(computerFear)
+alpha(mathsFear)
+alpha(peerFear)
+```
+
+# Interpretación de los resultados
+
+## Subescala de miedo a los computadores
+
+```{r}
+alpha(computerFear)
+```
+
+¿Qué significan los estadístícos?
+
+
+
+**raw_alpha**: $\alpha$ de Cronbach  con valores  ≥ .7 o .8 indican buenos niveles de confiabilidad; Kline (1999))
+
+**std.alpha**: Esto se interpreta de manera similar, pero sólo necesitamos el raw_apha
+
+**G6:** Lambda de Guttman 6 (Calculado a partir de la correlación múltiple al cuadrado o ‘smc’)
+
+**average_r**: Correlación promedio inter-ítem 
+
+**mean**: promedio de la escala 
+
+**sd**: Desviación estándar de la escala
+
+##Cómo interpretar ‘Reliability if an item is dropped’ (Confiabilidad si el ítem es eliminado)?
+
+El alfa de Cronbach es de .82. Cada fila refiere a cada ítem y tiene un alfa asociado a cómo se comportaría esta escala si el ítem de la fila es eliminado. Por ejemplo para el ítem Q6 el valor que obtendría la escala de miedo a los computadores sería de .79, es decir empeoraría.
+
+En ciertas ocaciones al eliminar un ítem el alfa de Cronbach podría aumentar, en estos casos se tendría evidencia a favor de quitar el ítem de la escala (Ojo, este análisis puede ser útil al momento de realizar el piloto de un estudio)
+
+
+
+#Bibliografía
+
+
+* Field, A., Miles, J., & Field, Z. (2012). Discovering statistics with R. Sage Publications Ltd.
+
+* Kline, P. (1999). The handbook of psychological testing (2nd ed.). London: Routledge.
+
+* Tomás, J. M., Galiana, L., Hontangas, P., Oliver, A., Sancho, P., Evidencia acumulada sobre los efectos de método asociados a ítems invertidos. Psicológica [en linea] 2013, 34 [Fecha de consulta: 17 de junio de 2019] Disponible en:<http://www.redalyc.org/articulo.oa?id=16929535013> ISSN 0211-2159 
+
