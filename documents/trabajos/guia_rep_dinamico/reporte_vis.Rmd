@@ -7,6 +7,17 @@ output:
     fig_caption: true
 ---
 
+```{r setup, include=FALSE, cache = FALSE}
+require("knitr")
+options(htmltools.dir.version = FALSE)
+opts_chunk$set(warning=FALSE,
+              message=FALSE,
+              echo=TRUE,
+              cache = TRUE)
+```
+
+
+
 # Visualización de datos con ggplot2
 ```
 ![](ggplot2.png)
@@ -14,7 +25,7 @@ output:
 
 ![](images/ggplot2.png)
 
-Es importante que en un informe acádemico se incorpore visualización de datos, pues muchas veces resulta agobiante al lector solo reportar los análisis en textos y tablas. A continuación, introduciremos algunos tópicos básicos y avanzados en visualización de datos con ggplot2. Utilizaremos como ejemplo los datos del Estudio Longitudinal Social de Chile (ELSOC, 2016).
+Es importante que en un informe académico se incorpore visualización de datos, pues muchas veces resulta una representación más eficiente de los análisis  en comparación con textos y tablas. A continuación, introduciremos algunos tópicos básicos y avanzados en visualización de datos con ggplot2. Utilizaremos como ejemplo los datos del Estudio Longitudinal Social de Chile (ELSOC, 2016).
 
 - **Instalar y cargar paquetes**
 ```{r}
@@ -27,7 +38,8 @@ library(haven)
 - **Tratamiento de los datos**
 ```{r}
 #Leemos el conjunto de datos.
-elsoc_w01<-read_dta("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/data/COESW1_Stata14_V3.dta")
+load(url("https://juancarloscastillo.github.io/metsoc-facsouchile/documents/data/ELSOC_W01_v2.00.RData"))
+n
 #Establecemos los casos perdidos a variables de interés.
 elsoc_w01[elsoc_w01==-999 | elsoc_w01==-888] <- NA
 
@@ -76,40 +88,13 @@ ggplot(elsoc_w01, aes(x = as.numeric(m0_edad))) +
        subtitle = "Edad")
 ```
 
-
--**Tabla para reportar un modelo de regresión**
-
-El reporte de resultados de los parámetros estimados (e.g., coeficientes B, F de Levene, R2, suma de cuadrados) podemos realizarlo en tablas con este formato y estilo
-
-```{r echo=F, warning=FALSE, message=FALSE,results='hide'}
-elsoc_w01[elsoc_w01==-999 | elsoc_w01==-888] <- NA
-elsoc_w01$sexo<- as.factor(car::recode(elsoc_w01$m0_sexo, "1='Hombre'; 2='Mujer'"))
-elsoc_w01$ed<- as.factor(elsoc_w01$m01)
-elsoc_w01$edu<- car::recode(elsoc_w01$ed, "10 ='Universitaria';1:3='Básica'; 4:5='Media'; 6:7='Tecnica Superior'; 8:9 ='Universitaria'")
-elsoc_w01$edu<- as.factor(elsoc_w01$edu)
-modelo1<- lm(d01_01 ~ m0_edad+ m29 +sexo, data=elsoc_w01)
-modelo2<- lm(d01_01 ~ m0_edad+ m29 +sexo+edu, data=elsoc_w01)
-library(texreg)
-```
-```{r echo=F, warning=FALSE, message=FALSE,results='asis'}
-htmlreg(list(modelo1, modelo2),
-        custom.model.names = c("Modelo 1", "Modelo 2"),
-        custom.coef.names = c("Intercepto", "Edad", "Ingreso", "Mujer", "Media","Técnica","Universitaria"),   #Cambiar nombre de las variables
-        include.f=TRUE,
-        include.rmse=FALSE,
-        custom.note = "%stars., errores estándar en paréntesis",
-        caption=" ",
-        #single.row = T, #para que la DS este en una linea
-        booktabs = TRUE, dcolumn = TRUE, doctype = FALSE)
-```
-
 -**Gráfico de mosaico**
 
 Para quienes deban aplicar un modelo de regresión logística binaria (RLB), recomendamos utilizar los gráficos de mosaico para visualizar descriptivamente las variables categóricas.
-```{r echo=FALSE, fig.height=6}
-#install.packages("pacman")
-library("pacman")
-load("titanic.Rdata")
+
+```{r fig.height=6}
+
+load("../../data/titanic.Rdata")
 
 pacman::p_load(sjmisc, descr,tidyverse, scales, xtable, ggmosaic, stargazer)
 ggplot(data = tt) +
@@ -121,17 +106,9 @@ Finalmente, podemos realizar gráficos dinámicos. Usando los datos del paquete 
 
 ```{r}
 #Instalar y cargar paquetes
-#install.packages("gifski") #crea gif
-#install.packages("gapminder") #paquete que contiene bases de datos de estadisticas mundiales
-#install.packages("gganimate")
-#install.packages("dygraphs")
-#install.packages("png")
 
-library(gifski)
-library(gapminder)
-library(gganimate)
-library(dygraphs)
-library(png)
+# devtools::install_github("r-rust/gifski") # esta se instala desde devtools; en linux requiere también instalar cargo (sudo apt-get install cargo)
+pacman::p_load(gifski,gapminder,gganimate,dygraphs,png)
 
 # Creditos en GitHub a Thomasp85
 # https://gist.github.com/thomasp85/05169ad44ddcc8ed56da6ff7bf7fbe36
@@ -150,3 +127,40 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
 ```
 
 Tal como se puede observar, tenemos cuatro variables interactuando en el gráfico: a) países (categórica); b) expectativa de vida (intervalar); c) PIB per cápita (intervalar); y d) tiempo en años (intervalar).
+
+-**Tabla para reportar un modelo de regresión**
+
+El reporte de resultados de los parámetros estimados (e.g., coeficientes B, F de Levene, R2, suma de cuadrados) podemos realizarlo en tablas con este formato y estilo
+
+Primero se realiza un ajuste de las variables:
+
+```{r echo=TRUE, warning=FALSE, message=FALSE,results='hide'}
+elsoc_w01[elsoc_w01==-999 | elsoc_w01==-888] <- NA
+elsoc_w01$sexo<- as.factor(car::recode(elsoc_w01$m0_sexo, "1='Hombre'; 2='Mujer'"))
+elsoc_w01$ed<- as.factor(elsoc_w01$m01)
+elsoc_w01$edu<- car::recode(elsoc_w01$ed, "10 ='Universitaria';1:3='Básica'; 4:5='Media'; 6:7='Tecnica Superior'; 8:9 ='Universitaria'")
+elsoc_w01$edu<- as.factor(elsoc_w01$edu)
+
+```
+
+Luego, se estiman los modelos:
+
+```{r}
+modelo1<- lm(d01_01 ~ m0_edad+ m29 +sexo, data=elsoc_w01)
+modelo2<- lm(d01_01 ~ m0_edad+ m29 +sexo+edu, data=elsoc_w01)
+```
+
+Finalmente, reporte con la librería `texreg`
+
+```{r echo=T, warning=FALSE, message=FALSE,results='asis'}
+pacman::p_load(texreg)
+htmlreg(list(modelo1, modelo2),
+        custom.model.names = c("Modelo 1", "Modelo 2"),
+        custom.coef.names = c("Intercepto", "Edad", "Ingreso", "Mujer", "Media","Técnica","Universitaria"),   #Cambiar nombre de las variables
+        include.f=TRUE,
+        include.rmse=FALSE,
+        custom.note = "%stars., errores estándar en paréntesis",
+        caption=" ",
+        #single.row = T, #para que la DS este en una linea
+        booktabs = TRUE, dcolumn = TRUE, doctype = FALSE)
+```
