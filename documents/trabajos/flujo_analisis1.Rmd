@@ -33,13 +33,13 @@ options(width=1200)
 `r format(Sys.time(), '%d %B, %Y')`
 
 
-A continuación se presenta un ejemplo de flujo de análisis utilizando R / RStudio. Este flujo corresponde a la primera parte de ajuste de los datos, y más adelante se presentaran flujos de descripción y de modelamiento. 
+A continuación se presenta un ejemplo de flujo de análisis utilizando R / RStudio. Este flujo corresponde a la primera parte de ajuste de los datos, y más adelante se presentaran flujos de descripción y de modelamiento.
 
 Actualmente existe mucha literatura y tutoriales sobre esto, pero en general se abordan aspectos del análisis por separado y con una profundidad y complejidad que en ocasiones es una barrera para utilizar los recursos de R de una manera más pragmática para análisis y reporte de datos.
 
 El flujo presentado acá proviene de mi experiencia personal analizando datos y enseñando a hacerlo, y se orienta por la reproducibilidad y la parsimonia En relación a la reproducibilidad, se trata de siempre tener en mente que el código y reporte tienen que ser entendidos por otros y por mí mismo en el futuro. Y la parsimonia es parte de esto: la menor cantidad de recursos posibles para hacer lo más posible, y buscar las funciones más intuitivas.
 
-# Librerías y datos 
+# Librerías y datos
 
 ## Librerías
 
@@ -243,7 +243,7 @@ data_n <- data_n %>% mutate(ing_comb = rowSums(select(., "ingreso_monto", "ingre
 data_n$ing_comb=recode(data_n$ing_comb, "0=NA")
 
 names(data_n)
-summary(data_n$ing_comb) 
+summary(data_n$ing_comb)
 
 ```
 
@@ -256,7 +256,7 @@ No se detectan missins, así que se procede:
 
 ```{r}
 names(data_n)
-data_n <- data_n %>%  mutate(ing_comb_eq = ing_comb / nhogar) 
+data_n <- data_n %>%  mutate(ing_comb_eq = ing_comb / nhogar)
 ```
 
 
@@ -278,3 +278,4 @@ data_n <- data_n %>% mutate(decil = ntile(ing_comb_eq,10))
 frq(data_n$decil)
 ```
 
+Para exploración de datos categóricos: https://www.r-bloggers.com/exploring-categorical-data-with-inspectdf/
